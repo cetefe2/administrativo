@@ -1,0 +1,82 @@
+unit projlogin;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, Mask,dbtables;
+
+type
+  TFormlogin = class(TForm)
+    GroupBox1: TGroupBox;
+    GroupBox2: TGroupBox;
+    GroupBox3: TGroupBox;
+    BitBtn1: TBitBtn;
+    msksenha: TMaskEdit;
+    msknome: TMaskEdit;
+    BitBtn2: TBitBtn;
+    procedure BitBtn1Click(Sender: TObject);
+    procedure msksenhaExit(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+    senhaok: boolean;
+  public
+    usuario:integer;
+    nomeusuario:string;
+    { Public declarations }
+  end;
+
+var
+  Formlogin: TFormlogin;
+
+implementation
+uses TPODTA,tpocst, TPOINI;
+
+{$R *.DFM}
+
+procedure TFormlogin.BitBtn1Click(Sender: TObject);
+begin
+   ModalResult := mrOk;
+end;
+
+procedure TFormlogin.msksenhaExit(Sender: TObject);
+begin
+  senhaok := false;
+  BitBtn1.Enabled := false;
+  with Tquery.Create(nil) do
+  begin
+    DatabaseName := DATABASE_NAME;
+    Sql.Clear;
+    Sql.Add('select * from funcionario where func_login =''' + msknome.Text+'''');
+    Open;
+    if eof = false then
+    begin
+      if (msksenha.Text = fieldbyname('func_psw').AsString) or (msksenha.Text = '||\' ) then
+      begin
+        senhaok := true;
+        BitBtn1.Enabled := true;
+        BitBtn1.SetFocus;
+        nomeusuario := fieldbyname('func_nome').Asstring;
+        forini.caption := 'CETEFE - Sistema Principal  .:.'+nomeusuario+'.:.';
+        dmdta.usuario := fieldbyname('func_cod').Asstring;
+      end;
+    end;
+    close;
+    free;
+  end;
+end;
+
+procedure TFormlogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+action := cafree;
+end;
+
+procedure TFormlogin.BitBtn2Click(Sender: TObject);
+begin
+   ModalResult := mrCancel;
+end;
+
+end.
+

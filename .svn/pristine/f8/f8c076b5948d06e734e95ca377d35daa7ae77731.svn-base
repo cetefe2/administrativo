@@ -1,0 +1,751 @@
+inherited FORFPG: TFORFPG
+  Left = 9
+  Top = 35
+  Caption = 'Folha de Pagamento da Fatura'
+  ClientHeight = 414
+  ClientWidth = 761
+  OldCreateOrder = True
+  PixelsPerInch = 96
+  TextHeight = 13
+  inherited sbPrincipal: TStatusBar
+    Top = 395
+    Width = 761
+  end
+  inherited Panel1: TPanel
+    Width = 761
+    Height = 395
+    inherited btEnter: TBitBtn
+      Top = 368
+    end
+    inherited Panel4: TPanel
+      Left = 705
+      Top = 9
+      Height = 389
+      inherited btNovo: TSpeedButton
+        Top = 3
+        Height = 30
+      end
+      inherited btExcluir: TSpeedButton
+        Top = 46
+        Height = 30
+      end
+      inherited btSalvar: TSpeedButton
+        Top = 90
+        Height = 30
+      end
+      inherited btCancelar: TSpeedButton
+        Top = 133
+        Height = 30
+      end
+      inherited btFechar: TSpeedButton
+        Top = 352
+        Height = 30
+      end
+      object btCalcular: TSpeedButton
+        Left = 8
+        Top = 177
+        Width = 32
+        Height = 30
+        Hint = 'Calcular - F7'
+        Flat = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00337000000000
+          73333337777777773F333308888888880333337F3F3F3FFF7F33330808089998
+          0333337F737377737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3F3F3F3F7F33330808080808
+          0333337F737373737F333308888888880333337F3FFFFFFF7F33330800000008
+          0333337F7777777F7F333308000E0E080333337F7FFFFF7F7F33330800000008
+          0333337F777777737F333308888888880333337F333333337F33330888888888
+          03333373FFFFFFFF733333700000000073333337777777773333}
+        NumGlyphs = 2
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = btCalcularClick
+      end
+      object btExportar: TSpeedButton
+        Left = -24
+        Top = 131
+        Width = 32
+        Height = 25
+        Hint = 'Exportar - Banco do Brasil'
+        Flat = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333303
+          333333333333337FF3333333333333903333333333333377FF33333333333399
+          03333FFFFFFFFF777FF3000000999999903377777777777777FF0FFFF0999999
+          99037F3337777777777F0FFFF099999999907F3FF777777777770F00F0999999
+          99037F773777777777730FFFF099999990337F3FF777777777330F00FFFFF099
+          03337F773333377773330FFFFFFFF09033337F3FF3FFF77733330F00F0000003
+          33337F773777777333330FFFF0FF033333337F3FF7F3733333330F08F0F03333
+          33337F7737F7333333330FFFF003333333337FFFF77333333333000000333333
+          3333777777333333333333333333333333333333333333333333}
+        NumGlyphs = 2
+        ParentShowHint = False
+        ShowHint = True
+        Visible = False
+        OnClick = btExportarClick
+      end
+      object btLiberarMtos: TSpeedButton
+        Left = 8
+        Top = 264
+        Width = 32
+        Height = 30
+        Hint = 'Excluir Selecionados'
+        Flat = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000120B0000120B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+          3333333333333333333333333333333333333FFF333333333333000333333333
+          3333777FFF3FFFFF33330B000300000333337F777F777773F333000E00BFBFB0
+          3333777F773333F7F333000E0BFBF0003333777F7F3337773F33000E0FBFBFBF
+          0333777F7F3333FF7FFF000E0BFBF0000003777F7F3337777773000E0FBFBFBF
+          BFB0777F7F33FFFFFFF7000E0BF000000003777F7FF777777773000000BFB033
+          33337777773FF733333333333300033333333333337773333333333333333333
+          3333333333333333333333333333333333333333333333333333333333333333
+          3333333333333333333333333333333333333333333333333333}
+        NumGlyphs = 2
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = btLiberarMtosClick
+      end
+      object ExportarItau: TSpeedButton
+        Left = 8
+        Top = 221
+        Width = 32
+        Height = 30
+        Hint = 'Remessa Ita'#250
+        Flat = True
+        Glyph.Data = {
+          76010000424D7601000000000000760000002800000020000000100000000100
+          04000000000000010000130B0000130B00001000000000000000000000000000
+          800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333303
+          333333333333337FF3333333333333903333333333333377FF33333333333399
+          03333FFFFFFFFF777FF3000000999999903377777777777777FF0FFFF0999999
+          99037F3337777777777F0FFFF099999999907F3FF777777777770F00F0999999
+          99037F773777777777730FFFF099999990337F3FF777777777330F00FFFFF099
+          03337F773333377773330FFFFFFFF09033337F3FF3FFF77733330F00F0000003
+          33337F773777777333330FFFF0FF033333337F3FF7F3733333330F08F0F03333
+          33337F7737F7333333330FFFF003333333337FFFF77333333333000000333333
+          3333777777333333333333333333333333333333333333333333}
+        NumGlyphs = 2
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = ExportarItauClick
+      end
+      object SpeedButton1: TSpeedButton
+        Left = 8
+        Top = 308
+        Width = 32
+        Height = 30
+        Hint = 'Gerar Documento nom Financeiro'
+        Flat = True
+        Glyph.Data = {
+          AA040000424DAA04000000000000360000002800000013000000130000000100
+          18000000000074040000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFF9F9F9F4F4F4F0F0F0F6F6F6FFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFDFDFDF5F5
+          F5E3E3E3CACBCCBABABAB2B2B2C8C8C8EBEBEBFDFDFDFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFDFDFDF4F4F4DEDEDEBDBEBEB5A38F
+          B18467A49D9CAAACAD9A9A9ABCBCBCE3E3E3FAFAFAFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFF000000FBFBFBDADBDDBEB9B5B9A28CD9A462E9A752CB7E2BA7
+          8F8EC0C5C7B2B2B2999999AFAFAFD8D8D8F5F5F5FFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFF000000E0DDDBD1B295E4B277F2B467EBAD5DE9A955D79750AC918DB6BC
+          BEBABABAB3B3B39F9F9FA4A4A4D5D5D5F9F9F9FFFFFFFFFFFFFFFFFFFFFFFF00
+          0000D2C8BFFFC480F6BC78F1B772F2B76FEBB876CB975CBAA090B3B7BAAFAFAE
+          B4B4B4B6B6B6A4A4A4BFBFBFF3F3F3FFFFFFFFFFFFFFFFFFFFFFFF000000D6C8
+          BCFFC88AF4BC7EE2AB74AD6F3B8162598B807BC2BEBCB4B5B6A8A8A8A3A3A39E
+          9E9EA3A3A3B9B9B9F1F1F1FFFFFFFFFFFFFFFFFFFFFFFF000000D6CDC3E3B480
+          B67742A0878BB6B2B2CED4D7EAF1F5E9EBEBB2B2B29C9C9C8E8E8E8989897E7E
+          7EB2B2B2E4E4E4EBEBEBF2F2F2FEFEFEFFFFFF000000E9E9E9CFCCCCD4D6D9E0
+          E6E9E1E4E8E4D1BEC19C8DE9E6E4BCBCBD8A8A8A9293939A9C9D787E7FA0A1A3
+          B2AFAFB0AEAEC8C8C8F4F4F4FFFFFF000000F2F3F4E2E1DFD9BAA5D8AA84CD81
+          38E0A057DE9315E5D4C8D3D5D68F8F909D9C9C90888B877275965442AB5015B4
+          6B42B0A5A4EDEDEDFFFFFF000000F5F8F9E6D9CDEFAF63DD974EEFC294F1DAC7
+          F9E3D0FDFAF7F3F4F5919496AD9A92AA572BC76000DB863BF0A767E8A46ACEBB
+          B4F8F8F8FFFFFF000000F9F9FAE9E7E6FFF4E8F6EBE3FCF4ECEEE0D3F5EAE2D6
+          9E7DEBE6E3C3C7C8B2ABA7CC9067C08552BE987CE8BF9CEED4C0F3F1F0FFFFFF
+          FFFFFF000000FEFEFEEFEFF0FAFCFEE9B684D2975CE39C4AD09865EAAF73DCC9
+          BEEBEEEEADADAF888A8B8B9092989B9CE5E5E5FFFFFFFFFFFFFFFFFFFFFFFF00
+          0000FFFFFFFAFAFAE7E9EBEED4BCE7CAB5EEDED2E5DCD5E4DFD7D2D2D1C0C1C2
+          B8B8B88A8A8A8A8A8A999999E1E1E1FFFFFFFFFFFFFFFFFFFFFFFF000000FFFF
+          FFFFFFFFFBFBFBDFE1E2CACBCB959BA085898C6F73765254554C4C4C9E9E9E8E
+          8E8E8888889A9A9ADDDDDDFDFDFDFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF
+          FFFFFFE3E3E3A0A1A15A5A595454524242423D3D3D464646AAAAAA8D8D8D7E7E
+          7E9B9B9BDCDCDCFCFCFCFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFE5
+          E5E5B9B9B9989898B0B0B0C3C3C3CFCFCFD9D9D9E9E9E9D6D6D6AAAAAAAAAAAA
+          EDEDEDFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFF3F3F3D9D9
+          D9CECECECECECED4D4D4D7D7D7DBDBDBDCDCDCE4E4E4E7E7E7F1F1F1FFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFF000000}
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = SpeedButton1Click
+      end
+    end
+    inherited Panel5: TPanel
+      Width = 691
+      Height = 389
+      inherited pgPrincipal: TPageControl
+        Width = 685
+        Height = 383
+        inherited tbConsulta: TTabSheet
+          inherited Panel2: TPanel
+            Width = 677
+            Height = 352
+            object Label7: TLabel [0]
+              Left = 384
+              Top = 308
+              Width = 54
+              Height = 13
+              Caption = 'Estagi'#225'rios:'
+            end
+            object Label8: TLabel [1]
+              Left = 558
+              Top = 307
+              Width = 97
+              Height = 13
+              Caption = 'Com Desconto - Ita'#250
+            end
+            object Label10: TLabel [2]
+              Left = 446
+              Top = 309
+              Width = 106
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Total Folha (Liberado):'
+            end
+            inherited DBGrid1: TDBGrid
+              Top = 8
+              Width = 665
+              Height = 292
+              DataSource = DmDTA.dsFolhaPgto
+              Options = [dgEditing, dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgConfirmDelete]
+              ParentFont = False
+              PopupMenu = PopupMenu1
+              OnDrawColumnCell = DBGrid1DrawColumnCell
+              OnEnter = DBGrid1Enter
+              OnExit = DBCtrlGrid1Exit
+              OnKeyPress = DBGrid1KeyPress
+              Columns = <
+                item
+                  Expanded = False
+                  FieldName = 'est_nome'
+                  ReadOnly = True
+                  Width = 183
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'tce_cod'
+                  ReadOnly = True
+                  Width = 34
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'est_agencia'
+                  Title.Caption = 'Ag'#234'ncia'
+                  Width = 50
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'est_conta'
+                  Title.Caption = 'Conta'
+                  Width = 72
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'fbo_valor'
+                  Width = 54
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'ValorCerto'
+                  Width = 54
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'DescSituacao'
+                  ReadOnly = True
+                  Width = 97
+                  Visible = True
+                end
+                item
+                  Expanded = False
+                  FieldName = 'id_parcela'
+                  Width = 59
+                  Visible = True
+                end>
+            end
+            object DBEdit6: TDBEdit
+              Left = 558
+              Top = 323
+              Width = 106
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              DataField = 'TotalBB'
+              DataSource = DmDTA.dsTotal
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object DBCtrlGrid1: TDBCtrlGrid
+              Left = 633
+              Top = 27
+              Width = 38
+              Height = 270
+              Color = clWhite
+              DataSource = DmDTA.dsFolhaPgto
+              PanelBorder = gbNone
+              PanelHeight = 18
+              PanelWidth = 21
+              ParentColor = False
+              TabOrder = 2
+              RowCount = 15
+              OnExit = DBCtrlGrid1Exit
+              object DBCheckBox2: TDBCheckBox
+                Left = 5
+                Top = 1
+                Width = 16
+                Height = 17
+                DataField = 'fbo_liberacao'
+                DataSource = DmDTA.dsFolhaPgto
+                TabOrder = 0
+                ValueChecked = '1'
+                ValueUnchecked = '0'
+              end
+            end
+            object Button1: TButton
+              Left = 635
+              Top = 10
+              Width = 36
+              Height = 18
+              Caption = 'Lib.'
+              TabOrder = 3
+            end
+            object DBEdit9: TDBEdit
+              Left = 446
+              Top = 324
+              Width = 106
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              DataField = 'Total'
+              DataSource = DmDTA.dsTotal
+              ReadOnly = True
+              TabOrder = 4
+            end
+            object cbHabilitaEdicao: TCheckBox
+              Left = 8
+              Top = 317
+              Width = 209
+              Height = 17
+              Caption = 'Habilita Edi'#231#227'o da lista'
+              Checked = True
+              State = cbChecked
+              TabOrder = 5
+              OnClick = cbHabilitaEdicaoClick
+            end
+            object edTotalEst: TEdit
+              Left = 383
+              Top = 324
+              Width = 58
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              ReadOnly = True
+              TabOrder = 6
+            end
+          end
+        end
+        inherited tbRegistro: TTabSheet
+          inherited Panel3: TPanel
+            Width = 677
+            Height = 352
+            inherited Bevel3: TBevel
+              Left = 9
+              Top = 58
+              Width = 654
+              Height = 289
+            end
+            object Label2: TLabel
+              Left = 41
+              Top = 76
+              Width = 33
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Fatura:'
+            end
+            object Label3: TLabel
+              Left = 23
+              Top = 199
+              Width = 51
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Estudante:'
+            end
+            object Label4: TLabel
+              Left = 13
+              Top = 245
+              Width = 61
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Bolsa Aux'#237'lio'
+            end
+            object Label5: TLabel
+              Left = 203
+              Top = 245
+              Width = 54
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Descontos:'
+            end
+            object Label1: TLabel
+              Left = 29
+              Top = 156
+              Width = 44
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Empresa:'
+            end
+            object Label6: TLabel
+              Left = 28
+              Top = 117
+              Width = 47
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'Ano/M'#234's:'
+            end
+            object DBText1: TDBText
+              Left = 581
+              Top = 75
+              Width = 67
+              Height = 16
+              Alignment = taRightJustify
+              AutoSize = True
+              DataField = 'DescSituacao'
+              DataSource = DmDTA.dsFolhaPgto
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -15
+              Font.Name = 'MS Sans Serif'
+              Font.Style = [fsBold, fsItalic]
+              ParentFont = False
+            end
+            object Label9: TLabel
+              Left = 561
+              Top = 119
+              Width = 24
+              Height = 13
+              Alignment = taRightJustify
+              Caption = 'TCE:'
+            end
+            object Label11: TLabel
+              Left = 472
+              Top = 245
+              Width = 39
+              Height = 13
+              Caption = 'Parcela:'
+              FocusControl = DBEdit5
+            end
+            object DBEdit1: TDBEdit
+              Left = 78
+              Top = 195
+              Width = 37
+              Height = 21
+              Color = clInfoBk
+              DataField = 'est_cod'
+              DataSource = DmDTA.dsFolhaPgto
+              TabOrder = 0
+              OnDblClick = DBEdit1DblClick
+              OnExit = DBEdit1Exit
+              OnKeyDown = DBEdit1KeyDown
+            end
+            object DBEdit2: TDBEdit
+              Left = 120
+              Top = 195
+              Width = 527
+              Height = 21
+              TabStop = False
+              CharCase = ecUpperCase
+              Color = cl3DLight
+              DataField = 'est_nome'
+              DataSource = DmDTA.dsFolhaPgto
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object DBEdit3: TDBEdit
+              Left = 78
+              Top = 241
+              Width = 105
+              Height = 21
+              DataField = 'fbo_valor'
+              DataSource = DmDTA.dsFolhaPgto
+              TabOrder = 2
+              OnKeyPress = DBEdit3KeyPress
+            end
+            object DBEdit4: TDBEdit
+              Left = 261
+              Top = 241
+              Width = 124
+              Height = 21
+              DataField = 'fbo_descontos'
+              DataSource = DmDTA.dsFolhaPgto
+              TabOrder = 3
+              OnKeyPress = DBEdit3KeyPress
+            end
+            object DBEdit8: TDBEdit
+              Left = 78
+              Top = 73
+              Width = 59
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              DataField = 'fat_numero'
+              DataSource = DmDTA.dsFolhaPgto
+              ReadOnly = True
+              TabOrder = 4
+            end
+            object edAno: TEdit
+              Left = 78
+              Top = 114
+              Width = 59
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              ReadOnly = True
+              TabOrder = 5
+            end
+            object edMes: TEdit
+              Left = 142
+              Top = 114
+              Width = 37
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              ReadOnly = True
+              TabOrder = 6
+            end
+            object edEmpCod: TEdit
+              Left = 78
+              Top = 153
+              Width = 36
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              ReadOnly = True
+              TabOrder = 7
+            end
+            object edEmpNome: TEdit
+              Left = 118
+              Top = 153
+              Width = 529
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              ReadOnly = True
+              TabOrder = 8
+            end
+            object DBCheckBox1: TDBCheckBox
+              Left = 525
+              Top = 277
+              Width = 121
+              Height = 16
+              TabStop = False
+              Alignment = taLeftJustify
+              Caption = 'Pagamento Liberado'
+              DataField = 'fbo_liberacao'
+              DataSource = DmDTA.dsFolhaPgto
+              TabOrder = 9
+              ValueChecked = '1'
+              ValueUnchecked = '0'
+            end
+            object DBEdit7: TDBEdit
+              Left = 591
+              Top = 115
+              Width = 55
+              Height = 21
+              TabStop = False
+              CharCase = ecUpperCase
+              Color = cl3DLight
+              DataField = 'tce_cod'
+              DataSource = DmDTA.dsFolhaPgto
+              ReadOnly = True
+              TabOrder = 10
+            end
+            object DBEdit5: TDBEdit
+              Left = 512
+              Top = 243
+              Width = 134
+              Height = 21
+              TabStop = False
+              Color = cl3DLight
+              DataField = 'id_parcela'
+              DataSource = DmDTA.dsFolhaPgto
+              ReadOnly = True
+              TabOrder = 11
+            end
+            object DBNavigator1: TDBNavigator
+              Left = 21
+              Top = 278
+              Width = 40
+              Height = 21
+              DataSource = DmDTA.dsFolhaPgto
+              VisibleButtons = [nbFirst, nbNext]
+              Flat = True
+              TabOrder = 12
+            end
+            object DBRadioGroup1: TDBRadioGroup
+              Left = 64
+              Top = 266
+              Width = 456
+              Height = 63
+              Caption = 'Tipo de Lancamento'
+              Columns = 3
+              DataField = 'Controle'
+              DataSource = DmDTA.dsFolhaPgto
+              Items.Strings = (
+                'Folha Normal'
+                'Recesso Indenizado'
+                'Recesso Remunerado'
+                'Complemento 01'
+                'Complemento 02'
+                'Complemento 03')
+              TabOrder = 13
+              Values.Strings = (
+                '0'
+                '1'
+                '2'
+                '3'
+                '4'
+                '5')
+            end
+          end
+        end
+      end
+    end
+  end
+  inherited usPrincipal1: TUpdateSQL
+    Left = 369
+    Top = 62
+  end
+  inherited quPrincipal1: TQuery
+    Left = 338
+    Top = 62
+  end
+  object quInsereFolha: TQuery
+    DatabaseName = 'TalentPool'
+    SQL.Strings = (
+      'insert into FolhaPgto'
+      
+        '  (fat_numero, tce_cod, est_cod, fbo_valor, fbo_descontos, fbo_s' +
+        'ituacao, fbo_liberacao,controle)'
+      'values'
+      
+        '  (:fat_numero, :tce_cod, :est_cod, :fbo_valor, :fbo_descontos, ' +
+        ':fbo_situacao, :fbo_liberacao,:controle)')
+    Left = 43
+    Top = 50
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'fat_numero'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftInteger
+        Name = 'tce_cod'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftInteger
+        Name = 'est_cod'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftFloat
+        Name = 'fbo_valor'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftFloat
+        Name = 'fbo_descontos'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftString
+        Name = 'fbo_situacao'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'fbo_liberacao'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftInteger
+        Name = 'controle'
+        ParamType = ptUnknown
+      end>
+  end
+  object qryEstudantes: TQuery
+    DatabaseName = 'TalentPool'
+    SQL.Strings = (
+      'update estudante'
+      'set est_agencia = :est_agencia,'
+      'est_conta = :est_conta'
+      'where'
+      'est_cod = :est_cod')
+    Left = 99
+    Top = 58
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'est_agencia'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'est_conta'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftUnknown
+        Name = 'est_cod'
+        ParamType = ptUnknown
+      end>
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 235
+    Top = 58
+    object MarcarTodas1: TMenuItem
+      Caption = 'Marcar Todas'
+      OnClick = MarcarTodas1Click
+    end
+    object DesmarcarTodas1: TMenuItem
+      Caption = 'Desmarcar Todas'
+      OnClick = DesmarcarTodas1Click
+    end
+  end
+  object Qrypesquisa: TQuery
+    CachedUpdates = True
+    DatabaseName = 'TalentPool'
+    Left = 282
+    Top = 62
+  end
+end

@@ -1,0 +1,931 @@
+unit TPOLote2;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Buttons, Grids, DBGrids, ComCtrls, StdCtrls, Mask, DBCtrls,
+  ExtCtrls, DBTables, DB;
+
+type
+  TFORLOTE2 = class(TForm)
+    Pgprincipal: TPageControl;
+    tbregistro: TTabSheet;
+    tbconsulta: TTabSheet;
+    PageControl2: TPageControl;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
+    DBGrid3: TDBGrid;
+    SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
+    SpeedButton9: TSpeedButton;
+    DBGrid2: TDBGrid;
+    Bevel1: TBevel;
+    btNovo: TSpeedButton;
+    btExcluir: TSpeedButton;
+    btSalvar: TSpeedButton;
+    btCancelar: TSpeedButton;
+    btEmail: TSpeedButton;
+    btFechar: TSpeedButton;
+    quPrincipal1: TQuery;
+    usPrincipal1: TUpdateSQL;
+    lblInclusao: TLabel;
+    QryItensLote: TQuery;
+    QryItensLotefat_numero: TIntegerField;
+    QryItensLoteest_cod: TIntegerField;
+    QryItensLotetce_cod: TIntegerField;
+    QryItensLoteEst_nome: TStringField;
+    QryItensLoteest_agencia: TStringField;
+    QryItensLoteest_conta: TStringField;
+    QryItensLotelot_numero: TIntegerField;
+    QryItensLotefbo_valor: TFloatField;
+    QryItensLotefbo_descontos: TFloatField;
+    QryItensLotefbo_situacao: TStringField;
+    QryItensLotefbo_liberacao: TStringField;
+    dsItens: TDataSource;
+    QryItensLoteEst_cpf: TStringField;
+    QryAbertos: TQuery;
+    QryAbertosest_cod: TIntegerField;
+    QryAbertostce_cod: TIntegerField;
+    QryAbertosEst_nome: TStringField;
+    DsAbertos: TDataSource;
+    Panel1: TPanel;
+    DBGrid4: TDBGrid;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    Panel3: TPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    QryItensLoteEst_Cidade: TStringField;
+    QryItensLoteEst_Estado: TStringField;
+    QryItensLoteEst_endereco: TStringField;
+    QryItensLoteEst_cep: TStringField;
+    SpeedButton1: TSpeedButton;
+    campos: TListBox;
+    DBEdit4: TDBEdit;
+    Label4: TLabel;
+    QryItensLoteDataCred: TDateField;
+    Qrypesquisa: TQuery;
+    QryItensLoteid_parcela: TIntegerField;
+    DSD: TQuery;
+    DSDID_DOCUMENTO: TIntegerField;
+    DSDID_PESSOA: TIntegerField;
+    DSDID_CENTROCUSTO: TIntegerField;
+    DSDID_PLANOCONTAS: TIntegerField;
+    DSDDTA_EMISSAO: TDateTimeField;
+    DSDNUM_PARCELAS: TIntegerField;
+    DSDDOCUMENTO: TStringField;
+    DSDJUROS: TFloatField;
+    DSDTOTALAVISTA: TFloatField;
+    DSDTOTAL: TFloatField;
+    DSDOBSERVACAO: TStringField;
+    DSDPAGREC: TStringField;
+    DSDID_USUARIOINCLUIU: TIntegerField;
+    DSDID_USUARIOALTEROU: TIntegerField;
+    DSDDATAINCLUIU: TDateTimeField;
+    DSDDATAALTEROU: TDateTimeField;
+    DSDSTATUS: TIntegerField;
+    DSDID_USUARIOCANCELOU: TIntegerField;
+    DSDDTA_CANCELAMENTO: TDateTimeField;
+    DSDVLR_EFETUADO: TFloatField;
+    DSDSALDO: TFloatField;
+    DSDID_NOTA: TIntegerField;
+    UpdateSQL1: TUpdateSQL;
+    dbparcela: TQuery;
+    dbparcelaDTA_VENCIMENTO: TDateTimeField;
+    dbparcelaDTA_VENCPRORROGADO: TDateTimeField;
+    dbparcelaID_DOCUMENTO: TIntegerField;
+    dbparcelaID_PARCELAS: TIntegerField;
+    dbparcelaNUMPARCELA: TIntegerField;
+    dbparcelaSALDO: TFloatField;
+    dbparcelaVLR_PARCELA: TFloatField;
+    dbparcelaVLR_REALIZADO: TFloatField;
+    upparcela: TUpdateSQL;
+    Rateio: TQuery;
+    RateioID_RATEIO: TIntegerField;
+    RateioID_DOCUMENTO: TIntegerField;
+    RateioID_CC: TIntegerField;
+    RateioVALOR: TFloatField;
+    RateioPERC: TFloatField;
+    upRateio: TUpdateSQL;
+    QryItensLoteBanco: TStringField;
+    QryItensLoteRegistro: TIntegerField;
+    QryItensLoteest_codbanco: TIntegerField;
+    QryItensLotevalorcerto: TCurrencyField;
+    QryItensLotedesconto_banco: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
+    procedure btNovoClick(Sender: TObject);
+    procedure btSalvarClick(Sender: TObject);
+    procedure SpeedButton6Click(Sender: TObject);
+    procedure DBEdit1Change(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure btEmailClick(Sender: TObject);
+    function Formatar(Texto: string; TamanhoDesejado: integer; AcrescentarADireita: boolean = true; CaracterAcrescentar: char = ' '): string;
+    procedure btFecharClick(Sender: TObject);
+    procedure SpeedButton8Click(Sender: TObject);
+    procedure SpeedButton9Click(Sender: TObject);
+    procedure btExcluirClick(Sender: TObject);
+    procedure btCancelarClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure DBGrid4KeyPress(Sender: TObject; var Key: Char);
+    procedure QryItensLoteCalcFields(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Fat, Mes, Ano, Emp: Integer;
+    EmpNome: string;
+  end;
+var
+  FORLOTE2: TFORLOTE2;
+implementation
+uses TPODTA, TPOFNC, TPOCST, TPOFPG, TPOINI;
+{$R *.dfm}
+
+procedure TFORLOTE2.FormCreate(Sender: TObject);
+begin
+  quPrincipal1 := DmDTA.quLotePgto;
+  DmDTA.DsLotePgto.DataSet := quPrincipal1;
+end;
+
+procedure TFORLOTE2.FormShow(Sender: TObject);
+begin
+  with DmDTA.quLotePgto do
+  begin
+    Close;
+    ParamByName('fat_numero').AsInteger := Fat;
+    Open;
+  end;
+end;
+
+procedure TFORLOTE2.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if DmDta.quFolhaPgto.UpdatesPending then
+  begin
+    DmDta.quLotePgto.ApplyUpdates;
+    DmDta.quLotePgto.CommitUpdates;
+  end;
+  ACTION := CAFREE;
+end;
+
+procedure TFORLOTE2.FormDestroy(Sender: TObject);
+begin
+  DmDta.dsLotepgto.DataSet := DmDta.qulotepgto;
+end;
+
+procedure TFORLOTE2.btNovoClick(Sender: TObject);
+begin
+  quPrincipal1.Insert;
+  quPrincipal1.FieldByName('fat_numero').AsInteger := fat;
+  quPrincipal1.FieldByName('fat_ano').AsInteger := ano;
+  quPrincipal1.FieldByName('fat_mes').asinteger := mes;
+  quPrincipal1.FieldByName('emp_cod').asinteger := emp;
+  lblInclusao.Caption := 'Inclusão';
+  pgPrincipal.ActivePage := tbRegistro;
+  btsalvar.Enabled := true;
+  QryItensLote.Close;
+  btSalvarClick(Sender);
+end;
+
+procedure TFORLOTE2.btSalvarClick(Sender: TObject);
+var
+  PrimeiroRegistro, UltimoRegistro: integer;
+  posicao: tbookmark;
+begin
+  if quPrincipal1.State in [dsinsert, dsEdit] = false then
+    exit;
+  if quPrincipal1.State in [dsinsert] then
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      SQL.Clear;
+      SQL.Add('select');
+      SQL.Add('  max(lot_numero) as Maximo,');
+      SQL.Add('  min(lot_numero) as Minimo');
+      SQL.Add('from');
+      SQL.Add('  lote');
+      Open;
+      if FieldByName('Minimo').IsNull then
+      begin
+        PrimeiroRegistro := 0;
+        UltimoRegistro := 0;
+      end
+      else
+      begin
+        PrimeiroRegistro := FieldByName('Minimo').AsInteger;
+        UltimoRegistro := FieldByName('Maximo').AsInteger;
+      end;
+      Close;
+      Free;
+      quPrincipal1.FieldByName('lot_numero').asinteger := ultimoregistro + 1;
+    end;
+    quprincipal1.post;
+    if quprincipal1.UpdatesPending then
+    begin
+      quprincipal1.ApplyUpdates;
+      quprincipal1.CommitUpdates;
+    end;
+    quprincipal1.Close;
+    quprincipal1.Open;
+    btsalvar.Enabled := false;
+    pgPrincipal.ActivePage := tbconsulta;
+  end;
+end;
+
+procedure TFORLOTE2.SpeedButton6Click(Sender: TObject);
+var
+  posicao: tbookmark;
+begin
+  if quprincipal1.FieldByName('lot_sequencia').AsString = '' then
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('update  folhapgto  set lot_numero =:lote,REGISTRO=:REGISTRO where est_cod =:estudante and fat_numero=:fatura ');
+      parambyname('lote').asinteger := quprincipal1.FieldByName('lot_numero').Asinteger;
+      parambyname('estudante').asinteger := qryabertos.FieldByName('est_cod').Asinteger;
+      parambyname('fatura').asinteger := quprincipal1.FieldByName('fat_numero').Asinteger;
+      parambyname('REGISTRO').asinteger := dmdta.NEW_ID('LOTEHSBC');
+      execsql;
+      if not qryabertos.Eof then
+        qryabertos.Next
+      else if qryabertos.RecordCount > 1 then
+        qryabertos.First;
+     // posicao := qryabertos.GetBookmark;
+      qryabertos.Close;
+      qryabertos.Open;
+      qryitenslote.Close;
+      qryitenslote.Open;
+      Close;
+      Free;
+    end;
+  end
+  else
+    showmessage('Lote já foi emitido');
+end;
+
+procedure TFORLOTE2.DBEdit1Change(Sender: TObject);
+begin
+  if (quprincipal1.Active) and (quprincipal1.IsEmpty = false) then
+  begin
+    qryitenslote.Close;
+    qryitenslote.ParamByName('lote').asinteger := quprincipal1.FieldByName('lot_numero').Asinteger;
+    qryitenslote.Open;
+    qryabertos.Close;
+    qryabertos.ParamByName('faturamento').asinteger := fat;
+    qryabertos.Open;
+  end;
+end;
+
+procedure TFORLOTE2.SpeedButton7Click(Sender: TObject);
+begin
+  if quprincipal1.FieldByName('lot_sequencia').AsString = '' then
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('update  folhapgto  set lot_numero =:lote , REGISTRO =:REGISTRO where lot_numero is null and  fat_numero=:fatura ');
+      sql.Add(' and est_cod in (select est_cod from Estudante where est_banco = ''Banco Itaú'')  and  fbo_liberacao = 1    ');
+      parambyname('lote').asinteger := quprincipal1.FieldByName('lot_numero').Asinteger;
+      parambyname('fatura').asinteger := quprincipal1.FieldByName('fat_numero').Asinteger;
+      parambyname('REGISTRO').asinteger := dmdta.NEW_ID('LOTEHSBC');
+      execsql;
+      qryabertos.Close;
+      qryabertos.Open;
+      qryitenslote.Close;
+      qryitenslote.Open;
+      Close;
+      Free;
+    end;
+  end
+  else
+    showmessage('Lote já foi emitido!');
+end;
+
+function strzero(linha: string; tam: integer): string;
+var
+  palavra: string;
+begin
+  palavra := trim(linha);
+  while length(palavra) < tam do
+    palavra := '0' + palavra;
+  result := palavra;
+end;
+
+procedure TFORLOTE2.btEmailClick(Sender: TObject);
+var
+  Tempo: string;
+  car: char;
+  F, F1: TextFile;
+  sFav, sPag: string;
+  ano, mes, dia: Word;
+  sValor: string;
+  Registro: string;
+  CodigoBanco: string;
+  NumeroRegistro, NumeroLote: integer;
+  total: real;
+  PrimeiroRegistro, UltimoRegistro: integer;
+  idempresa, idrateio, idpessoa, iddocumento, idparcela: integer;
+  TotalDoc, valordoc: currency;
+  QCC, Qdocumento: tquery;
+
+begin
+  TotalDoc := 0;
+
+  iddocumento := 0;
+  idempresa := 0;
+  if quPrincipal1.FieldByName('lot_datacred').asstring = '' then
+  begin
+    showmessage('É Necessário Informar a Data para crédito');
+    dbedit4.SetFocus;
+    exit;
+  end;
+  if MSGSIMNAO('Deseja Emitir Lote?') = false then
+    exit;
+  if quPrincipal1.FieldByName('lot_sequencia').AsString = '' then
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      SQL.Clear;
+      SQL.Add('select');
+      SQL.Add('  max(lot_sequencia) as Maximo,');
+      SQL.Add('  min(lot_sequencia) as Minimo');
+      SQL.Add('from');
+      SQL.Add('  lote');
+      Open;
+      if FieldByName('Minimo').IsNull then
+      begin
+        PrimeiroRegistro := 0;
+        UltimoRegistro := 0;
+      end
+      else
+      begin
+        PrimeiroRegistro := FieldByName('Minimo').AsInteger;
+        UltimoRegistro := FieldByName('Maximo').AsInteger;
+      end;
+      Close;
+      Free;
+      quprincipal1.Edit;
+      quPrincipal1.FieldByName('lot_sequencia').asinteger := ultimoregistro + 1;
+      quprincipal1.fieldbyname('lot_data').value := now;
+      quprincipal1.post;
+      if quprincipal1.UpdatesPending then
+      begin
+        quprincipal1.ApplyUpdates;
+        quprincipal1.CommitUpdates;
+      end;
+    end;
+  end;
+
+  NumeroRegistro := 0;
+  NumeroLote := quPrincipal1.FieldByName('lot_sequencia').asinteger;
+
+  qrypesquisa.Close;
+  qrypesquisa.SQL.Clear;
+  qrypesquisa.SQL.Add('select id_documento from tb_documentos nolock where id_documento in (select id_documento from tb_parcelas where id_lote=:lote) ');
+  qrypesquisa.ParamByName('lote').AsInteger := numerolote;
+  qrypesquisa.Open;
+  if qrypesquisa.Eof = false then
+    iddocumento := qrypesquisa.fieldbyname('id_documento').asinteger;
+
+  Registro := '';
+  CodigoBanco := '399';
+  // Gera um arquivo para o Banco do HSBC
+  if not directoryexists('C:\BancoHSBC\Aplicativos\Arquivos\Pag\') then
+  begin
+    createdir('C:\BancoHSBC');
+    createdir('C:\BancoHSBC\Aplicativos\');
+    createdir('C:\BancoHSBC\Aplicativos\Arquivos');
+    createdir('C:\BancoHSBC\Aplicativos\Arquivos\Pag');
+  end;
+
+  qrypesquisa.Close;
+  qrypesquisa.SQL.Clear;
+  qrypesquisa.SQL.Add('select * from tb_pessoas where emp_cod=:codigo or func_cod=:codigo ');
+  qrypesquisa.ParamByName('codigo').AsInteger := DmDta.qulotePgtoemp_cod.AsInteger;
+  qrypesquisa.Open;
+  if qrypesquisa.Eof = false then
+  begin
+    Qdocumento := TQuery.Create(nil);
+    qcc := TQuery.Create(nil);
+    idempresa := qrypesquisa.fieldbyname('id_pessoas').AsInteger;
+  end;
+
+  Screen.Cursor := crHourGlass;
+  AssignFile(F, 'C:\BancoHSBC\Aplicativos\Arquivos\Pag\list_' + copy(DmDta.quFolhaPgtofat_numero.asstring, 5, 4) + '.txt');
+  Rewrite(F);
+  AssignFile(F1, 'C:\BancoHSBC\Aplicativos\Arquivos\Pag\' + copy(DmDta.quFolhaPgtofat_numero.asstring, 5, 4) + strzero(quPrincipal1.FieldByName('lot_sequencia').asstring, 4) + '.rem');
+  Rewrite(F1);
+  //  Controle
+  Registro := Formatar('399', 3, false, '0'); {1 a 3 - Código do banco}
+  Registro := Registro + '0000'; {4 a 7 - Lote de serviço}
+  Registro := Registro + '0'; {8 - Tipo de registro - Registro header de arquivo}
+  // filler
+  Registro := Registro + Formatar('', 9); {9 a 14 - Complemento}
+  // Empresa
+
+
+  Registro := Registro + '2'; {18 - Tipo de inscrição do cedente} // 2 - pessoa juridica
+
+  Registro := Registro + Formatar('02217643000117', 14, false, '0'); {19 a 32 - Número de inscrição do cedente}
+  Registro := Registro + Formatar('708186', 6, false, '0'); {33  a 38 (6)contrato}
+  // filler
+  Registro := Registro + Formatar('', 14); {39 a 52 - Complemento}
+
+ {CÓDIGO DO CONVÊNIO = AGÊNCIA + NÚMERO CONVÊNIO + DV}
+  Registro := Registro + Formatar('1284', 5, false, '0'); {53 a 57 - Código da agência} //
+  Registro := Registro + Formatar('', 1); {58 - Complemento}
+  Registro := Registro + Formatar('396', 12, false, '0'); {59 a 70 - Numero da Conta debitada} //
+  Registro := Registro + Formatar('', 1); {71 - Complemento}
+  Registro := Registro + Formatar('', 1); {72 - Dígito do código do convênio no banco} // VErificar com o Banco
+  Registro := Registro + Formatar('CENTRO DE TREINAMENTO E FORMACAO DO ESTUDANTE', 30, true, ' '); {73 a 102 - Nome do cedente}
+  Registro := Registro + Formatar('HSBC Bank Brasil S.A.', 30, true, ' '); {103 a 132 - Nome do banco}
+  Registro := Registro + Formatar('', 10); {133 a 142 }
+  Registro := Registro + '1'; {143 - Código de Remessa (1) / Retorno (2)}
+  Registro := Registro + FormatDateTime('ddmmyyyy', NOW()); {144 a 151 - Data do de geração do arquivo}
+  Registro := Registro + FormatDateTime('hhmmss', NOW()); {152 a 157 - Hora de geração do arquivo}
+  Registro := Registro + Formatar(quPrincipal1.FieldByName('lot_sequencia').asstring, 6); {158 a 163 } // Numero da Remessa gerar numero
+  Registro := Registro + Formatar('020', 3); {164 a 166 } // LAyout do ARquivo
+  Registro := Registro + Formatar('01600', 5); {167 a 171 }
+  Registro := Registro + Formatar('CPG', 3); {172 a 174 } // Aplicacao
+  Registro := Registro + Formatar('Y2K', 3); {175 a 177 } // identificacao do ano 2000
+  Registro := Registro + Formatar('', 14); {178 a 191 } // Brancos
+  Registro := Registro + Formatar('', 49); {192 a 240 } // Brancos
+
+  WriteLn(F1, REGISTRO);
+  Registro := '';
+  {GERAR REGISTRO HEADER DO LOTE}
+  Registro := Formatar(CodigoBanco, 3, false, '0'); {1a 3 - Código do banco}
+  Registro := Registro + Formatar(IntToStr(1), 4, false, '0'); {4 a 7 - Número do lote de serviço}
+  Registro := Registro + '1'; {8 - Tipo do registro - Registro header de lote}
+  Registro := Registro + 'C'; {9 - Tipo de operação: C Credito)}
+  Registro := Registro + '30'; {10 a 11 - Tipo da Operação: 01 (Cobrança)} // 30 - salario 20 - Fornecedores
+  Registro := Registro + '01'; {12 a 13 - Forma de pagamento: preencher com ZEROS no caso de cobrança}
+  Registro := Registro + '020'; {14 a 16 - Número da versão do layout do lote}
+  Registro := Registro + ' '; {17 - Uso exclusivo FEBRABAN/CNAB}
+  Registro := Registro + '2'; {18 - Tipo de inscrição do cedente}
+  Registro := Registro + Formatar('02217643000117', 14, false, '0'); {19 a 32 - Número de inscrição do cedente}
+  Registro := Registro + Formatar('708186', 6, false, '0'); {33  a 38 (6)contrato}
+  Registro := Registro + Formatar('', 14); {39 a 52 - Complemento}
+  Registro := Registro + Formatar('1284', 5, false, '0'); {53 a 57 - Código da agência} //
+  Registro := Registro + Formatar('', 1); {58 - Complemento}
+  Registro := Registro + Formatar('396', 12, false, '0'); {59 a 70 - Numero da Conta debitada} //
+  Registro := Registro + Formatar('', 1); {71 - Complemento}
+  Registro := Registro + Formatar('', 1); {72 - Dígito do código do convênio no banco} // VErificar com o Banco
+
+  Registro := Registro + Formatar('CENTRO DE TREINAMENTO E FORMACAO DO ESTUDANTE', 30, true, ' '); {73 a 102 - Nome do cedente}
+  Registro := Registro + Formatar('', 40); {103 a 142  Brancos} // Verificar o tipo de convenio ####
+  Registro := Registro + Formatar('IGUACU', 30, true, ' '); {143 a 172  ENDERECO} // verificar endereco
+  Registro := Registro + Formatar('2345', 5, false, '0'); {173 a 177  NUMERO} //
+  Registro := Registro + Formatar('1º ANDAR', 15, true, ' '); {178 a 192  COMPLEMENTO} //
+  Registro := Registro + Formatar('CURITIBA', 20, true, ' '); {193 a 212  CIDADE} //
+  Registro := Registro + Formatar('80240030', 8, false, '0'); {213 a 220  CEP} //
+  Registro := Registro + 'PR'; {221 a 222  UF} //
+  Registro := Registro + Formatar('', 8); {223 a 230  BRANCOS}
+  Registro := Registro + Formatar('', 10); {231 a 240  BRANCOS}
+  WriteLn(F1, REGISTRO);
+  // data de liberação pgto
+  DecodeDate(Date, ano, mes, dia);
+  NumeroRegistro := 0;
+  //dmDta.quFolhaPgto
+  with qryitenslote do
+  begin
+    First;
+    DisableControls;
+    while not eof do
+    begin
+      if FieldByName('fbo_liberacao').AsInteger = 1 then
+      begin
+        INC(NumeroRegistro);
+        Registro := '';
+        sFav := '';
+        sPag := '';
+        // Tratamento do valor
+        sValor := FormatFloat('0', FieldByName('valorcerto').AsFloat * 100);
+        total := total + FieldByName('valorcerto').AsFloat * 100;
+        Registro := Formatar(CodigoBanco, 3, false, '0'); {1a 3 - Código do banco}
+        Registro := Registro + Formatar(IntToStr(1), 4, false, '0'); { 4 A 7  NUMERO DO LOTE }
+        Registro := Registro + '3'; { 8 A 8  REGISTRO DETALHE LOTE }
+        Registro := Registro + Formatar(IntToStr(NumeroRegistro), 5, false, '0'); { 9 A 13 N. sequencial do Registro no lote }
+        Registro := Registro + 'A'; { 14 A 14  Codigo do Segmento }
+        Registro := Registro + '0'; { 15 A 15  Tipo de movimento }
+        Registro := Registro + '00'; { 16 A 17  Instrucao do Movimento }
+        Registro := Registro + '000'; { 18 A 20  Camera de Compensacao}
+        Registro := Registro + Formatar(FieldByName('banco').AsString, 3, false, '0'); { 21 A 23  Banco do Favorecido}
+        if pos('-', FieldByName('est_agencia').AsString) > 0 then
+          Registro := Registro + Formatar(copy(FieldByName('est_agencia').AsString, 1, pos('-', FieldByName('est_agencia').AsString) - 1), 5, false, '0') { 24 A 28  Ag. Conta Favorecido}
+        else
+          Registro := Registro + Formatar(FieldByName('est_agencia').AsString, 5, false, '0'); { 24 A 28  Ag. Conta Favorecido}
+
+        Registro := Registro + ' '; { 29  Filler em Branco}
+
+        if pos('-', FieldByName('est_conta').AsString) > 0 then
+        begin
+          tempo := trim(copy(FieldByName('est_conta').AsString, pos('-', FieldByName('est_conta').AsString) + 1, 2));
+          if length(tempo) > 1 then
+            tempo := copy(FieldByName('est_conta').AsString, 1, pos('-', FieldByName('est_conta').AsString) - 1) + trim(copy(FieldByName('est_conta').AsString, pos('-', FieldByName('est_conta').AsString) + 1, 1))
+          else
+            tempo := copy(FieldByName('est_conta').AsString, 1, pos('-', FieldByName('est_conta').AsString) - 1);
+
+          Registro := Registro + formatar(tempo, 12, false, '0')
+        end
+          // Formatar(copy(FieldByName('est_conta').AsString, 1, pos('-', FieldByName('est_conta').AsString) - 1), 12, false, '0') {30 a 41 numero da conta}
+        else
+          Registro := Registro + Formatar(FieldByName('est_conta').AsString, 12, false, '0'); {30 a 41 numero da conta}
+
+          // pos('-', FieldByName('est_conta').AsString) + 1, 1), 1) {42 Digito da Conta}
+        if pos('-', FieldByName('est_conta').AsString) > 0 then
+          Registro := Registro + copy(FieldByName('est_conta').AsString, length(FieldByName('est_conta').AsString), 1)
+        else
+          Registro := Registro + ' ';
+
+        if pos('-', FieldByName('est_agencia').AsString) > 0 then
+          Registro := Registro + PreencheEspacosDireita(copy(FieldByName('est_agencia').AsString, pos('-', FieldByName('est_agencia').AsString) + 1, 1), 1) {43 Digito da Agencia}
+        else
+          Registro := Registro + ' ';
+
+        Registro := Registro + PreencheEspacosDireita(FieldByName('est_nome').AsString, 30); { 44 a 73 Nome do Favorecido}
+        Registro := Registro + Formatar(FieldByName('registro').AsString, 16, false, '0'); {74 a 90 Seu numero }
+        registro := registro + '    '; {90  a 93 Seu numero }
+        Registro := Registro + FormatDateTime('ddmmyyyy', quPrincipal1.FieldByName('lot_datacred').value); {94 a 101   Data de Pagamento}
+        Registro := Registro + 'R$ '; { 102 a 104  Moeda}
+        Registro := Registro + Formatar(' ', 17); {105 a 121 }
+        Registro := Registro + Formatar(svalor, 13, false, '0'); {122 a 134 valor previsto}
+        Registro := Registro + Formatar(' ', 1); {135 Emissao Individual S-sim ,N-Nao }
+
+        Registro := Registro + Formatar(' ', 30); {136 a 165 em branco }
+        Registro := Registro + Formatar(' ', 12); {166 a 177 em branco }
+        Registro := Registro + Formatar(' ', 40); {178 a 217 em branco }
+        Registro := Registro + Formatar('06', 2); {218 a 219 Pagamento de Sallario }
+        Registro := Registro + Formatar(' ', 21); {220 a 240 em branco }
+
+
+        //Registro := Registro + Formatar('0', 8, false, '0'); {155 a 162 Data da efetivação do Pagamento}
+        //Registro := Registro + Formatar('0', 15, false, '0'); {163 a 177 Valor Efetivo do pagamento }
+        //Registro := Registro + Formatar(' ', 18); {178 a 195 em branco  Nota 13}
+        //Registro := Registro + Formatar(' ', 2); {196 a 197 em branco }
+        //Registro := Registro + Formatar('0', 9, false, '0'); {198 a 203 nota 14 }
+        //Registro := Registro + PreencheEspacosDireita(FieldByName('est_cpf').AsString, 14);
+        //Registro := Registro + Formatar('51', 2); {218 a 219 nota 30 } //###
+        //Registro := Registro + '00010'; {220 a 224 nota 26 } //###
+        //Registro := Registro + Formatar(' ', 2); {225 a 229 em branco }
+        //Registro := Registro + Formatar('0', 1, false, '0'); {230 aviso ao favorecido  Não }
+        //Registro := Registro + Formatar(' ', 10); {225 a 229 em branco }
+        WriteLn(F1, REGISTRO);
+
+//        REgistro b
+        INC(NumeroRegistro);
+
+        Registro := Formatar(CodigoBanco, 3, false, '0'); {1a 3 - Código do banco}
+        Registro := Registro + Formatar(IntToStr(1), 4, false, '0'); { 4 A 7  NUMERO DO LOTE }
+        Registro := Registro + '3'; { 8 A 8  REGISTRO DETALHE LOTE }
+        Registro := Registro + Formatar(IntToStr(NumeroRegistro), 5, false, '0'); { 9 A 13 N. sequencial do Registro no lote }
+        Registro := Registro + 'B'; { 14 A 14  Codigo do Segmento }
+        Registro := Registro + '   '; { 15 A 17  Brancos }
+        Registro := Registro + '1'; { 1-cpf 2- cgc 18  Tipo Inscricao FAvorecido }
+        Registro := Registro + Formatar(FieldByName('est_cpf').AsString, 14, false, '0');
+        // PreencheEspacosDireita(FieldByName('est_cpf').AsString, 14); { 19 A 32  cpf }
+        Registro := Registro + Formatar(' ', 30); ; { 33 A 62  Logradouro Favorecido}
+        Registro := Registro + Formatar(' ', 5); ; { 63 A 67  numero Favorecido}
+        Registro := Registro + Formatar(' ', 15); ; { 68 A 82  Complemento Fav}
+        Registro := Registro + Formatar(' ', 15); ; { 83 A 97  Bairro Favorecido}
+        Registro := Registro + Formatar(' ', 20); ; { 98 A 117  Cidade Favorecido}
+        Registro := Registro + Formatar(' ', 5); ; { 118 A 122  CEP Favorecido}
+        Registro := Registro + Formatar(' ', 3); ; { 123 A 125  Complemento do CEP Favorecido}
+        Registro := Registro + Formatar(' ', 2); ; { 126 A 127  UF Favorecido}
+        Registro := Registro + Formatar(' ', 113); ; { 127 A 240  filler}
+        WriteLn(F1, REGISTRO);
+        // Arquivo favorecidos
+        sFav := sFav + PreencheEspacosDireita(FieldByName('est_nome').AsString, 50);
+        sFav := sFav + PreencheEspacosDireita(FieldByName('est_cpf').AsString, 14);
+        sFav := sFav + PreencheEspacosDireita(FieldByName('est_agencia').AsString, 5);
+        sFav := sFav + PreencheEspacosDireita(FieldByName('est_conta').AsString, 12);
+        sFav := sFav + Formatar(svalor, 21, false, '0');
+        WriteLn(F, sFav);
+      end;
+      next;
+    end;
+    if iddocumento > 0 then
+    begin
+      with Qdocumento do
+      begin
+        DatabaseName := DATABASE_NAME;
+        sql.clear;
+        Sql.Add('update  tb_documentos set  ');
+        sql.add(' totalavista=:totalavista,total=:total,saldo=:saldo where id_documento=:documento ');
+        qrypesquisa.close;
+        qrypesquisa.SQL.Clear;
+        qrypesquisa.SQL.Add('select sum(vlr_parcela) Total ,sum(saldo) saldo from tb_parcelas where id_documento=:documento ');
+        qrypesquisa.parambyname('documento').asinteger := iddocumento;
+        qrypesquisa.Open;
+        parambyname('totalavista').ascurrency := qrypesquisa.fieldbyname('total').AsCurrency;
+        parambyname('total').ascurrency := qrypesquisa.fieldbyname('total').AsCurrency;
+        parambyname('saldo').ascurrency := qrypesquisa.fieldbyname('saldo').AsCurrency;
+        parambyname('documento').asinteger := iddocumento;
+        execsql;
+        close;
+        free;
+      end;
+
+      with QCC do
+      begin
+        DatabaseName := DATABASE_NAME;
+        sql.clear;
+        Sql.Add('update  tb_rateiocc set  ');
+        sql.add(' valor=:valor where id_documento=:documento');
+       // parambyname('id_rateio').asinteger := idrateio;
+        parambyname('valor').ascurrency := qrypesquisa.fieldbyname('total').AsCurrency;
+        parambyname('documento').asinteger := iddocumento;
+        execsql;
+        close;
+        free;
+      end;
+    end;
+
+    registro := '';
+    registro := '399' + Formatar(IntToStr(1), 4, false, '0') + '5';
+    Registro := Registro + Formatar(' ', 9);
+    Registro := Registro + Formatar(IntToStr(NumeroRegistro + 2), 6, false, '0');
+    Registro := Registro + Formatar(' ', 3);
+    svalor := FormatFloat('0', total);
+    Registro := Registro + Formatar(svalor, 15, false, '0');
+    Registro := Registro + Formatar(' ', 199);
+    WriteLn(F1, REGISTRO);
+
+    registro := '';
+    registro := '39999999'; { 1 a 8}
+    Registro := Registro + Formatar(' ', 9); {9 a 17}
+    Registro := Registro + Formatar('1', 6, false, '0'); {18 a 23}
+    Registro := Registro + Formatar(IntToStr(NumeroRegistro + 4), 6, false, '0'); {24 a 29}
+    Registro := Registro + Formatar(' ', 211); { vazio 20 a 240 }
+    WriteLn(F1, REGISTRO);
+   { registro := '34199999         000001';
+    Registro := Registro + Formatar(IntToStr(NumeroRegistro + 4), 6, false, '0');
+    registro := Registro + Formatar(' ', 211);
+    WriteLn(F1, REGISTRO);}
+    First;
+    EnableControls;
+  end;
+  CloseFIle(F);
+  CloseFIle(F1);
+  Screen.Cursor := crdefault;
+
+  MSGAVISO('Arquivos gerados com sucesso!');
+  qryitenslote.close;
+  qryitenslote.open;
+end;
+
+function TFORLOTE2.Formatar(Texto: string; TamanhoDesejado: integer; AcrescentarADireita: boolean = true; CaracterAcrescentar: char = ' '): string;
+{
+   OBJETIVO: Eliminar caracteres inválidos e acrescentar caracteres à esquerda ou à direita do texto original para que a string resultante fique com o tamanho desejado
+
+   Texto : Texto original
+   TamanhoDesejado: Tamanho que a string resultante deverá ter
+   AcrescentarADireita: Indica se o carácter será acrescentado à direita ou à esquerda
+      TRUE - Se o tamanho do texto for MENOR que o desejado, acrescentar carácter à direita
+             Se o tamanho do texto for MAIOR que o desejado, eliminar últimos caracteres do texto
+      FALSE - Se o tamanho do texto for MENOR que o desejado, acrescentar carácter à esquerda
+             Se o tamanho do texto for MAIOR que o desejado, eliminar primeiros caracteres do texto
+   CaracterAcrescentar: Carácter que deverá ser acrescentado
+}
+var
+  QuantidadeAcrescentar,
+    TamanhoTexto,
+    PosicaoInicial,
+    i: integer;
+
+begin
+  case CaracterAcrescentar of
+    '0'..'9', 'a'..'z', 'A'..'Z': ; {Não faz nada}
+  else
+    CaracterAcrescentar := ' ';
+  end;
+
+  Texto := Trim(AnsiUpperCase(Texto));
+  TamanhoTexto := Length(Texto);
+  for i := 1 to (TamanhoTexto) do
+  begin
+    if Pos(Texto[i], ' 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~''"!@#$%^&*()_-+=|/\{}[]:;,.<>') = 0 then
+    begin
+      case Texto[i] of
+        'Á', 'À', 'Â', 'Ä', 'Ã': Texto[i] := 'A';
+        'É', 'È', 'Ê', 'Ë': Texto[i] := 'E';
+        'Í', 'Ì', 'Î', 'Ï': Texto[i] := 'I';
+        'Ó', 'Ò', 'Ô', 'Ö', 'Õ': Texto[i] := 'O';
+        'Ú', 'Ù', 'Û', 'Ü': Texto[i] := 'U';
+        'Ç': Texto[i] := 'C';
+        'Ñ': Texto[i] := 'N';
+      else Texto[i] := ' ';
+      end;
+    end;
+  end;
+
+  QuantidadeAcrescentar := TamanhoDesejado - TamanhoTexto;
+  if QuantidadeAcrescentar < 0 then
+    QuantidadeAcrescentar := 0;
+  if CaracterAcrescentar = '' then
+    CaracterAcrescentar := ' ';
+  if TamanhoTexto >= TamanhoDesejado then
+    PosicaoInicial := TamanhoTexto - TamanhoDesejado + 1
+  else
+    PosicaoInicial := 1;
+
+  if AcrescentarADireita then
+    Texto := Copy(Texto, 1, TamanhoDesejado) + StringOfChar(CaracterAcrescentar, QuantidadeAcrescentar)
+  else
+    Texto := StringOfChar(CaracterAcrescentar, QuantidadeAcrescentar) + Copy(Texto, PosicaoInicial, TamanhoDesejado);
+
+  Result := AnsiUpperCase(Texto);
+end;
+
+procedure TFORLOTE2.btFecharClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFORLOTE2.SpeedButton8Click(Sender: TObject);
+begin
+  if quprincipal1.FieldByName('lot_sequencia').AsString <> '' then
+    if MSGSIMNAO('Este Lote já foi emitido. Deseja mesmo tirar Lançamento do Lote?') = false then
+      exit;
+
+  if (qryitenslote.FieldByName('id_parcela').AsString <> '') then
+  begin
+    qrypesquisa.Close;
+    qrypesquisa.SQL.Clear;
+    qrypesquisa.SQL.add('select * from tb_parcelas where id_parcelas=:parcela ');
+    qrypesquisa.parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+    qrypesquisa.Open;
+    if qrypesquisa.FieldByName('saldo').ascurrency <> qryitenslote.FieldByName('valorcerto').ascurrency then
+    begin
+      showmessage('Lançamento está em um documento e já foi efetivado. Cancele primeiro as baixas(no financeiro)  para continuar. ');
+      exit;
+    end;
+  end;
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('update  tb_documentos  set total=total-:valor, totalavista=totalavista-:valor, saldo=saldo - :valor where id_documento= (select id_documento from tb_parcelas where id_parcelas=:parcela) ');
+      parambyname('valor').ascurrency := qryitenslote.FieldByName('valorcerto').ascurrency;
+      parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+      execsql;
+      Close;
+      Free;
+    end;
+
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('delete tb_lancamentos where id_parcela=:parcela ');
+      parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+      execsql;
+      Close;
+      Free;
+    end;
+
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      qrypesquisa.Close;
+      qrypesquisa.SQL.Clear;
+      qrypesquisa.SQL.add('select total from tb_documentos where id_documento= (select id_documento from tb_parcelas where id_parcelas=:parcela)  ');
+      qrypesquisa.parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+      qrypesquisa.Open;
+      sql.clear;
+      Sql.Add('update  tb_rateiocc set  ');
+      sql.add(' valor=:valor  where id_documento=(select id_documento from tb_parcelas where id_parcelas=:parcela) ');
+      parambyname('valor').ascurrency := qrypesquisa.fieldbyname('total').ascurrency;
+      parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+      execsql;
+      close;
+      free;
+    end;
+
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('delete tb_parcelas where id_parcelas=:parcela ');
+      parambyname('parcela').asinteger := qryitenslote.FieldByName('id_parcela').Asinteger;
+      execsql;
+      Close;
+      Free;
+    end;
+
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('update  folhapgto  set lot_numero = null ,id_parcela = null,REGISTRO = NULL where lot_numero=:lote and est_cod =:estudante and fat_numero=:fatura ');
+      parambyname('lote').asinteger := qryitenslote.FieldByName('lot_numero').Asinteger;
+      parambyname('estudante').asinteger := qryitenslote.FieldByName('est_cod').Asinteger;
+      parambyname('fatura').asinteger := qryitenslote.FieldByName('fat_numero').Asinteger;
+      execsql;
+      qryabertos.Close;
+      qryabertos.Open;
+      qryitenslote.Close;
+      qryitenslote.Open;
+      Close;
+      Free;
+    end;
+  end;
+end;
+
+procedure TFORLOTE2.SpeedButton9Click(Sender: TObject);
+begin
+  if quprincipal1.FieldByName('lot_sequencia').AsString = '' then
+  begin
+    with TQuery.Create(nil) do
+    begin
+      DatabaseName := DATABASE_NAME;
+      Sql.Add('update  folhapgto  set lot_numero = null,REGISTRO = NULL  where lot_numero=:lote and  fat_numero=:fatura ');
+      parambyname('lote').asinteger := quprincipal1.FieldByName('lot_numero').Asinteger;
+      parambyname('fatura').asinteger := quprincipal1.FieldByName('fat_numero').Asinteger;
+      execsql;
+      qryabertos.Close;
+      qryabertos.Open;
+      qryitenslote.Close;
+      qryitenslote.Open;
+      Close;
+      Free;
+    end;
+  end
+  else
+    showmessage('Lote já foi emitido!');
+end;
+
+procedure TFORLOTE2.btExcluirClick(Sender: TObject);
+begin
+  if qryitenslote.isempty then
+    if quprincipal1.IsEmpty = false then
+      if MSGSIMNAO('Deseja excluir o registro posicionado?') then
+      begin
+        try
+          DmDta.ExcluirRegistro(quPrincipal1);
+        except
+          btCancelar.Click; // Cancela Registro
+        end;
+      end;
+end;
+
+procedure TFORLOTE2.btCancelarClick(Sender: TObject);
+begin
+  quprincipal1.Cancel;
+  quprincipal1.CancelUpdates;
+  btsalvar.Enabled := false;
+end;
+
+procedure TFORLOTE2.SpeedButton1Click(Sender: TObject);
+begin
+  Screen.Cursor := crHourGlass;
+  QryItensLotetce_cod.Visible := false;
+  campos.Items.Clear;
+  campos.Items.Add('valor');
+  forini.ExportarDadosExcel(QryItensLote, campos, '', 'Fatura: ' + dbedit2.Text + '  Lote: ' + dbedit1.text + '  Envio: ' + dbedit5.Text + '  ' + dbedit3.Text, dbedit6.Text);
+  DmDta.quContaCorrest_cpf.Visible := false;
+  QryItensLotetce_cod.Visible := false;
+  Screen.Cursor := crDefault;
+end;
+
+procedure TFORLOTE2.DBGrid4KeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    pgPrincipal.ActivePage := tbRegistro;
+end;
+
+function iif(Condicao: Boolean; retornaTrue, retornaFalse: Variant): Variant;
+begin
+  if Condicao then
+    Result := retornaTrue
+  else
+    Result := retornaFalse;
+end;
+
+procedure TFORLOTE2.QryItensLoteCalcFields(DataSet: TDataSet);
+begin
+  qryitenslotedatacred.asstring := quPrincipal1.FieldByName('lot_datacred').asstring;
+  qryitensloteValorCerto.AsFloat := qryitensloteFbo_valor.AsFloat -
+      qryitenslotefbo_descontos.AsFloat - qryitenslotedesconto_banco.asFloat;
+      //qryitenslotefbo_descontos.AsFloat - iif(qryitensloteest_codbanco.AsInteger = 7, 0, 3.98);
+
+end;
+
+end.
+

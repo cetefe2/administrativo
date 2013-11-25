@@ -1,0 +1,213 @@
+unit TPOEMP3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  TPOMOD1, Buttons, StdCtrls, Mask, DBCtrls, ComCtrls, ExtCtrls, Db;
+
+type
+  TFOREMP3 = class(TFORMOD1)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Label2: TLabel;
+    DBRadioGroup1: TDBRadioGroup;
+    DBEdit1: TDBEdit;
+    DBRadioGroup2: TDBRadioGroup;
+    edValor: TEdit;
+    edPorc: TEdit;
+    TabSheet2: TTabSheet;
+    DBMemo1: TDBMemo;
+    Label1: TLabel;
+    DBEdit2: TDBEdit;
+    Label3: TLabel;
+    DBEdit3: TDBEdit;
+    TabSheet3: TTabSheet;
+    rdauxilio: TDBRadioGroup;
+    Button1: TButton;
+    DBEdit35: TDBEdit;
+    DBEdit34: TDBEdit;
+    Button2: TButton;
+    procedure DBRadioGroup1Change(Sender: TObject);
+    procedure DBRadioGroup2Click(Sender: TObject);
+    procedure btOkClick(Sender: TObject);
+    procedure edValorKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure DBMemo1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Button2Click(Sender: TObject);
+    procedure DBEdit34DblClick(Sender: TObject);
+    procedure rdauxilioChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    tela: integer;
+    { Public declarations }
+  end;
+
+var
+  FOREMP3: TFOREMP3;
+
+implementation
+
+uses TPODTA, TPOFNC, TPOEMP, TPOEMPA, untLibera;
+
+{$R *.DFM}
+
+procedure TFOREMP3.DBRadioGroup1Change(Sender: TObject);
+begin
+  if dbRadioGroup1.ItemIndex = 0 then
+  begin
+    DBMemo1.Text := 'A empresa, mensalmente, encaminhará ao CETEFE a folha de pagamento ' +
+      'contendo o(s) valor(es) referente(s) a bolsa-auxílio do(s) estagiário(s), ' +
+      'a contribuição ao CETEFE e o valor total que será creditado na conta ' +
+      'corrente do CETEFE. Após o depósito, a empresa enviará comprovante para que ' +
+      'seja possível o repasse do pagamento ao(s) estagiário(s). ' +
+      'Banco do Brasil S/A - Agência: 1869-4 - Conta Corrente: 13.532-1';
+  end
+  else if dbRadioGroup1.ItemIndex = 1 then
+  begin
+    DBMemo1.Text := 'A empresa, mensalmente, efetuará o pagamento ao estagiário mediante assinatura ' +
+      'de recibo. A contribuição ao CETEFE será paga através de boleto bancário encaminhado à ' +
+      'empresa.';
+  end;
+end;
+
+procedure TFOREMP3.DBRadioGroup2Click(Sender: TObject);
+begin
+  inherited;
+  case DBRadioGroup2.ItemIndex of
+    0, 1, 2, 3:
+      begin
+        edValor.Color := cl3DLight;
+        edValor.ReadOnly := True;
+        edValor.Text := '';
+        edPorc.Color := cl3DLight;
+        edPorc.ReadOnly := True;
+        edPorc.Text := '';
+      end;
+    4:
+      begin
+        edPorc.Color := cl3DLight;
+        edPorc.ReadOnly := True;
+        edValor.Color := clWindow;
+        edValor.ReadOnly := False;
+        edValor.Text := '0,00';
+        edPorc.Text := '';
+        edValor.SetFocus;
+      end;
+    5:
+      begin
+        edValor.Color := cl3DLight;
+        edValor.ReadOnly := True;
+        edPorc.Color := clWindow;
+        edPorc.ReadOnly := False;
+        edPorc.Text := '0';
+        edValor.Text := '';
+        edPorc.SetFocus;
+      end;
+  end;
+end;
+
+procedure TFOREMP3.btOkClick(Sender: TObject);
+begin
+  case DBRadioGroup2.ItemIndex of
+    0, 1, 2, 3:
+      begin
+        if not (DmDta.quEmpresa.State in [dsInsert, dsEdit]) then
+          DmDta.quEmpresa.Edit;
+        DmDta.quEmpresa.FieldByName('emp_valortaxa').Text := '';
+      end;
+    4:
+      begin
+        if not (DmDta.quEmpresa.State in [dsInsert, dsEdit]) then
+          DmDta.quEmpresa.Edit;
+        DmDta.quEmpresa.FieldByName('emp_valortaxa').AsFloat := StrToFloat(edValor.Text);
+      end;
+    5,6:
+      begin
+        if not (DmDta.quEmpresa.State in [dsInsert, dsEdit]) then
+          DmDta.quEmpresa.Edit;
+        DmDta.quEmpresa.FieldByName('emp_valortaxa').AsFloat := StrToFloat(edPorc.Text);
+      end;
+  end;
+  inherited;
+end;
+
+procedure TFOREMP3.edValorKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = '.' then Key := ',';
+end;
+
+procedure TFOREMP3.FormShow(Sender: TObject);
+begin
+  inherited;
+  case DBRadioGroup2.ItemIndex of
+    4:
+      begin
+        edValor.Color := clWindow;
+        edValor.REadOnly := False;
+        edValor.Text := FormatFloat('#,##0.00', DmDta.quEmpresaemp_valortaxa.AsFloat);
+      end;
+    5,6:
+      begin
+        edPorc.Color := clWindow;
+        edPorc.REadOnly := False;
+        edPorc.Text := DmDta.quEmpresaemp_valortaxa.Text;
+      end;
+  end;
+end;
+
+procedure TFOREMP3.DBMemo1KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  CaracterMaiusculo(Key);
+end;
+
+procedure TFOREMP3.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if tela = 1 then
+    FOREMP.btSalvarClick(Sender)
+  else
+    FOREMPA.btSalvarClick(Sender);
+  inherited;
+end;
+
+procedure TFOREMP3.Button2Click(Sender: TObject);
+begin
+  inherited;
+  if not (DmDta.quEmpresa.State in [dsInsert, dsEdit]) then dmDta.quEmpresa.Edit;
+  DmDta.quEmpresaEmp_Auxtransp.AsString := '';
+  rdauxilio.ItemIndex := -1;
+  DmDta.quEmpresaEmp_Auxtransptexto.AsString := '';
+  DmDta.quEmpresaEmp_Auxtranspvalor.asstring := '';
+
+
+end;
+
+procedure TFOREMP3.DBEdit34DblClick(Sender: TObject);
+begin
+  inherited;
+  if frmlibera.showmodal = mrok then
+    DBEdit34.readonly := false
+  else
+    showmessage('Você não tem Permissão para trocar este Status nessa tela!!');
+end;
+
+procedure TFOREMP3.rdauxilioChange(Sender: TObject);
+begin
+  inherited;
+  dbedit35.Enabled := rdauxilio.ItemIndex = 1;
+  dbedit34.Enabled := rdauxilio.ItemIndex = 3;
+  if DmDta.quEmpresa.State in [dsedit, dsinsert] then
+  begin
+    if dbedit35.Enabled = false then
+      DmDta.quEmpresaEmp_Auxtranspvalor.asstring := '';
+    if dbedit34.Enabled = false then
+      DmDta.quEmpresaEmp_Auxtransptexto.AsString := '';
+  end;
+end;
+
+end.
+

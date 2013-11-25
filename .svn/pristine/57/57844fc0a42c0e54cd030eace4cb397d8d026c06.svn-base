@@ -1,0 +1,3672 @@
+unit TPOTAL;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  TPOMOD3, DBTables, Db, ExtCtrls, Grids, DBGrids, ComCtrls, Buttons,
+  StdCtrls, DBCtrls, Mask;
+
+type
+  TFORTAL = class(TFORMOD3)
+    Label1: TLabel;
+    edTceCod: TEdit;
+    Label2: TLabel;
+    DBEdit1: TDBEdit;
+    Label3: TLabel;
+    DBEdit8: TDBEdit;
+    meTceVig: TMaskEdit;
+    Label6: TLabel;
+    Label17: TLabel;
+    meEnt1: TMaskEdit;
+    Label11: TLabel;
+    meSai1: TMaskEdit;
+    Label18: TLabel;
+    meEnt2: TMaskEdit;
+    Label19: TLabel;
+    meSai2: TMaskEdit;
+    Label21: TLabel;
+    cbTipoBolsa: TComboBox;
+    btImprimir: TSpeedButton;
+    qcontrato: TQuery;
+    DBEdit2: TDBEdit;
+    meTalDtRet: TMaskEdit;
+    Label23: TLabel;
+    Label8: TLabel;
+    meTceEmi: TMaskEdit;
+    btSabado: TSpeedButton;
+    DBCheckBox2: TDBCheckBox;
+    DBCheckBox3: TDBCheckBox;
+    DBCheckBox4: TDBCheckBox;
+    DBCheckBox5: TDBCheckBox;
+    DBCheckBox6: TDBCheckBox;
+    DBCheckBox7: TDBCheckBox;
+    DBCheckBox8: TDBCheckBox;
+    qrypesquisa: TQuery;
+    Label4: TLabel;
+    meIntervalo: TMaskEdit;
+    qrySupervisor: TQuery;
+    qrySupervisorNome: TStringField;
+    qrySupervisorFunc_cod: TIntegerField;
+    dssupervisor: TDataSource;
+    BitBtn1: TBitBtn;
+    rdauxilio: TDBRadioGroup;
+    nb: TNotebook;
+    Label7: TLabel;
+    DBEdit13: TDBEdit;
+    Label9: TLabel;
+    dbedit14: TDBMemo;
+    edsemana: TEdit;
+    Label27: TLabel;
+    SpeedButton7: TSpeedButton;
+    qrySupervisorEmp_cod: TIntegerField;
+    GroupBox1: TGroupBox;
+    Label33: TLabel;
+    Label32: TLabel;
+    Label35: TLabel;
+    Label34: TLabel;
+    Label5: TLabel;
+    DBEdit15: TDBEdit;
+    DBEdit16: TDBEdit;
+    DBEdit17: TDBEdit;
+    DBEdit19: TDBEdit;
+    DBEdit18: TDBEdit;
+    cbSuper: TDBLookupComboBox;
+    ckEscala: TDBCheckBox;
+    Label28: TLabel;
+    DBEdit22: TDBEdit;
+    SpeedButton1: TSpeedButton;
+    GroupBox2: TGroupBox;
+    ckAtividades: TDBCheckBox;
+    CKBOLSA: TDBCheckBox;
+    CKJORNADA: TDBCheckBox;
+    CKPRAZO: TDBCheckBox;
+    SpeedButton10: TSpeedButton;
+    rdEscolha: TDBRadioGroup;
+    ckf1: TDBCheckBox;
+    Label10: TLabel;
+    DBEdit3: TDBEdit;
+    ckr1: TDBCheckBox;
+    ckf2: TDBCheckBox;
+    ckr2: TDBCheckBox;
+    DBEdit4: TDBEdit;
+    Label12: TLabel;
+    ckarea: TDBCheckBox;
+    cktempo: TDBCheckBox;
+    Label41: TLabel;
+    DBEdit24: TDBEdit;
+    DBEdit25: TDBEdit;
+    Label42: TLabel;
+    DBEdit26: TDBEdit;
+    Label43: TLabel;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btSalvarClick(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure meEnt1Exit(Sender: TObject);
+    procedure meTceAltExit(Sender: TObject);
+    procedure btImprimirClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBEdit1KeyPress(Sender: TObject; var Key: Char);
+    procedure DBEdit2Exit(Sender: TObject);
+    procedure meEnt2KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure meTceVigKeyPress(Sender: TObject; var Key: Char);
+    procedure cbTipoBolsaClick(Sender: TObject);
+    procedure meTalDtRetKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btSabadoClick(Sender: TObject);
+    procedure DBCheckBox2Click(Sender: TObject);
+    procedure DBCheckBox7Click(Sender: TObject);
+    procedure CriaCampo(Tabela, campo, chave, condicao: string);
+    procedure DBEdit14DblClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure btNovoClick(Sender: TObject);
+    procedure rdauxilioChange(Sender: TObject);
+    procedure cbSuperExit(Sender: TObject);
+    procedure SpeedButton7Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure SpeedButton10Click(Sender: TObject);
+    procedure DBEdit24DblClick(Sender: TObject);
+    procedure DBEdit24Exit(Sender: TObject);
+    procedure pgPrincipalChange(Sender: TObject);
+  private
+    { Private declarations }
+    sTotal: string;
+  public
+    { Public declarations }
+    CodEstudante, Tce: Integer;
+    MudaAba, F2: Boolean;
+    hr1, hr2, hr3, hr4, hr5, hr6, hr7, hr8, dtc, etotal: string;
+    Retorno, Digitou: Boolean;
+    periodo: string;
+
+    procedure InicializaDados; override;
+    procedure SetaCodigo(Codigo, Vaga, Estudante: Integer);
+    procedure AtualizaDados; override;
+    procedure CarregaDados; override;
+    procedure BuscaPrimeiroUltimo; override;
+    procedure CalcHora();
+    procedure LimpaCampos; override;
+  end;
+
+var
+  FORTAL: TFORTAL;
+
+implementation
+
+uses TPODTA, TPOTALD, TPOFNC, TPOCST, ComObj, TPOINI, untLibera, TPOTALAT,
+  TPOTALOBS, TPOIFU;
+
+{$R *.DFM}
+
+procedure TFORTAL.FormCreate(Sender: TObject);
+begin
+  inherited;
+  DmDTA.criacampo('TCEAlteracao', 'Tal_AuxAlim', 'Tal_COD', ' char(1)');
+  DmDTA.criacampo('TCEAlteracao', 'Tal_AuxAlimAntecipa', 'Tal_COD', ' char(1)');
+  DmDTA.criacampo('TCEAlteracao', 'Tal_AuxAlimTipo', 'Tal_COD', ' varchar(50)');
+  DmDTA.criacampo('TCEAlteracao', 'Tal_AuxAlimtexto', 'Tal_COD', ' varchar(50)');
+  DmDTA.criacampo('TCEAlteracao', 'Tal_AuxAlimValor', 'Tal_COD', ' money');
+
+  criacampo('TCEAlteracao', 'Func_cod', 'Tal_COD', ' int ');
+  criacampo('TCEAlteracao', 'Tal_Intervalo', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_domingo', 'Tal_COD', ' char(1)');
+
+  criacampo('TCEAlteracao', 'tal_horSabini1', 'TAL_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_horsabfim1', 'TAL_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_horsabini2', 'TAL_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_horSabfim2', 'TAL_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_InterSab', 'TAL_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_horsegini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsegfim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsegini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsegfim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Interseg', 'Tal_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_horterini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horterfim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horterini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horterfim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Interter', 'Tal_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_horquaini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquafim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquaini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquafim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Interqua', 'Tal_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_horquiini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquifim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquiini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horquifim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Interqui', 'Tal_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_horsexini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsexfim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsexini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_horsexfim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Intersex', 'Tal_COD', ' smalldatetime ');
+
+  criacampo('TCEAlteracao', 'Tal_hordomini1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_hordomfim1', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_hordomini2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'Tal_hordomfim2', 'Tal_COD', ' smalldatetime ');
+  criacampo('TCEAlteracao', 'tal_Interdom', 'Tal_COD', ' smalldatetime ');
+  nomeCodigo := 'tal_vigencia';
+  nomeNome := 'tal_vigencia';
+  nomeTabela := 'TceAlteracao';
+  Tce := -1;
+
+  MudaAba := True;
+
+  quPrincipal1 := DmDta.quTceAlteracao;
+  DmDta.dsTceAlteracao.DataSet := quPrincipal1;
+  Retorno := False;
+end;
+
+procedure TFORTAL.FormDestroy(Sender: TObject);
+begin
+  inherited;
+  DmDta.dsTceAlteracao.DataSet := DmDta.quTceAlteracao;
+end;
+
+procedure TFORTAL.InicializaDados;
+begin
+  inherited;
+  quPrincipal1.FieldByName('tce_cod').Value := Tce;
+
+  meTceEmi.Text := FormatDateTime('dd/mm/yyyy', Date);
+  meTceVig.Text := FormatDateTime('dd/mm/yyyy', Date);
+
+  quPrincipal1.FieldByName('tal_segunda').Value := '1';
+  quPrincipal1.FieldByName('tal_terca').Value := '1';
+  quPrincipal1.FieldByName('tal_quarta').Value := '1';
+  quPrincipal1.FieldByName('tal_quinta').Value := '1';
+  quPrincipal1.FieldByName('tal_sexta').Value := '1';
+  quPrincipal1.FieldByName('tal_sabado').Value := '0';
+
+  cbTipoBolsa.ItemIndex := 1;
+  Digitou := False;
+  Retorno := True;
+  meTceVig.SetFocus;
+end;
+
+procedure TFORTAL.FormShow(Sender: TObject);
+begin
+  qrysupervisor.Open;
+  Screen.Cursor := crHourGlass;
+  with quPrincipal1 do
+  begin
+    ParamByName('tce_cod').AsInteger := Tce;
+    Open;
+  end;
+  inherited;
+  Screen.Cursor := crDefault;
+end;
+
+procedure TFORTAL.btSalvarClick(Sender: TObject);
+var
+  Ret: Boolean;
+begin
+  btEnter.SetFocus;
+
+  if Salvou then
+  begin
+    if meTceVig.Text = '  /  /     ' then
+    begin
+      MSGERRO('Entre com a data de vigência do TCE!');
+      meTceVig.SetFocus;
+    end
+    else if meEnt1.Text = '  :  ' then
+    begin
+      MSGERRO('Entre com a entrada 1 do TCE!');
+      meEnt1.SetFocus;
+    end
+    else if meSai1.Text = '  :  ' then
+    begin
+      MSGERRO('Entre com a saída 1 do TCE!');
+      meSai1.SetFocus;
+    end
+    else if DBEdit1.Text = '' then
+    begin
+      MSGERRO('Entre com o valor da bolsa do TCE!');
+      DBEdit1.SetFocus;
+    end
+    else
+    begin
+      Ret := Retorno;
+      btEnter.SetFocus;
+
+      if quPrincipal1.State in [dsInsert, dsEdit] then
+      begin
+        try
+          AtualizaDados;
+          DMDta.SalvarRegistro(quPrincipal1);
+        except
+          btCancelar.Click; // Cancela Registro
+        end;
+      end;
+
+      if Ret then
+        DmDta.AtualizaPgtoEstagiario(DmDta.quTceest_cod.AsInteger, DmDta.quTcetce_cod.AsInteger);
+
+      if MudaAba then
+      begin
+        estadoNavegando;
+        pgPrincipal.ActivePage := tbConsulta;
+      end;
+    end;
+  end;
+end;
+
+procedure TFORTAL.DBGrid1DblClick(Sender: TObject);
+begin
+  if F2 then
+  begin
+    F2Codigo := quPrincipal1.FieldByName('idi_cod').AsString;
+    F2Nome := quPrincipal1.FieldByName('idi_nome').AsString;
+    Close;
+  end
+  else
+  begin
+    inherited;
+    pgPrincipalChange(Sender);
+  end;
+end;
+
+procedure TFORTAL.SetaCodigo(Codigo, Vaga, Estudante: Integer);
+begin
+  qrysupervisor.Close;
+  codEstudante := estudante;
+  if vaga > 0 then
+  begin
+    qrysupervisor.ParamByName('vaga').asinteger := vaga;
+    qrysupervisor.Open;
+  end;
+  Tce := Codigo;
+  edTceCod.Text := IntToStr(Tce);
+end;
+
+procedure TFORTAL.AtualizaDados;
+begin
+  if quPrincipal1.State = dsInsert then
+  begin
+    BuscaPrimeiroUltimo();
+    inc(ultimoRegistro);
+    quPrincipal1.FieldByName('tal_cod').Value := ultimoRegistro;
+  end;
+  quPrincipal1.FieldByName('tal_dataemi').text := meTceEmi.Text;
+  quPrincipal1.FieldByName('tal_vigencia').text := meTceVig.Text;
+  quPrincipal1.FieldByName('tal_horarioini1').text := '01/01/1900 ' + meEnt1.Text;
+  quPrincipal1.FieldByName('tal_horariofim1').text := '01/01/1900 ' + meSai1.Text;
+
+  if meIntervalo.Text <> '  :  ' then
+    quPrincipal1.FieldByName('tal_Intervalo').text := '01/01/1900 ' + meIntervalo.Text
+  else
+    quPrincipal1.FieldByName('tal_Intervalo').text := '';
+
+  if meEnt2.Text <> '  :  ' then
+    quPrincipal1.FieldByName('tal_horarioini2').text := '01/01/1900 ' + meEnt2.Text
+  else
+    quPrincipal1.FieldByName('tal_horarioini2').text := '';
+  if meSai2.Text <> '  :  ' then
+    quPrincipal1.FieldByName('tal_horariofim2').text := '01/01/1900 ' + meSai2.Text
+  else
+    quPrincipal1.FieldByName('tal_horariofim2').text := '';
+  if meTalDtRet.Text <> '  /  /    ' then
+    quPrincipal1.FieldByName('tal_retorno').text := meTalDtRet.Text
+  else
+    quPrincipal1.FieldByName('tal_retorno').text := '';
+  quPrincipal1.FieldByName('tal_tipobolsa').text := IntToStr(cbTipoBolsa.ItemIndex);
+end;
+
+procedure TFORTAL.CarregaDados;
+begin
+  Digitou := False;
+  Retorno := False;
+  if not quPrincipal1.FieldByName('tal_Intervalo').IsNull then
+    if Length(quPrincipal1.FieldByName('tal_Intervalo').text) = 10 then
+      meIntervalo.Text := '00:00'
+    else                       // 00/00/0000 hh:nn:ss
+      meIntervalo.Text := copy(quPrincipal1.FieldByName('tal_Intervalo').text, 12,5);
+
+  if not quPrincipal1.FieldByName('tal_dataemi').IsNull then
+    meTceEmi.Text := quPrincipal1.FieldByName('tal_dataemi').text;
+  if not quPrincipal1.FieldByName('tal_vigencia').IsNull then
+    meTceVig.Text := quPrincipal1.FieldByName('tal_vigencia').text;
+  if not quPrincipal1.FieldByName('tal_horarioini1').IsNull then
+    meEnt1.Text := quPrincipal1.FieldByName('tal_horarioini1').Value;
+  if not quPrincipal1.FieldByName('tal_horariofim1').IsNull then
+    meSai1.Text := quPrincipal1.FieldByName('tal_horariofim1').Value;
+  if not quPrincipal1.FieldByName('tal_horarioini2').IsNull then
+    meEnt2.Text := quPrincipal1.FieldByName('tal_horarioini2').Value;
+  if not quPrincipal1.FieldByName('tal_horariofim2').IsNull then
+    meSai2.Text := quPrincipal1.FieldByName('tal_horariofim2').Value;
+  if not quPrincipal1.FieldbyName('tal_retorno').IsNull then
+    meTalDtRet.Text := quPrincipal1.FieldbyName('tal_retorno').text;
+
+  if (not quPrincipal1.FieldByName('tal_horarioini1').IsNull) then
+    Hr1 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horarioIni1').Value)
+  else
+    Hr1 := '';
+  if (not quPrincipal1.FieldByName('tal_horariofim1').IsNull) then
+    Hr2 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horariofim1').Value)
+  else
+    Hr2 := '';
+  if (not quPrincipal1.FieldByName('tal_horarioini2').IsNull) then
+    Hr3 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horarioIni2').Value)
+  else
+    Hr3 := '';
+  if (not quPrincipal1.FieldByName('tal_horariofim2').IsNull) then
+    Hr4 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horariofim2').Value)
+  else
+    Hr4 := '';
+  if (not quPrincipal1.FieldByName('tal_horsabini1').IsNull) then
+    Hr5 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabIni1').Value)
+  else
+    Hr5 := '';
+  if (not quPrincipal1.FieldByName('tal_horsabfim1').IsNull) then
+    Hr6 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabfim1').Value)
+  else
+    Hr6 := '';
+  if (not quPrincipal1.FieldByName('tal_horsabini2').IsNull) then
+    Hr7 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabIni2').Value)
+  else
+    Hr7 := '';
+  if (not quPrincipal1.FieldByName('tal_horsabfim2').IsNull) then
+    Hr8 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabfim2').Value)
+  else
+    Hr8 := '';
+
+  CalcHora;
+
+  if (not quPrincipal1.FieldByName('tal_tipobolsa').IsNull) and
+    (quPrincipal1.FieldByName('tal_tipobolsa').Value <> '') then
+    cbTipoBolsa.ItemIndex := quPrincipal1.FieldByName('tal_tipobolsa').AsInteger;
+end;
+
+
+procedure TFORTAL.meEnt1Exit(Sender: TObject);
+begin
+  inherited;
+  if TMaskEdit(Sender).text <> '  :  ' then
+  begin
+    if not Validahora(TMaskEdit(Sender).Text) then
+    begin
+      TMAskEdit(Sender).SetFocus;
+      Salvou := False;
+    end
+    else
+      Salvou := True;
+  end;
+
+  if Salvou then
+  begin
+    if not (quPrincipal1.State in [dsInsert, dsEdit]) then quPrincipal1.Edit;
+
+    if (meEnt2.Text <> '  :  ') and (meSai1.Text <> '  :  ') then
+      meIntervalo.Text := timetostr(strtotime(meent2.text) - strtotime(mesai1.text));
+
+    if (meEnt1.Text <> '  :  ') and
+      (meSai1.Text <> '  :  ') then
+    begin
+      hr1 := ''; hr2 := ''; hr3 := ''; hr4 := '';
+      if meEnt1.Text <> '  :  ' then
+        hr1 := meEnt1.Text;
+      if meSai1.Text <> '  :  ' then
+        hr2 := meSai1.Text;
+      if meEnt2.Text <> '  :  ' then
+        hr3 := meEnt2.Text;
+      if meSai2.Text <> '  :  ' then
+        hr4 := meSai2.Text;
+      CalcHora();
+    end;
+  end;
+end;
+
+procedure TFORTAL.meTceAltExit(Sender: TObject);
+begin
+  inherited;
+  if TMaskEdit(Sender).text <> '  /  /    ' then
+    if not ValidaData(TMaskEdit(Sender).Text) then
+      TMAskEdit(Sender).SetFocus;
+end;
+
+procedure TFORTAL.btImprimirClick(Sender: TObject);
+var var1: variant;
+  CRM, CRO, CRJ, CREF, CPP, Coren, Conselho, CodEsc, Emp: string;
+  datac: string[37];
+  TipoPessoa: string;
+  agencia, conta, exte, datana, estadoesc: string;
+  respOrientador, carOrientador: string;
+  endesc, baiesc, cidadeEsc, cnpjesc, caresc, telesc, cepesc, nomeesc, RespEsc, dataest: string;
+  endemp, baiemp, telemp, cidadeEmp, estadoEmp, faxEmp, cepemp, cnpjemp, caremp, inscemp, respemp, nomeemp: string;
+  curcod, numMatEsc, EstadoEst, serieEst, cpfEst, cidadeEst, endest, baiest, telest, cepest, rgest, ctpest, curest, nomeEst: string;
+  DireEsc, SuperEmp, AreaEst, OrientadorEst: string;
+  AreaSuperEst, ExpSuperEst, CoordEsc, SuperEst, CargoSuperEst, FormSuperEst: string;
+  at: array[1..5] of string;
+  ce, ces, contador: integer;
+  uce, dce: string;
+  num: integer;
+  vias, uni, dez, cen: string;
+  centa, unida, dezen, cente, perAtu, turEst, tipobolsa: string;
+  bolsa: Double;
+  DataFim: TDateTime;
+
+
+
+  procedure dtcompleta(dias: boolean);
+  var
+    dt, d, m, a: string;
+    da: array[1..8] of string;
+    me: array[1..12] of string;
+  begin
+    me[1] := 'janeiro';
+    me[2] := 'fevereiro';
+    me[3] := 'março';
+    me[4] := 'abril';
+    me[5] := 'maio';
+    me[6] := 'junho';
+    me[7] := 'julho';
+    me[8] := 'agosto';
+    me[9] := 'setembro';
+    me[10] := 'outubro';
+    me[11] := 'novembro';
+    me[12] := 'dezembro';
+   // if CodEsc <> '200' then
+   //   dt := DmDta.quTceAlteracao.FieldByName('tal_dataemi').Text
+   // else
+    dt := FormatDateTime('dd/mm/yyyy', diasuteis(5,DmDta.quTceAlteracaoTal_vigencia.AsDateTime));
+    da[1] := dt[1];
+    da[2] := dt[2];
+    da[3] := dt[4];
+    da[4] := dt[5];
+    da[5] := dt[7];
+    da[6] := dt[8];
+    da[7] := dt[9];
+    da[8] := dt[10];
+    d := da[1] + da[2];
+    m := da[3] + da[4];
+    a := da[5] + da[6] + da[7] + da[8];
+  //  datac := '' + d + ' de ' + me[strtoint(m)] + ' de ' + a + '';
+    if Dias then
+      datac := '' + d + ' dia(s) do mês de ' + me[strtoint(m)] + ' de ' + a + ''
+    else
+      datac := '' + d + ' de ' + me[strtoint(m)] + ' de ' + a + ''
+  end;
+
+  procedure completadados;
+  var i, ValorInt: Integer;
+    Valor, ValorCent: Double;
+    ValString: string;
+    escola, funcionarioescola: integer;
+    Empresa, Funcionario: integer;
+  begin
+    bolsa := DBEdit8.field.Value;
+    tipoBolsa := cbTipoBolsa.Text;
+    empresa := DmDta.quTceemp_cod.asinteger;
+    funcionario := 0;
+    dmdta.PegaResponsavel(1, empresa, funcionario);
+
+
+
+
+    with qContrato do
+    begin
+      // Busca a dados da vaga
+      if DmDta.quTce.FieldByName('tce_tipocont').Value = '0' then
+      begin
+        Close;
+        sql.Clear;
+        //Sql.Add('Select v.*, a.ati_nome from Vaga v, VagaAtividade a where v.vag_cod = a.vag_cod and v.vag_cod = ' + DmDta.quTcevag_cod.Text);
+
+        Sql.Add('Select * from talatividade where tce_cod =' + dbedit8.Text + ' and tal_cod = ' + DmDta.quTceAlteracaotal_cod.AsString);
+        Open;
+        {SuperEst := FieldByName('vag_supervisor').AsString;
+        FormSuperEst := FieldByName('vag_formsupervisor').AsString;
+        ExpSuperEst := FieldByName('vag_Expsupervisor').AsString;
+        AreaSuperEst := FieldByName('vag_Areasupervisor').AsString;
+        cargoSuperEst := FieldByName('vag_Cargsupervisor').AsString;}
+        {SuperEst := DmDta.BuscaCampo('vaga', 'vag_supervisor', 'vag_cod', DmDta.quTcevag_cod.asinteger);
+        FormSuperEst := DmDta.BuscaCampo('vaga', 'vag_formsupervisor', 'vag_cod', DmDta.quTcevag_cod.asinteger);
+        ExpSuperEst := DmDta.BuscaCampo('vaga', 'vag_expsupervisor', 'vag_cod', DmDta.quTcevag_cod.asinteger);
+        CargoSuperEst := DmDta.BuscaCampo('vaga', 'vag_cargSupervisor', 'vag_cod', DmDta.quTcevag_cod.asinteger);
+        AreaSuperEst := DmDta.BuscaCampo('vaga', 'vag_Areasupervisor', 'vag_cod', DmDta.quTcevag_cod.asinteger);}
+
+        SuperEst := cbsuper.Text;
+        FormSuperEst := DmDta.quTceAlteracaoformacao.AsString;
+        ExpSuperEst := DmDta.quTcealteracaoTempo.AsString;
+        CargoSuperEst := DmDta.quTceAlteracaoCargo.AsString;
+        AreaSuperEst := DmDta.quTceAlteracaoArea.asstring;
+
+        if not IsEmpty then
+        begin
+          first;
+          for i := 1 to 5 do
+          begin
+            if Eof then break;
+            at[i] := FieldByName('ati_talnome').AsString;
+            Next;
+          end;
+        end;
+      end;
+
+      Emp := DmDta.quTceemp_cod.text;
+      bolsa := DBEdit8.field.Value;
+      tipoBolsa := cbTipoBolsa.Text;
+
+      // busca dados do perfil
+      close;
+      sql.clear;
+      sql.add('select e.*, c.cur_nome from Estudante E, Curso C where e.cur_cod = c.cur_cod and e.est_cod = ' + Dmdta.quTceEst_cod.Text);
+      open;
+      agencia := fieldByName('est_agencia').AsString;
+      conta := fieldByName('est_conta').AsString;
+
+      dataest := fieldByName('est_dtnasc').AsString;
+      nomeEst := fieldByName('est_nome').AsString;
+      datana := fieldbyname('est_dtnasc').asstring;
+      endest := fieldbyname('est_endereco').asstring;
+      if fieldbyname('est_numend').Text <> '' then
+        endEst := endEst + ' ' + fieldbyname('est_numend').Text;
+      if fieldbyname('est_apto').Text <> '' then
+        endEst := endEst + ' - ' + fieldbyname('est_apto').Text;
+      if fieldbyname('est_bloco').Text <> '' then
+        endEst := endEst + ' - BLOCO ' + fieldbyname('est_bloco').Text;
+      baiest := fieldbyname('est_bairro').asstring;
+      cidadeEst := fieldByName('est_cidade').asstring;
+      estadoEst := fieldByName('est_estado').asstring;
+      telest := fieldbyname('est_fone1').asstring;
+      // formata o telefone
+      if telest <> '' then
+        telest := '(' + Copy(telest, 1, 2) + ') ' + Copy(telest, 3, 4) + '-' + Copy(telest, 7, 4);
+      cepest := fieldbyname('est_cep').asstring;
+      // formata o CEP
+      if cepEst <> '' then
+        cepest := Copy(cepest, 1, 5) + '-' + Copy(cepest, 6, 3);
+      rgest := fieldbyname('est_rg').asstring;
+      cpfest := fieldbyname('est_cpf').asstring;
+      // formata o CPF
+      if cpfEst <> '' then
+        cpfEst := Copy(cpfEst, 1, 3) + '.' + Copy(cpfEst, 4, 3) + '.' + Copy(cpfEst, 7, 3) + '-' + Copy(cpfEst, 10, 2);
+      ctpest := fieldbyname('est_ctpsnum').asstring;
+      serieest := fieldbyname('est_ctpsserie').asstring;
+      curCod := fieldByName('cur_cod').asstring;
+      curest := fieldbyname('cur_nome').asstring;
+      CodEsc := fieldByName('inst_cod').asstring;
+      peratu := fieldByName('pcu_anoatual').AsString;
+
+      escola := strtoint(CodEsc);
+      funcionarioEscola := 0;
+      dmdta.PegaResponsavelEscola(1, Escola, funcionarioEscola);
+
+
+      if fieldByName('pcu_peratual').AsString = '0' then
+        perAtu := perAtu + 'º ano'
+      else
+        perAtu := perAtu + 'º período';
+
+      if fieldByName('pcu_turno').Asstring <> '' then
+        case fieldByName('pcu_turno').AsInteger of
+          0: turEst := 'manhã';
+          1: turEst := 'tarde';
+          2: turEst := 'noite';
+          3: turEst := 'manhã/tarde';
+          4: turEst := 'manhã/noite';
+          5: turEst := 'tarde/noite';
+        end;
+      // busca dados da escola
+      close;
+      sql.clear;
+      sql.add('select i.*, f.ifu_nome inst_nomerespcomp, f.ifu_cargo from Instituicao i left join Instfuncionario f on i.inst_cod = f.inst_cod and ' + inttostr(funcionarioEscola) + ' = f.func_cod where i.inst_cod = ' + CodEsc);
+      open;
+      CodEsc := fieldbyname('inst_cod').asstring;
+      nomeesc := fieldbyname('inst_nome').asstring;
+      estadoesc := fieldbyname('inst_estado').asstring;
+      endesc := fieldbyname('inst_endereco').asstring;
+      if fieldbyname('inst_numend').Text <> '' then
+        endesc := endesc + ' ' + fieldbyname('inst_numend').Text;
+      if fieldbyname('inst_sala').Text <> '' then
+        endesc := endesc + ' - SALA ' + fieldbyname('inst_sala').Text;
+      baiesc := fieldbyname('inst_bairro').asstring;
+      cidadeEsc := fieldByName('inst_cidade').asstring;
+      cnpjesc := fieldbyname('inst_cnpj').asstring;
+      // formata o CNPJ
+      if cnpjEsc <> '' then
+        cnpjesc := Copy(cnpjesc, 1, 2) + '.' + Copy(cnpjesc, 3, 3) + '.' + Copy(cnpjesc, 6, 3) + '/' +
+          Copy(cnpjesc, 9, 4) + '-' + Copy(cnpjesc, 13, 2);
+      caresc := fieldbyname('ifu_cargo').asstring; ;
+      telesc := fieldbyname('inst_telefone').asstring;
+      // formata o telefone
+      if telesc <> '' then
+        telesc := '(' + Copy(telesc, 1, 2) + ') ' + Copy(telesc, 3, 4) + '-' + Copy(telesc, 7, 4);
+      cepesc := fieldbyname('inst_cep').asstring;
+      // formata o CEP
+      if cepesc <> '' then
+        cepesc := Copy(cepesc, 1, 5) + '-' + Copy(cepesc, 6, 3);
+      respEsc := fieldbyname('inst_nomerespcomp').asstring;
+
+
+
+
+      // busca os dados da empresa
+      close;
+      sql.clear;
+      sql.add('select e.*, f.efu_nome, f.efu_cargo from Empresa e left join Empfuncionario f on e.emp_cod = f.emp_cod and ' + inttostr(funcionario) + ' = f.func_cod where e.emp_cod = ' + Emp);
+      open;
+      Tipopessoa := fieldByName('emp_tipopessoa').AsString;
+      nomeemp := DmDta.quTceemp_nome.Text;
+      telemp := fieldByName('emp_telefone').AsString;
+      endemp := fieldbyname('emp_endereco').asstring;
+      if fieldbyname('emp_numend').Text <> '' then
+        endemp := endemp + ' ' + fieldbyname('emp_numend').Text;
+      if fieldbyname('emp_cjto').Text <> '' then
+        endemp := endemp + ' - CJ. ' + fieldbyname('emp_cjto').Text;
+      baiemp := fieldbyname('emp_bairro').asstring;
+      cidadeEmp := fieldByName('emp_cidade').asstring;
+      // formata o telefone
+      if telemp <> '' then
+        telemp := '(' + Copy(telemp, 1, 2) + ') ' + Copy(telemp, 3, 4) + '-' + Copy(telemp, 7, 4);
+      cepemp := fieldbyname('emp_cep').asstring;
+      // formata o CEP
+      if cepemp <> '' then
+        cepemp := Copy(cepemp, 1, 5) + '-' + Copy(cepemp, 6, 3);
+      cnpjemp := fieldbyname('emp_cnpj').asstring;
+      if cnpjemp <> '' then
+        cnpjemp := poemascara(cnpjemp);
+      // formata o CNPJ
+       { cnpjemp := Copy(cnpjemp, 1, 2) + '.' + Copy(cnpjemp, 3, 3) + '.' + Copy(cnpjemp, 6, 3) + '/' +
+          Copy(cnpjemp, 9, 4) + '-' + Copy(cnpjemp, 13, 2);}
+      respemp := fieldByName('efu_nome').Asstring;
+      estadoemp := fieldByName('emp_estado').Asstring;
+      caremp := fieldbyname('efu_cargo').asstring;
+      inscemp := fieldbyname('Emp_inscest').Asstring;
+      faxemp := fieldbyname('Emp_fax').AsString;
+    end;
+
+    // valor da bolsa
+    bolsa := DBEdit1.field.Value;
+    tipoBolsa := cbTipoBolsa.Text;
+    ValString := FloatToStr(bolsa);
+    Valor := StrToFloat(ValString);
+    ValorInt := Trunc(Valor);
+    ValorCent := (Valor - ValorInt) * 100;
+
+    // valor por extenso da bolsa auxílio
+    if valorInt > 0 then
+      exte := NumeroExtenso(ValorInt, 1);
+
+    if ValorCent > 0 then
+    begin
+      if FormatFloat('0', ValorCent) = FormatFloat('0', Trunc(ValorCent)) then
+      begin
+        if exte = '' then
+          exte := NumeroExtenso(Trunc(ValorCent), 2)
+        else
+          exte := exte + ' E ' + NumeroExtenso(Trunc(ValorCent), 2);
+      end
+      else
+      begin
+        if exte = '' then
+          exte := NumeroExtenso(Trunc(ValorCent) + 1, 2)
+        else
+          exte := exte + ' E ' + NumeroExtenso(Trunc(ValorCent) + 1, 2);
+      end;
+    end;
+    exte := AnsiLowerCase(exte);
+
+
+    // Verifica se não tem TA
+    with DmDta.quTceAditivo do
+    begin
+      Close;
+      ParamByName('tce_cod').AsInteger := DmDta.quTceTCE_COD.Value;
+      Open;
+
+      if IsEmpty then
+        DataFim := DmDta.quTce.FieldByName('tce_datafim').AsDateTime
+      else
+      begin
+        Last;
+        DataFim := FieldByName('tpr_datafim').AsDateTime;
+        Close;
+      end;
+    end;
+
+    dtcompleta(false);
+  end;
+
+
+  //*************************************************************//
+  // TCE - modelo normal                                         //
+  //*************************************************************//
+  procedure verfonte;
+  begin
+    if CodEsc = '200' then
+      Var1.Font('Arial', 7)
+    else
+      Var1.Font('Arial', 8);
+  end;
+
+  procedure imprimenovo;
+  begin
+    Screen.Cursor := crHourGlass;
+    var1 := CreateOleObject('Word.basic');
+    if codesc = '331' then
+       var1.FileNew(FORINI.Diretorio + 'taufpr.dot')
+    else
+    var1.FileNew(FORINI.Diretorio + 'tapd.dot');
+    var1.editbookmark('tipo', 0, 0, 0, 1);
+
+    if dmdta.qutcetce_estobrigato.AsString = '1' then
+      var1.Insert(' OBRIGATÓRIO ')
+    else
+      var1.Insert(' NÃO OBRIGATÓRIO ');
+
+//    var1.editbookmark('numero', 0, 0, 0, 1);
+    Var1.Insert('Nº ' + FormatFloat('000000', DmDta.quTce.FieldByName('tce_cod').AsFloat));
+
+    var1.editbookmark('dia', 0, 0, 0, 1);
+    dtcompleta(true);
+    Var1.Insert(datac);
+
+    var1.editbookmark('curitiba', 0, 0, 0, 1);
+    var1.Insert('CURITIBA');
+
+//
+
+
+     // Estudante
+    var1.editbookmark('estudante', 0, 0, 0, 1);
+    Var1.Insert(nomeest);
+    var1.editbookmark('curso', 0, 0, 0, 1);
+    Var1.Insert(curEst);
+    var1.editbookmark('ano', 0, 0, 0, 1);
+    Var1.Insert(perAtu);
+
+    var1.editbookmark('turno', 0, 0, 0, 1);
+    Var1.Insert(turEst);
+    var1.editbookmark('curso2', 0, 0, 0, 1);
+    Var1.Insert(curEst);
+    var1.editbookmark('ano2', 0, 0, 0, 1);
+    Var1.Insert(perAtu);
+
+
+    var1.editbookmark('datanascimento', 0, 0, 0, 1);
+    Var1.Insert(dataest);
+    var1.editbookmark('endereco', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(endEst));
+    var1.editbookmark('bairro', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(baiEst));
+    var1.editbookmark('cidade', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(cidadeEst));
+    var1.editbookmark('cep', 0, 0, 0, 1);
+    Var1.Insert(CepEst);
+    var1.editbookmark('estado', 0, 0, 0, 1);
+    Var1.Insert(estadoest);
+    var1.editbookmark('cpf', 0, 0, 0, 1);
+    Var1.Insert(cpfEst);
+
+    var1.editbookmark('rg', 0, 0, 0, 1);
+    Var1.Insert(rgEst);
+
+    var1.editbookmark('telefone', 0, 0, 0, 1);
+    Var1.Insert(telEst);
+
+    // empresa
+    var1.editbookmark('empresa', 0, 0, 0, 1);
+    Var1.Insert(nomeemp);
+    var1.editbookmark('enderecoempresa', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(endEmp));
+    var1.editbookmark('bairroempresa', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(baiemp));
+    var1.editbookmark('cidadeempresa', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(cidadeemp));
+    var1.editbookmark('cepempresa', 0, 0, 0, 1);
+    Var1.Insert(CepEmp);
+    var1.editbookmark('estadoempresa', 0, 0, 0, 1);
+    Var1.Insert(estadoemp);
+    var1.editbookmark('cnpjempresa', 0, 0, 0, 1);
+    Var1.Insert(cnpjemp);
+    var1.editbookmark('telefoneempresa', 0, 0, 0, 1);
+    Var1.Insert(telemp);
+    var1.editbookmark('representanteempresa', 0, 0, 0, 1);
+    Var1.Insert(respemp);
+    var1.editbookmark('cargorepresentante', 0, 0, 0, 1);
+    Var1.Insert(caremp);
+
+    // Instituicao
+
+    var1.editbookmark('instituicao', 0, 0, 0, 1);
+    Var1.Insert(nomeesc);
+    var1.editbookmark('enderecoinstituicao', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(endesc));
+    var1.editbookmark('bairroinstituicao', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(baiesc));
+    var1.editbookmark('cidadeinstituicao', 0, 0, 0, 1);
+    Var1.Insert(AnsiUpperCase(cidadeesc));
+    var1.editbookmark('cepinstituicao', 0, 0, 0, 1);
+    Var1.Insert(CepEsc);
+    var1.editbookmark('estadoinstituicao', 0, 0, 0, 1);
+    Var1.Insert(estadoesc);
+    var1.editbookmark('cnpjinstituicao', 0, 0, 0, 1);
+    Var1.Insert(cnpjesc);
+    var1.editbookmark('telefoneinstituicao', 0, 0, 0, 1);
+    Var1.Insert(telesc);
+    var1.editbookmark('representanteinstituicao', 0, 0, 0, 1);
+    Var1.Insert(respEsc);
+    var1.editbookmark('cargorepresentanteinstituicao', 0, 0, 0, 1);
+    Var1.Insert(caresc);
+    
+
+    var1.editbookmark('vigencia', 0, 0, 0, 1);
+    Var1.Insert(meTcevig.Text + ' à ' + dmdta.quTceultimodia.AsString);
+
+    if CKESCALA.Checked then
+      PERIODO := '';
+
+    var1.editbookmark('semana', 0, 0, 0, 1);
+    Var1.Insert(periodo + '' + dtc);
+
+    var1.editbookmark('totalhoras', 0, 0, 0, 1);
+    Var1.Insert(Stotal);
+
+    var1.editbookmark('valormensal', 0, 0, 0, 1);
+
+    if Bolsa > 0 then
+      Var1.Insert('R$ ' + FormatFloat('#,##0.00', bolsa) + ' (' + exte + ' / ' + lowercase(tipoBolsa) + ')')
+    else
+      Var1.Insert('R$ ________ (SEM REMUNERAÇÃO)');
+
+    var1.editbookmark('auxiliotransporte', 0, 0, 0, 1);
+
+    if dmdta.quTcealteracaotal_AuxTransp.AsString = 'R' then
+      Var1.Insert('Recarga no “Cartão Transporte" fornecido pela URBS – Urbanização de Curitiba – S.A., correspondente ao número de dias em que o ESTUDANTE realizar o estágio durante o mês.');
+
+    if dmdta.quTcealteracaotal_AuxTransp.AsString = 'P' then
+      if dmdta.quTcealteracaotal_AuxTranspValor.asstring <> '' then
+        Var1.Insert('Auxílio pecuniário no valor mensal de R$ ' + formatfloat('###,##0.00', dmdta.quTcealteracaotal_AuxTranspValor.value) + '(' + ansilower(pchar(Extenso(dmdta.quTcealteracaotal_AuxTranspValor.value))) + '). ')
+      else
+        Var1.Insert('Auxílio pecuniário no valor mensal de R$  .');
+
+    if dmdta.quTcealteracaotal_AuxTransp.AsString = 'T' then
+    begin
+      Var1.Insert('Meio de locomoção oferecido pela própria ');
+      Var1.Bold;
+      Var1.Insert('PARTE CONCEDENTE.');
+      Var1.Bold;
+    end;
+
+    if dmdta.quTcealteracaotal_AuxTransp.AsString = 'O' then
+      Var1.Insert(dmdta.quTcealteracaotal_AuxTranspTEXTO.AsString + '.');
+
+
+   
+    if at[1] <> '' then
+    begin
+      var1.editbookmark('atividade1', 0, 0, 0, 1);
+      Var1.Insert('1. '+at[1]+ #13);
+    end;
+
+    if at[2] <> '' then
+    begin
+      var1.editbookmark('atividade2', 0, 0, 0, 1);
+      Var1.Insert('2. '+at[2]+ #13);
+    end;
+
+    if at[3] <> '' then
+    begin
+      var1.editbookmark('atividade3', 0, 0, 0, 1);
+      Var1.Insert('3. '+at[3]+ #13);
+    end;
+
+    if at[4] <> '' then
+    begin
+      var1.editbookmark('atividade4', 0, 0, 0, 1);
+      Var1.Insert('4. '+at[4]+ #13);
+    end;
+
+    if at[5] <> '' then
+    begin
+      var1.editbookmark('atividade5', 0, 0, 0, 1);
+      Var1.Insert('5. '+at[5]+ #13);
+    end;
+
+    var1.editbookmark('vias', 0, 0, 0, 1);
+    if codesc = '331' then
+      Var1.Insert('5 (cinco)')
+    else
+      Var1.Insert('4(quatro)');
+
+
+    var1.editbookmark('supervisor', 0, 0, 0, 1);
+    Var1.Bold;
+    Var1.Insert(cbsuper.Text);
+    var1.editbookmark('cargosupervisor', 0, 0, 0, 1);
+    Var1.Insert(dmDta.quTcealteracaoCargo.AsString);
+    Var1.Bold;
+    var1.editbookmark('escolhas', 0, 0, 0, 1);
+    if ckf1.Checked then
+    begin
+
+      Var1.Insert('Formação Acadêmica: ');
+      Var1.Bold;
+      Var1.Insert(DmDTA.quTceAlteracaoFormacao.AsString);
+      Var1.Bold;
+      Var1.insert(#13);
+    end;
+
+ //   var1.editbookmark('registrosupervisor', 0, 0, 0, 1);
+    if ckr1.Checked then
+    begin
+      Var1.Insert('Número do registro no Conselho de Fiscalização Profissional: ');
+      Var1.Bold;
+      Var1.Insert(DmDTA.quTceAlteracaoregistro.AsString);
+      Var1.Bold;
+      Var1.insert(#13);
+    end;
+
+   // var1.editbookmark('areasupervisor', 0, 0, 0, 1);
+
+    if ckarea.Checked then
+    begin
+      Var1.Insert('Área de atuação: ');
+      Var1.Bold;
+      Var1.Insert(DmDTA.quTceAlteracaoarea.AsString);
+      Var1.Bold;
+      Var1.insert(#13);
+    end;
+
+   // var1.editbookmark('outraformacao', 0, 0, 0, 1);
+    if ckf2.Checked then
+    begin
+      Var1.Insert('Outras Formações: ');
+      Var1.Bold;
+      Var1.Insert(DmDTA.quTceoutraformacao.AsString);
+      if ckr2.Checked then
+        Var1.Insert(' ' + DmDTA.quTceregistro2.AsString);
+      Var1.Bold;
+      Var1.insert(#13);
+    end;
+
+
+   // var1.editbookmark('temposupervisor', 0, 0, 0, 1);
+    if cktempo.Checked then
+    begin
+      Var1.Insert('Tempo de experiência comprovada: ');
+      Var1.Bold;
+      Var1.Insert(DmDTA.quTcetempo.AsString);
+      Var1.Bold;
+      Var1.insert(#13);
+    end;
+
+
+    {var1.editbookmark('formacaosupervisor', 0, 0, 0, 1);
+    if ckf1.Checked then
+      Var1.Insert(DmDTA.quTceAlteracaoFormacao.AsString);
+
+    var1.editbookmark('registrosupervisor', 0, 0, 0, 1);
+    if ckr1.Checked then
+      Var1.Insert(DmDTA.quTceAlteracaoregistro.AsString);
+
+    var1.editbookmark('areasupervisor', 0, 0, 0, 1);
+    if ckarea.Checked then
+      Var1.Insert(DmDTA.quTceAlteracaoarea.AsString);
+
+    var1.editbookmark('outraformacao', 0, 0, 0, 1);
+    if ckf2.Checked then
+      Var1.Insert(DmDTA.quTceAlteracaooutraformacao.AsString);
+
+    if ckr2.Checked then
+      var1.insert(' ' + DmDTA.quTceAlteracaoregistro2.AsString);
+
+    var1.editbookmark('temposupervisor', 0, 0, 0, 1);
+    if cktempo.Checked then
+      Var1.Insert(DmDTA.quTceAlteracaotempo.AsString);
+
+    }
+
+
+
+    var1.editbookmark('orientador', 0, 0, 0, 1);
+    Var1.Insert(respOrientador);
+
+    var1.editbookmark('formacaoorientador', 0, 0, 0, 1);
+    Var1.Insert(carOrientador);
+
+
+    qrypesquisa.close;
+    qrypesquisa.SQL.clear;
+    qrypesquisa.SQL.add(' select * from tcerelatorio where tce_cod=:tce and ordem=:ordem ');
+    qrypesquisa.ParamByName('tce').asinteger := DmDTA.quTce.fieldbyname('tce_cod').asinteger;
+    qrypesquisa.ParamByName('ordem').asinteger := 1;
+    qrypesquisa.Open;
+    if qrypesquisa.Eof = false then
+    begin
+      var1.editbookmark('relatorio1', 0, 0, 0, 1);
+      if qrypesquisa.FieldByName('prev_data').value > date then
+        Var1.Insert(qrypesquisa.FieldByName('prev_data').AsString);
+    end;
+
+    qrypesquisa.close;
+    qrypesquisa.ParamByName('ordem').asinteger := 2;
+    qrypesquisa.Open;
+    if qrypesquisa.Eof = false then
+    begin
+      var1.editbookmark('relatorio2', 0, 0, 0, 1);
+      if qrypesquisa.FieldByName('prev_data').value > date then
+        Var1.Insert(qrypesquisa.FieldByName('prev_data').AsString);
+    end;
+
+    qrypesquisa.close;
+    qrypesquisa.ParamByName('ordem').asinteger := 3;
+    qrypesquisa.Open;
+    if qrypesquisa.Eof = false then
+    begin
+      var1.editbookmark('relatorio3', 0, 0, 0, 1);
+      if qrypesquisa.FieldByName('prev_data').value > date then
+        Var1.Insert(qrypesquisa.FieldByName('prev_data').AsString);
+    end;
+
+    qrypesquisa.close;
+    qrypesquisa.ParamByName('ordem').asinteger := 4;
+    qrypesquisa.Open;
+    if qrypesquisa.Eof = false then
+    begin
+      var1.editbookmark('relatorio4', 0, 0, 0, 1);
+      if qrypesquisa.FieldByName('prev_data').value > date then
+        Var1.Insert(qrypesquisa.FieldByName('prev_data').AsString);
+    end;
+
+    Screen.Cursor := crDefault;
+    var1.AppShow;
+  end;
+
+  procedure Imprime;
+  var
+    palavra: string;
+    clausula: array[1..6] of string;
+    controle: integer;
+    imprimetudo: boolean;
+  begin
+
+    imprimetudo := true;
+    if ckatividades.Checked then
+      imprimetudo := false;
+    if ckbolsa.Checked then
+      imprimetudo := false;
+    if ckjornada.Checked then
+      imprimetudo := false;
+    if ckprazo.Checked then
+      imprimetudo := false;
+
+
+    controle := 0;
+    Clausula[1] := 'PRIMEIRA';
+    Clausula[2] := 'SEGUNDA';
+    Clausula[3] := 'TERCEIRA';
+    Clausula[4] := 'QUARTA';
+    Clausula[5] := 'QUINTA';
+    Clausula[6] := 'SEXTA';
+
+    if tipopessoa = 'X' then
+      palavra := 'unidade'
+    else
+      palavra := 'parte';
+
+    Screen.Cursor := crHourGlass;
+    var1 := CreateOleObject('Word.basic');
+    if CodEsc = '200' then
+      var1.FileNew(FORINI.Diretorio + 'tce_mod1UT.dot')
+    else
+      var1.FileNew(FORINI.Diretorio + 'tce_mod1.dot');
+    if CodEsc = '200' then
+    begin
+      Var1.Font('Arial', 8);
+      Var1.Insert(#13 + #13);
+      Var1.Insert(#13 + #13);
+      Var1.Insert(#13);
+    end;
+
+    // Cabeçalho
+    Var1.CenterPara;
+    Var1.Font('Arial', 11);
+    Var1.Bold;
+    Var1.Insert('ALTERAÇÃO DO TERMO DE COMPROMISSO DE ESTÁGIO ');
+    if dmdta.qutcetce_estobrigato.AsString = '1' then
+      var1.Insert('OBRIGATÓRIO ')
+    else
+      var1.Insert('NÃO OBRIGATÓRIO ');
+    Var1.Insert('Nº ' + FormatFloat('000000', DmDta.quTce.FieldByName('tce_cod').AsFloat));
+
+    Var1.Insert(#13 + #13);
+    Var1.Font('Arial', 8);
+
+    // Texto Inicial
+    Var1.JustifyPara;
+    Var1.Insert('A ');
+    Var1.Bold;
+    Var1.Insert('INSTITUIÇÃO DE ENSINO');
+    Var1.Bold;
+    Var1.Insert(', a ');
+    Var1.Bold;
+    Var1.Insert('PARTE CONCEDENTE');
+    Var1.Bold;
+    Var1.Insert(', e o ');
+    Var1.Bold;
+    Var1.Insert('ESTUDANTE');
+    Var1.Bold;
+    Var1.Insert(', abaixo relacionados, firmam esta alteração ao TERMO DE COMPROMISSO E ESTÁGIO ');
+    Var1.Insert('Nº ' + FormatFloat('000000', DmDta.quTce.FieldByName('tce_cod').AsFloat));
+    Var1.Insert(', através do Agente de Integração ');
+    Var1.Bold;
+    Var1.Insert('CETEFE - CENTRO DE TREINAMENTO E FORMAÇÃO DO ESTUDANTE, ');
+    Var1.Bold;
+    Var1.Insert('agente de integração declarado de utilidade pública, de fins educacionais e sem intuito ');
+    Var1.Insert('lucrativo, com sede na cidade de Curitiba, Estado do Paraná, na Avenida Iguaçu nº. 2345, 1° andar, ');
+    Var1.Insert('inscrita no CNPJ/MF sob nº. 02.217.643/0001-17, neste ato representado por seu Diretor-Presidente ');
+    Var1.Insert('Rodrigo Kotzias Moscalewski, brasileiro, casado, empresário, portador da carteira de identidade RG ');
+    Var1.Insert('nº. 3.655.060-0 SSP/PR e inscrito no CPF/MF sob nº. 873.751.419-91, conforme faculta a Lei nº 11.778 de 25/09/2008.' + #13);
+    Var1.Font('Arial', 11);
+    Var1.Insert(#13);
+    Var1.Font('Arial', 8);
+    // Parte da instituição de ensino
+
+    Var1.JustifyPara;
+    Var1.Underline;
+    verfonte;
+    Var1.Insert('INSTITUIÇÃO DE ENSINO' + #13);
+    verfonte;
+    Var1.Insert('Razão Social: ' + #9 + nomeesc + #13);
+    verfonte;
+    Var1.Insert('Endereço: ' + #9 + endesc + #13);
+    verfonte;
+    Var1.Insert('Bairro: ' + #9 + baiesc + #9);
+    Var1.Insert('Cidade: ' + #9 + cidadeEsc + #13);
+    verfonte;
+    Var1.Insert('CEP: ' + #9 + cepEsc + #9);
+    Var1.Insert('Telefone: ' + #9 + telesc + #13);
+    verfonte;
+    Var1.Insert('CNPJ: ' + #9 + cnpjesc + #13);
+    verfonte;
+    Var1.Insert('Representada por: ' + #9 + respEsc + #13);
+    verfonte;
+    Var1.Insert('Cargo: ' + #9 + caresc + #13);
+    verfonte;
+    Var1.Insert('Professor Orientador: ' + #9 + respOrientador + #13);
+    verfonte;
+    Var1.Insert('Formação Acadêmica: ' + #9 + carOrientador + #13);
+    verfonte;
+    Var1.Insert(#13);
+    verfonte;
+    // parte da empresa
+
+
+    if tipopessoa = 'J' then // pessoa Juridica
+    begin
+      Var1.Underline;
+      verfonte;
+      Var1.Insert('PARTE CONCEDENTE' + #13);
+      verfonte;
+      Var1.Insert('Razão Social: ' + #9 + nomeemp + #13);
+      verfonte;
+      Var1.Insert('Endereço: ' + #9 + AnsiUpperCase(endemp) + #13);
+      verfonte;
+      Var1.Insert('Bairro: ' + #9 + AnsiUpperCase(baiemp) + #9);
+      verfonte;
+      Var1.Insert('Cidade: ' + #9 + AnsiUpperCase(cidadeemp) + #13);
+      verfonte;
+      Var1.Insert('CEP: ' + #9 + cepemp + #9);
+      Var1.Insert('Telefone: ' + #9 + telemp + #13);
+      verfonte;
+      Var1.Insert('CNPJ: ' + #9 + cnpjemp + #13);
+      verfonte;
+      Var1.Insert('Representada por: ' + #9 + respemp + #13);
+      verfonte;
+      Var1.Insert('Cargo: ' + #9 + caremp + #13);
+      {verfonte;
+      Var1.Insert('Supervisor de Estágio: ' + #9 + SuperEst + #13);
+      verfonte;
+      Var1.Insert('Cargo: ' + #9 + CargoSuperEst + #13);
+      verfonte;
+      if FormSuperEst <> '' then
+      begin
+        Var1.Insert('Formação Acadêmica: ' + #9 + FormSuperEst + #13);
+        verfonte;
+        Var1.Insert(#13);
+        verfonte;
+      end
+      else
+      begin
+        Var1.Insert('Área de atuação: ' + #9 + AreaSuperEst + #13);
+        verfonte;
+        Var1.Insert('Tempo de experiência comprovada: ' + #9 + ExpSuperEst + #13);
+        verfonte;
+        Var1.Insert(#13);
+        verfonte;
+      end; }
+
+    end
+    else
+    begin
+      Var1.Underline;
+      verfonte;
+      Var1.Insert('PARTE CONCEDENTE' + #13);
+      verfonte;
+      Var1.Insert('Profissional Liberal: ' + #9 + nomeemp + #13);
+      verfonte;
+      Var1.Insert('Cargo: ' + #9 + caremp + #13);
+      verfonte;
+      Var1.Insert('CPF: ' + #9 + cnpjemp + #13);
+      verfonte;
+      Var1.Insert('Endereço: ' + #9 + AnsiUpperCase(endemp) + #13);
+      verfonte;
+      Var1.Insert('Bairro: ' + #9 + AnsiUpperCase(baiemp) + #9);
+
+      Var1.Insert('Cidade: ' + #9 + AnsiUpperCase(cidadeemp) + #13);
+      verfonte;
+      Var1.Insert('CEP: ' + #9 + cepemp + #9);
+      Var1.Insert('Telefone: ' + #9 + telemp + #13);
+      verfonte;
+      Var1.Insert('Representada por: ' + #9 + respemp + #13);
+      verfonte;
+      Var1.Insert('Cargo: ' + #9 + caremp + #13);
+      {verfonte;
+      Var1.Insert('Supervisor de Estágio: ' + #9 + SuperEst + #13);
+      verfonte;
+      Var1.Insert('Cargo: ' + #9 + CargoSuperEst + #13);
+      verfonte;
+      if FormSuperEst <> '' then
+      begin
+        Var1.Insert('Formação Acadêmica: ' + #9 + FormSuperEst + #13);
+        Var1.Insert(#13);
+        verfonte;
+      end
+      else
+      begin
+        Var1.Insert('Área de atuação: ' + #9 + AreaSuperEst + #13);
+        verfonte;
+        Var1.Insert('Tempo de experiência comprovada: ' + ExpSuperEst + #13);
+        verfonte;
+        Var1.Insert(#13);
+        verfonte;
+      end;}
+    end;
+
+    // supervisor do Estágio
+    verfonte;
+    Var1.Insert('Supervisor de Estágio: ' + #9 + cbsuper.Text + #13);
+    verfonte;
+    Var1.Insert('Cargo: ' + #9 + DmDTA.quTcealteracaocargo.AsString + #13);
+    verfonte;
+    if ckf1.Checked then
+      Var1.Insert('Formação Acadêmica: ' + #9 + DmDTA.quTcealteracaoFormacao.AsString);
+    if ckr1.Checked then
+    begin
+      verfonte;
+      if ckf1.Checked then
+        Var1.Insert(#9 + 'Nº Registro Conselho:' + #9 + DmDTA.quTceAlteracaoregistro.AsString + #13)
+      else
+        Var1.Insert('Nº Registro Conselho:' + #9 + DmDTA.quTceAlteracaoregistro.AsString + #13)
+    end
+    else
+      if ckf1.Checked then
+        Var1.Insert(#13);
+    verfonte;
+    if ckf2.Checked then
+      Var1.Insert('Outra Formação: ' + #9 + DmDTA.quTceALTERACAOoutraformacao.AsString);
+    if ckr2.Checked then
+    begin
+      verfonte;
+      if ckf2.Checked then
+        Var1.Insert(#9 + 'Nº Registro Conselho:' + #9 + DmDTA.quTceAlteracaoregistro2.AsString + #13)
+      else
+        Var1.Insert('Nº Registro Conselho:' + #9 + DmDTA.quTceAlteracaoregistro2.AsString + #13)
+    end
+    else
+      if ckf2.Checked then
+        Var1.Insert(#13);
+    verfonte;
+    if ckarea.Checked then
+      Var1.Insert('Área de atuação: ' + #9 + DmDTA.quTceAlteracaoarea.AsString + #13);
+    verfonte;
+
+    if cktempo.Checked then
+      Var1.Insert('Tempo de experiência comprovada: ' + DmDTA.quTceAlteracaoTempo.AsString + #13);
+    Var1.Insert(#13);
+
+
+
+    ///
+    // parte do estudante
+    Var1.Underline;
+    verfonte;
+    Var1.Insert('ESTUDANTE' + #13);
+    verfonte;
+    Var1.Insert('Nome: ' + #9 + nomeest + #9);
+    Var1.Insert('Data Nascimento: ' + #9 + dataest + #13);
+    verfonte;
+    Var1.Insert('Endereço: ' + #9 + AnsiUpperCase(endEst) + #13);
+    verfonte;
+    Var1.Insert('Bairro: ' + #9 + AnsiUpperCase(baiEst) + #9);
+    Var1.Insert('Cidade: ' + #9 + AnsiUpperCase(cidadeEst) + #13);
+    verfonte;
+    Var1.Insert('CEP: ' + #9 + CepEst + #9);
+    Var1.Insert('Telefone: ' + #9 + Telest + #13);
+    verfonte;
+    Var1.Insert('RG: ' + #9 + rgEst + #9);
+    Var1.Insert('CPF: ' + #9 + cpfEst + #13);
+    verfonte;
+    Var1.Insert('CTPS: ' + #9 + ctpEst + #9);
+    Var1.Insert('Série: ' + #9 + serieEst + #13);
+    verfonte;
+    if numMatEsc <> '' then
+      Var1.Insert('Matrícula: ' + #9 + NumMatEsc + #13);
+    verfonte;
+    Var1.Insert('Curso: ' + #9 + curEst + #13);
+    verfonte;
+    Var1.Insert('Período/Ano: ' + #9 + perAtu + #13);
+    verfonte;
+
+    Var1.Insert(#13);
+
+    // cláusulas do TCE
+    Var1.Font('Arial', 8);
+
+    if imprimetudo then
+    begin
+    // Cláusula 01
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA PRIMEIRA: OBJETO' + #13);
+//    Var1.Font('Arial', 9);
+      Var1.Insert('O presente instrumento tem por objeto assegurar a complementação de aprendizagem escolar dentro do ');
+      Var1.Insert('ambiente de trabalho, através de treinamento prático, integração social, iniciação profissional e desenvolvimento pessoal do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE, ');
+      Var1.Bold;
+      if CODESC = '200' then
+        Var1.Insert('em conformidade com as Leis 11.788/2008 e 8666/93 e demais disposições legais aplicáveis.' + #13)
+      else
+        Var1.Insert('em conformidade com a Lei nº. 11.788 de 25/09/2008 e demais disposições legais aplicáveis.' + #13);
+
+//    Var1.Font('Arial', 9);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Único: ');
+      Var1.Bold;
+      Var1.Insert('O presente instrumento não caracteriza vínculo empregatício de qualquer natureza entre o ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('e a ');
+      Var1.Bold;
+      if tipopessoa = 'X' then
+        Var1.Insert('UNIDADE CONCEDENTE')
+      else
+        Var1.Insert('PARTE CONCEDENTE');
+
+      Var1.Bold;
+      Var1.Insert(', devendo, contudo, ser rigorosamente observado o disposto no art. 3º. da Lei nº. 11.788 de 25/09/2008, sob pena de caracterizar-se o vínculo, nos termos da lei.   ');
+   // Var1.Bold;
+   // Var1.Insert('CETEFE. ' + #13);
+      Var1.Insert(#13);
+      Var1.Insert(#13);
+    // Cláusula 02
+      controle := 1;
+      inc(controle);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA ' + clausula[controle] + ': LOCAL E JORNADA DE ESTÁGIO' + #13);
+      if tipopessoa = 'X' then
+        palavra := 'unidade'
+      else
+        palavra := 'parte';
+      if CKESCALA.Checked then
+        PERIODO := '';
+      Var1.Insert('As atividades de estágio serão realizadas na sede da ' + palavra + ' concedente ' + periodo + '' + dtc + ', perfazendo ');
+      Var1.Insert(Stotal + ' horas semanais.');
+      Var1.Insert('A jornada de estágio deverá ser compatível com o horário letivo do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('e com o horário de funcionamento da ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE. ' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Primeiro: ');
+      Var1.Bold;
+      Var1.Insert('Caso a ');
+      Var1.Bold; // liga
+      Var1.Insert('INSTITUIÇÃO DE ENSINO ');
+      Var1.Bold; // desliga
+      Var1.Insert('adote avaliações periódicas ou finais, a carga horária do estágio ficará reduzida à metade durante estes períodos, desde que condizentes com as datas indicadas no comunicado previsto no item (d) da Cláusula Sétima infra, a ser apresentado pela ');
+      Var1.Bold; // liga
+      Var1.Insert('INSTITUIÇÃO DE ENSINO ');
+      Var1.Bold; // desliga
+      Var1.Insert('no início do período letivo. ' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Segundo: ');
+      Var1.Bold;
+      Var1.Insert('É assegurado ao estagiário, sempre que o estágio tenha duração igual ou superior a 1 (um) ano, período de recesso de 30 (trinta) dias remunerado, a ser gozado preferencialmente durante');
+      Var1.Insert(' suas férias escolares, sendo o período estabelecido de comum acordo entre o ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('e a ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE. ' + #13);
+
+      Var1.Bold;
+      Var1.Insert('Parágrafo Terceiro: ');
+      Var1.Bold;
+      Var1.Insert('Os dias de recesso previstos no parágrafo anterior serão concedidos de maneira proporcional, para as hipóteses em que o estágio tenha duração inferior a 1 (um) ano. ');
+      Var1.Insert(#13);
+      Var1.Insert(#13);
+
+
+    // Cláusula 03
+
+      inc(controle);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA ' + clausula[controle] + ': ATIVIDADES' + #13);
+      Var1.Insert('O Plano de Estágio acordado entre as partes abrange as seguintes atividades:' + #13 + #13);
+      if at[1] <> '' then
+        Var1.Insert('1. ' + at[1] + #13);
+      if at[2] <> '' then
+        Var1.Insert('2. ' + at[2] + #13);
+      if at[3] <> '' then
+        Var1.Insert('3. ' + at[3] + #13);
+      if at[4] <> '' then
+        Var1.Insert('4. ' + at[4] + #13);
+      if at[5] <> '' then
+        Var1.Insert('5. ' + at[5] + #13);
+
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Primeiro: ');
+      Var1.Bold;
+      Var1.Insert('As atividades acima relacionadas deverão proporcionar ao ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('experiência prática em sua formação, como forma de complementação ao ensino e à aprendizagem, devendo ser ');
+      Var1.Insert('compatíveis com o curso por ele escolhido e adequadas à sua proposta pedagógica. ' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Segundo: ');
+      Var1.Bold;
+      Var1.Insert('As atividades poderão ser ampliadas, reduzidas, alteradas ou substituídas de acordo com as necessidades da ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE, ');
+      Var1.Bold;
+      Var1.Insert('desde que observado o disposto no parágrafo primeiro da presente cláusula. ' + #13);
+      Var1.Insert(#13);
+
+    // Cláusula 04
+
+      inc(controle);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA ' + clausula[controle] + ': BOLSA-AUXÍLIO E AUXÍLIO TRANSPORTE ' + #13);
+
+      Var1.Insert('O ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('receberá da ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+      Var1.Bold;
+      Var1.Insert('auxílio transporte, bem como bolsa-auxílio mensal no valor de ');
+      if Bolsa > 0 then
+      begin
+        Var1.Insert('R$ ' + FormatFloat('#,##0.00', bolsa) + ' (' + exte + ' / ' + lowercase(tipoBolsa) + '), ');
+        Var1.Insert('a ser paga a partir do mês subseqüente ao do início do estágio.' + #13);
+      end
+      else
+        Var1.Insert('R$ ________ (SEM REMUNERAÇÃO). ' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Único:');
+      Var1.Bold;
+      Var1.Insert(' O auxílio transporte referido no "caput" da presente cláusula será concedido pela Parte Concedente através da seguinte forma: ');
+
+      if dmdta.quTcealteracaotal_AuxTransp.AsString = 'R' then
+        Var1.Insert('Recarga no “Cartão Transporte" fornecido pela URBS – Urbanização de Curitiba – S.A., correspondente ao número de dias em que o ESTUDANTE realizar o estágio durante o mês.' + #13 + #13);
+
+      if dmdta.quTcealteracaotal_AuxTransp.AsString = 'P' then
+        if dmdta.quTcealteracaotal_AuxTranspValor.AsString <> '' then
+          Var1.Insert('Auxílio pecuniário no valor mensal de R$  ' + formatfloat('###,##0.00', dmdta.quTcealteracaotal_AuxTranspValor.value) + '(' + ansilower(pchar(Extenso(dmdta.quTcealteracaotal_AuxTranspValor.value))) + ').' + #13 + #13)
+        else
+          Var1.Insert('Auxílio pecuniário no valor mensal de R$  .' + #13 + #13);
+
+      if dmdta.quTcealteracaotal_AuxTransp.AsString = 'T' then
+      begin
+        Var1.Insert('Meio de locomoção oferecido pela própria ');
+        Var1.Bold;
+        Var1.Insert('PARTE CONCEDENTE;' + #13 + #13);
+        Var1.Bold;
+      end;
+      if dmdta.quTcealteracaotal_AuxTransp.AsString = 'O' then
+        Var1.Insert(dmdta.quTcealteracaotal_AuxTranspTEXTO.AsString + #13 + #13);
+
+       // Cláusula 05
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA QUINTA: AGENTE DE INTEGRAÇÃO' + #13);
+      Var1.Insert('Conforme faculta o art. 5º da Lei nº. 11.788 de 25/09/2008, as partes elegem como intermediador do processo de estágio o Agente de Integração ');
+      Var1.Bold;
+      Var1.Insert('CETEFE - CENTRO DE TREINAMENTO E FORMAÇÃO DO ESTUDANTE, ');
+      Var1.Bold;
+      Var1.Insert('agente de integração declarado de utilidade pública, de fins educacionais e sem intuito');
+      Var1.Insert(' lucrativo, com sede na cidade de Curitiba, Estado do Paraná, na Avenida Iguaçu nº. 2345, ');
+      Var1.Insert('1° andar, inscrita no CNPJ/MF sob nº. 02.217.643/0001-17, neste ato representado por seu ');
+      Var1.Insert('Diretor-Presidente Rodrigo Kotzias Moscalewski, brasileiro, casado, empresário, portador da ');
+      Var1.Insert('carteira de identidade RG nº. 3.655.060-0 SSP/PR e inscrito no CPF/MF sob nº. 873.751.419-91.' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Primeiro: ');
+      Var1.Bold;
+      Var1.Insert('Durante a vigência do presente instrumento, o ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('estará incluído na cobertura do Seguro Contra Acidentes Pessoais proporcionado pela apólice nº. 0000009 da Unibanco AIG Seguros S/A, sob responsabilidade do ');
+      Var1.Bold;
+      Var1.Insert('CETEFE. ' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Segundo: ');
+      Var1.Bold;
+      Var1.Insert('Em caso violação do presente instrumento por qualquer das partes, independentemente do motivo ou razão, o ');
+      Var1.Bold;
+      Var1.Insert('CETEFE ');
+      Var1.Bold;
+      Var1.Insert('ficará totalmente livre e desonerado de qualquer responsabilidade por tal descumprimento, nada podendo lhe ser imputado ou exigido, a qualquer título. ' + #13);
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA SEXTA: OBRIGAÇÕES DA ' + uppercase(palavra) + ' CONCEDENTE' + #13);
+      Var1.Bold;
+      Var1.Insert('a) ');
+      Var1.Bold;
+      Var1.Insert('Proporcionar ao ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('atividades de aprendizagem social, profissional e cultural, pela experiência prática na sua linha de formação, com participação em situações reais de vida e de trabalho, através de instalações próprias para tanto; ' + #13);
+
+      Var1.Bold;
+      Var1.Insert('b) ');
+      Var1.Bold;
+      Var1.Insert('Enviar à ');
+      Var1.Bold;
+      Var1.Insert('INSTITUIÇÃO DE ENSINO, ');
+      Var1.Bold;
+      Var1.Insert('com periodicidade máxima de 6 (seis) meses, relatório de atividades que possibilitem o acompanhamento, supervisão e avaliação do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE, ');
+      Var1.Bold;
+      Var1.Insert('o qual deverá ser por este obrigatoriamente conferido e assinado; ');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('c) ');
+      Var1.Bold;
+      Var1.Insert('Por ocasião do desligamento do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE, ');
+      Var1.Bold;
+      Var1.Insert('entregar "Termo de Realização de Estágio" com indicação resumida das atividades desenvolvidas, períodos e avaliação de desempenho;');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('d) ');
+      Var1.Bold;
+      Var1.Insert('Realizar o pagamento da bolsa-auxílio ao ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('ou efetuar a transferência mensal da respectiva importância ao ');
+      Var1.Bold;
+      Var1.Insert('CETEFE, ');
+      Var1.Bold;
+      Var1.Insert('para que este efetue o pagamento diretamente ao ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE;');
+      Var1.Bold;
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('e) ');
+      Var1.Bold;
+      Var1.Insert('Respeitar os limites de contratação de estagiários estabelecidos no artigo 17 da Lei nº. 11.788 de 25/09/2008; ');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('f) ');
+      Var1.Bold;
+      Var1.Insert('Comunicar ao ');
+      Var1.Bold;
+      Var1.Insert('CETEFE, ');
+      Var1.Bold;
+      Var1.Insert('quaisquer alterações que venham a ser realizadas no presente instrumento.');
+      Var1.Insert(#13);
+      if (CODESC = '699') or (CODESC = '54') or (CODESC = '716') then
+      begin
+        Var1.Bold;
+        Var1.Insert('g) ');
+        Var1.Bold;
+        Var1.Insert('Aplica-se ao estagiário a legislação relacionada à saúde e segurança no trabalho, sendo sua implementação de responsabilidade da ');
+        Var1.Bold;
+        Var1.Insert('PARTE CONCEDENTE.');
+        Var1.Bold;
+        Var1.Insert(#13);
+      end;
+      Var1.Insert(#13);
+
+     // Cláusula 07
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA SÉTIMA: OBRIGAÇÕES DA INSTITUIÇÃO DE ENSINO' + #13);
+      Var1.Bold;
+      Var1.Insert('a) ');
+      Var1.Bold;
+      Var1.Insert('Avaliar as instalações da ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+      Var1.Bold;
+      Var1.Insert('do estágio e a sua adequação à formação cultural e profissional do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE; ');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('b) ');
+      Var1.Bold;
+      Var1.Insert('Exigir do ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('a apresentação periódica, em prazo não superior a 6 (seis) meses, do relatório de atividades mencionado no item b da Cláusula Sexta supra;');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('c) ');
+      Var1.Bold;
+      Var1.Insert('Zelar pelo cumprimento do instrumento ora celebrado, reorientando o ');
+      Var1.Bold;
+      Var1.Insert('ESTUDANTE ');
+      Var1.Bold;
+      Var1.Insert('para outro local em caso de descumprimento das disposições ora estabelecidas;');
+      Var1.Insert(#13);
+      Var1.Bold;
+      Var1.Insert('d) ');
+      Var1.Bold;
+      Var1.Insert('Comunicar a ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE, ');
+      Var1.Bold;
+      if (CODESC = '699') or (CODESC = '54') or (CODESC = '716') then
+        Var1.Insert('através do aluno, as datas de realização das avaliações escolares ou acadêmicas.    ')
+      else
+        Var1.Insert('no início do período letivo, as datas de realização das avaliações escolares ou acadêmicas.   ');
+      Var1.Insert(#13);
+      Var1.Insert(#13);
+
+    // Cláusula 08
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA OITAVA: OBRIGAÇÕES DO ESTUDANTE' + #13);
+      Var1.Bold;
+      Var1.Insert('a) ');
+      Var1.Bold;
+      Var1.Insert('Cumprir com empenho e interesse o Programa de Estágio, bem como as normas internas da ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE; ' + #13);
+      Var1.Bold;
+      Var1.Insert('b) ');
+      Var1.Bold;
+      Var1.Insert('Fornecer, sempre que necessário e dentro do prazo estipulado, informações para o acompanhamento e supervisão do Programa de Estágio promovido pela ');
+      Var1.Bold;
+      Var1.Insert('INSTITUIÇÃO DE ENSINO; ' + #13);
+      Var1.Bold;
+      Var1.Insert('c) ');
+      Var1.Bold;
+      Var1.Insert('Informar à ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+      Var1.Bold;
+      Var1.Insert('eventual conclusão, abandono ou trancamento de matrícula do curso; ' + #13);
+      Var1.Bold;
+      Var1.Insert('d) ');
+      Var1.Bold;
+      Var1.Insert('Informar à ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+      Var1.Bold;
+      Var1.Insert('eventual transferência de curso ou de Instituição de Ensino; ' + #13);
+      Var1.Bold;
+      Var1.Insert('e) ');
+      Var1.Bold;
+      Var1.Insert('Observar rigorosamente os limites de freqüência às aulas estabelecidos pela ');
+      Var1.Bold;
+      Var1.Insert('INSTITUIÇÃO DE ENSINO; ' + #13);
+      Var1.Bold;
+      Var1.Insert('f) ');
+      Var1.Bold;
+      Var1.Insert('Manter assiduidade e pontualidade junto à ');
+      Var1.Bold;
+      Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+      Var1.Bold;
+      Var1.Insert('durante o programa de estágio. ' + #13);
+      Var1.Insert(#13);
+      controle := 9;
+      Var1.Bold;
+
+      Var1.Insert('CLÁUSULA NONA: PRAZO' + #13);
+      Var1.Insert('Este Termo de Compromisso de Estágio terá vigência de ' + FormatDateTime('dd/mm/yyyy', DmDta.quTceAlteracaoTal_vigencia.AsDateTime) + ' até ' + FormatDateTime('dd/mm/yyyy', DataFim) + ', podendo ser prorrogado através de Termo Aditivo, desde que o prazo total não seja superior a 2 (dois) anos.' + #13);
+      Var1.Bold;
+      Var1.Insert('Parágrafo Único: ');
+      Var1.Bold;
+      Var1.Insert('Este instrumento poderá ser extinto unilateralmente por qualquer das partes, a qualquer tempo, mediante comunicação prévia, sem que ');
+      Var1.Insert('assista à outra parte direito a qualquer reclamação. ' + #13);
+      Var1.Insert(#13);
+
+      Var1.Bold;
+      if codesc <> '200' then
+      begin
+        if codesc = '331' then
+          vias := '05 (cinco)'
+        else
+          vias := '04 (quatro)';
+        Var1.Insert('CLÁUSULA DEZ: FORO' + #13);
+        Var1.Insert('Fica eleito o Foro Central da Comarca da Região Metropolitana de Curitiba, Estado do Paraná, para dirimir quaisquer dúvidas ou questões oriundas deste instrumento. ' + #13);
+        Var1.Insert('E, por assim estarem de acordo, assinam o presente instrumento em ' + vias + ' vias de igual teor e forma. ' + #13);
+        Var1.Insert(#13);
+      end
+      else
+      begin
+        Var1.Insert('CLÁUSULA DEZ: PUBLICAÇÃO' + #13);
+        Var1.Insert('A Instituição de Ensino dará publicidade a este instrumento em consonância com preceitos legais vigentes. ' + #13);
+        Var1.Insert(#13);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA ONZE: RESCISÃO ADMINISTRATIVA' + #13);
+        Var1.Insert('O presente convênio poderá ser rescindido pela Instituição de Ensino, em razão de interesse público.' + #13);
+        Var1.Insert(#13);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA DOZE: FORO' + #13);
+        Var1.Insert('Fica eleito o Foro da Justiça Federal, Seção Judiciária de Curitiba, Estado do Paraná, para dirimir quaisquer dúvidas ou questões oriundas deste instrumento.' + #13);
+        Var1.Insert('E, por assim estarem de acordo, assinam o presente instrumento em 04 (quatro) vias de igual teor e forma.' + #13);
+        Var1.Insert(#13);
+      end;
+    end
+    else
+    begin
+      // Com Escolha
+      if ckjornada.Checked then
+      begin
+        inc(controle);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA ' + clausula[controle] + ': LOCAL E JORNADA DE ESTÁGIO' + #13);
+        if tipopessoa = 'X' then
+          palavra := 'unidade'
+        else
+          palavra := 'parte';
+        if CKESCALA.Checked then
+          PERIODO := '';
+        Var1.Insert('As atividades de estágio serão realizadas na sede da ' + palavra + ' concedente ' + periodo + '' + dtc + ', perfazendo ');
+        Var1.Insert(Stotal + ' horas semanais.');
+        Var1.Insert('A jornada de estágio deverá ser compatível com o horário letivo do ');
+        Var1.Bold;
+        Var1.Insert('ESTUDANTE ');
+        Var1.Bold;
+        Var1.Insert('e com o horário de funcionamento da ');
+        Var1.Bold;
+        Var1.Insert(uppercase(palavra) + ' CONCEDENTE. ' + #13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Primeiro: ');
+        Var1.Bold;
+        Var1.Insert('Caso a ');
+        Var1.Bold; // liga
+        Var1.Insert('INSTITUIÇÃO DE ENSINO ');
+        Var1.Bold; // desliga
+        Var1.Insert('adote avaliações periódicas ou finais, a carga horária do estágio ficará reduzida à metade durante estes períodos, desde que condizentes com as datas indicadas no comunicado previsto no item (d) da Cláusula Sétima infra, a ser apresentado pela ');
+        Var1.Bold; // liga
+        Var1.Insert('INSTITUIÇÃO DE ENSINO ');
+        Var1.Bold; // desliga
+        Var1.Insert('no início do período letivo. ' + #13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Segundo: ');
+        Var1.Bold;
+        Var1.Insert('É assegurado ao estagiário, sempre que o estágio tenha duração igual ou superior a 1 (um) ano, período de recesso de 30 (trinta) dias remunerado, a ser gozado preferencialmente durante');
+        Var1.Insert(' suas férias escolares, sendo o período estabelecido de comum acordo entre o ');
+        Var1.Bold;
+        Var1.Insert('ESTUDANTE ');
+        Var1.Bold;
+        Var1.Insert('e a ');
+        Var1.Bold;
+        Var1.Insert(uppercase(palavra) + ' CONCEDENTE. ' + #13);
+
+        Var1.Bold;
+        Var1.Insert('Parágrafo Terceiro: ');
+        Var1.Bold;
+        Var1.Insert('Os dias de recesso previstos no parágrafo anterior serão concedidos de maneira proporcional, para as hipóteses em que o estágio tenha duração inferior a 1 (um) ano. ');
+        Var1.Insert(#13);
+        Var1.Insert(#13);
+      end;
+
+    // Cláusula 03
+      if ckatividades.Checked then
+      begin
+        inc(controle);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA ' + clausula[controle] + ': ATIVIDADES' + #13);
+        Var1.Insert('O Plano de Estágio acordado entre as partes abrange as seguintes atividades:' + #13 + #13);
+        if at[1] <> '' then
+          Var1.Insert('1. ' + at[1] + #13);
+        if at[2] <> '' then
+          Var1.Insert('2. ' + at[2] + #13);
+        if at[3] <> '' then
+          Var1.Insert('3. ' + at[3] + #13);
+        if at[4] <> '' then
+          Var1.Insert('4. ' + at[4] + #13);
+        if at[5] <> '' then
+          Var1.Insert('5. ' + at[5] + #13);
+
+        Var1.Insert(#13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Primeiro: ');
+        Var1.Bold;
+        Var1.Insert('As atividades acima relacionadas deverão proporcionar ao ');
+        Var1.Bold;
+        Var1.Insert('ESTUDANTE ');
+        Var1.Bold;
+        Var1.Insert('experiência prática em sua formação, como forma de complementação ao ensino e à aprendizagem, devendo ser ');
+        Var1.Insert('compatíveis com o curso por ele escolhido e adequadas à sua proposta pedagógica. ' + #13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Segundo: ');
+        Var1.Bold;
+        Var1.Insert('As atividades poderão ser ampliadas, reduzidas, alteradas ou substituídas de acordo com as necessidades da ');
+        Var1.Bold;
+        Var1.Insert(uppercase(palavra) + ' CONCEDENTE, ');
+        Var1.Bold;
+        Var1.Insert('desde que observado o disposto no parágrafo primeiro da presente cláusula. ' + #13);
+        Var1.Insert(#13);
+      end;
+    // Cláusula 04
+      if ckbolsa.Checked then
+      begin
+        inc(controle);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA ' + clausula[controle] + ': BOLSA-AUXÍLIO E AUXÍLIO TRANSPORTE ' + #13);
+
+        Var1.Insert('O ');
+        Var1.Bold;
+        Var1.Insert('ESTUDANTE ');
+        Var1.Bold;
+        Var1.Insert('receberá da ');
+        Var1.Bold;
+        Var1.Insert(uppercase(palavra) + ' CONCEDENTE ');
+        Var1.Bold;
+        Var1.Insert('auxílio transporte, bem como bolsa-auxílio mensal no valor de ');
+        if Bolsa > 0 then
+        begin
+          Var1.Insert('R$ ' + FormatFloat('#,##0.00', bolsa) + ' (' + exte + ' / ' + lowercase(tipoBolsa) + '), ');
+          Var1.Insert('a ser paga a partir do mês subseqüente ao do início do estágio.' + #13);
+        end
+        else
+          Var1.Insert('R$ ________ (SEM REMUNERAÇÃO). ' + #13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Único:');
+        Var1.Bold;
+        Var1.Insert(' O auxílio transporte referido no "caput" da presente cláusula será concedido pela Parte Concedente através da seguinte forma: ');
+
+        if dmdta.quTcealteracaotal_AuxTransp.AsString = 'R' then
+          Var1.Insert('Recarga no “Cartão Transporte" fornecido pela URBS – Urbanização de Curitiba – S.A., correspondente ao número de dias em que o ESTUDANTE realizar o estágio durante o mês.' + #13 + #13);
+
+        if dmdta.quTcealteracaotal_AuxTransp.AsString = 'P' then
+          if dmdta.quTcealteracaotal_AuxTranspValor.AsString <> '' then
+            Var1.Insert('Auxílio pecuniário no valor mensal de R$  ' + formatfloat('###,##0.00', dmdta.quTcealteracaotal_AuxTranspValor.value) + '(' + ansilower(pchar(Extenso(dmdta.quTcealteracaotal_AuxTranspValor.value))) + ').' + #13 + #13)
+          else
+            Var1.Insert('Auxílio pecuniário no valor mensal de R$  .' + #13 + #13);
+
+        if dmdta.quTcealteracaotal_AuxTransp.AsString = 'T' then
+        begin
+          Var1.Insert('Meio de locomoção oferecido pela própria ');
+          Var1.Bold;
+          Var1.Insert('PARTE CONCEDENTE;' + #13 + #13);
+          Var1.Bold;
+        end;
+        if dmdta.quTcealteracaotal_AuxTransp.AsString = 'O' then
+          Var1.Insert(dmdta.quTcealteracaotal_AuxTranspTEXTO.AsString + #13 + #13);
+
+      end;
+      if ckprazo.Checked then
+      begin
+        inc(controle);
+        Var1.Bold;
+        Var1.Insert('CLÁUSULA ' + clausula[controle] + ': PRAZO' + #13);
+        Var1.Insert('Este Termo de Compromisso de Estágio terá vigência de ' + FormatDateTime('dd/mm/yyyy', DmDta.quTceAlteracaoTal_vigencia.AsDateTime) + ' até ' + FormatDateTime('dd/mm/yyyy', DataFim) + ', podendo ser prorrogado através de Termo Aditivo, desde que o prazo total não seja superior a 2 (dois) anos.' + #13);
+        Var1.Bold;
+        Var1.Insert('Parágrafo Único: ');
+        Var1.Bold;
+        Var1.Insert('Este instrumento poderá ser extinto unilateralmente por qualquer das partes, a qualquer tempo, mediante comunicação prévia, sem que ');
+        Var1.Insert('assista à outra parte direito a qualquer reclamação. ' + #13);
+        Var1.Insert(#13);
+      end;
+      inc(controle);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA ' + clausula[controle] + ': DISPOSIÇÕES' + #13);
+      Var1.Insert('Permanecem inalteradas todas as demais disposições do Termo de Compromisso de Estágio, do qual este Termo de Alteração  passa a fazer parte integrante.' + #13);
+      Var1.Insert(#13);
+      inc(controle);
+      Var1.Bold;
+      Var1.Insert('CLÁUSULA ' + clausula[controle] + ': FORO' + #13);
+      if codesc <> '200' then
+      begin
+        Var1.Insert('Fica eleito o Foro Central da Comarca da Região Metropolitana de Curitiba, Estado do Paraná, para dirimir quaisquer dúvidas ou questões oriundas deste instrumento. ' + #13);
+        Var1.Insert('E, por assim estarem de acordo, assinam o presente instrumento em 04 (quatro) vias de igual teor e forma. ' + #13);
+        Var1.Insert(#13);
+      end
+      else
+      begin
+        Var1.Insert('Fica eleito o Foro da Justiça Federal, Seção Judiciária de Curitiba, Estado do Paraná, para dirimir quaisquer dúvidas ou questões oriundas deste instrumento.' + #13);
+        Var1.Insert('E, por assim estarem de acordo, assinam o presente instrumento em 04 (quatro) vias de igual teor e forma.' + #13);
+      end;
+    end;
+
+    // Parte final do documento - data e assinaturas
+    Var1.CenterPara;
+    Var1.Insert('Curitiba, ' + datac + '. ' + #13);
+    Var1.Insert(#13 + #13 + #13);
+
+    if CodEsc = '331' then
+    begin
+      Var1.JustifyPara;
+      Var1.Insert(#13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('              REPRESENTANTE DA INSTITUIÇÃO DE ENSINO                                     REPRESENTANTE DA ' + uppercase(palavra) + ' CONCEDENTE' + #13);
+      Var1.Insert(#13 + #13 + #13 + #13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('                   ORIENTADOR DA INSTITUIÇÃO DE ENSINO                                SUPERVISOR DE ESTAGIO DA ' + uppercase(palavra) + ' CONCEDENTE' + #13);
+      Var1.Insert(#13 + #13 + #13 + #13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('                              COORDENADOR DO CURSO                                                                   REPRESENTANTE DO CETEFE' + #13);
+      Var1.Insert(#13 + #13 + #13 + #13);
+      Var1.CenterPara;
+      Var1.Insert('________________________________________________' + #13);
+      Var1.CenterPara;
+      Var1.Insert('ESTUDANTE');
+    end
+    else
+    begin
+      Var1.JustifyPara;
+      Var1.Insert(#13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('              REPRESENTANTE DA INSTITUIÇÃO DE ENSINO                                  REPRESENTANTE DA ' + uppercase(palavra) + ' CONCEDENTE' + #13);
+      Var1.Insert(#13 + #13 + #13 + #13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('                   ORIENTADOR DA INSTITUIÇÃO DE ENSINO                              SUPERVISOR DE ESTAGIO DA ' + uppercase(palavra) + ' CONCEDENTE' + #13);
+      Var1.Insert(#13 + #13 + #13 + #13);
+      Var1.Insert('       ________________________________________________                    ________________________________________________' + #13);
+      Var1.Insert('                                             ESTUDANTE                                                                                REPRESENTANTE DO CETEFE');
+    end;
+    Screen.Cursor := crDefault;
+
+
+
+  end;
+
+
+
+begin
+  inherited;
+  CarregaDados;
+  completadados;
+
+  // Verifica os dados a serem solicitados, de acordo com a instituição do estudante
+
+  // Número de matricula -> somente para UFPR
+  if CodEsc = '331' then
+ //   InputQuery('Nº Matrícula', 'Número', NumMatEsc);
+    numMatEsc := dmdta.qutcetce_matricula.asstring;
+
+{  InputQuery('Supervisor', 'Supervisor de Estágio', SuperEst);
+  SuperEst := AnsiUpperCase(SuperEst);
+
+  if rdEscolha.ItemIndex > 0 then
+  begin
+    if rdEscolha.ItemIndex = 0 then
+      formSuperEst := DmDTA.quTceAlteracaoFormacao.AsString;
+    if rdEscolha.ItemIndex = 1 then
+      formSuperEst := DmDTA.quTceAlteracaoOutraformacao.AsString;
+    if rdEscolha.ItemIndex = 2 then
+      formSuperEst := '';
+  end;
+  if rdEscolha.ItemIndex <> 2 then
+  begin
+    InputQuery('Supervisor', 'Formação do Supervisor de Estágio', FormSuperEst);
+    FormSuperEst := AnsiUpperCase(FormSuperEst);
+  end;
+ }
+ // InputQuery('Supervisor', 'Formação do Supervisor de Estágio', FormSuperEst);
+//  FormSuperEst := AnsiUpperCase(FormSuperEst);
+  resporientador := DmDTA.quTceAlteracaoprofessororientador.AsString;
+  InputQuery('Orientador', 'Professor Orientador', respOrientador);
+  respOrientador := AnsiUpperCase(respOrientador);
+  carOrientador := DmDTA.quTceAlteracaoorientadorCargo.AsString;
+  InputQuery('Orientador', 'Formação do Orientador de Estágio', carOrientador);
+  carOrientador := AnsiUpperCase(carOrientador);
+
+  hr1 := ''; hr2 := ''; hr3 := ''; hr4 := '';
+  if meEnt1.Text <> '  :  ' then
+    hr1 := meEnt1.Text;
+  if meSai1.Text <> '  :  ' then
+    hr2 := meSai1.Text;
+  if meEnt2.Text <> '  :  ' then
+    hr3 := meEnt2.Text;
+  if meSai2.Text <> '  :  ' then
+    hr4 := meSai2.Text;
+
+  CalcHora();
+  imprimenovo;
+ // Imprime; // Chama a rotina que imprime
+end;
+
+procedure TFORTAL.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if Key = vk_F6 then btImprimirClick(Sender);
+end;
+
+procedure TFORTAL.DBEdit1KeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if Key = '.' then Key := ',';
+end;
+
+procedure TFORTAL.DBEdit2Exit(Sender: TObject);
+begin
+  inherited;
+  if not DBEdit2.Field.IsNull then
+    eTotal := DBEdit2.Text;
+end;
+
+procedure TFORTAL.BuscaPrimeiroUltimo;
+begin
+  inherited;
+  with TQuery.Create(nil) do
+  begin
+    DatabaseName := DATABASE_NAME;
+    SQL.Clear;
+    SQL.Add('select');
+    SQL.Add('  max(tal_cod) as Maximo,');
+    SQL.Add('  min(tal_cod) as Minimo');
+    SQL.Add('from');
+    SQL.Add('  TceAlteracao');
+    Sql.Add('where');
+    Sql.Add('  tce_cod = ' + edTceCod.Text);
+    Open;
+
+    if FieldByName('Minimo').IsNull then
+    begin
+      PrimeiroRegistro := 0;
+      UltimoRegistro := 0;
+    end
+    else
+    begin
+      PrimeiroRegistro := FieldByName('Minimo').AsInteger;
+      UltimoRegistro := FieldByName('Maximo').AsInteger;
+    end;
+
+    Close;
+    free;
+  end;
+end;
+
+procedure TFORTAL.LimpaCampos;
+begin
+  meTceVig.Clear;
+  meEnt1.Clear;
+  meSai1.Clear;
+  meEnt2.Clear;
+  meSai2.Clear;
+  meTalDtRet.Clear;
+end;
+
+procedure TFORTAL.meEnt2KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  Digitou := True;
+  if (not (quPrincipal1.State in [dsInsert, dsEdit])) then quPrincipal1.Edit;
+end;
+
+procedure TFORTAL.meTceVigKeyPress(Sender: TObject; var Key: Char);
+begin
+  inherited;
+  if (not (quPrincipal1.State in [dsInsert, dsEdit])) then quPrincipal1.Edit;
+end;
+
+procedure TFORTAL.cbTipoBolsaClick(Sender: TObject);
+begin
+  inherited;
+  if (not (quPrincipal1.State in [dsInsert, dsEdit])) then quPrincipal1.Edit;
+end;
+
+procedure TFORTAL.meTalDtRetKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  Digitou := True;
+  if (not (quPrincipal1.State in [dsInsert, dsEdit])) then quPrincipal1.Edit;
+  Retorno := True;
+end;
+
+procedure TFORTAL.btSabadoClick(Sender: TObject);
+begin
+  inherited;
+  MudaAba := False;
+
+  if (quPrincipal1.State in [dsInsert, dsEdit]) then
+  begin
+    if MSGSIMNAO('Deseja salvar o registro?') then
+    begin
+      try
+        btSalvar.Click;
+      except
+        btCancelar.Click; // Cancela Registro
+      end;
+    end
+    else
+      exit;
+  end;
+
+  if Salvou then
+  begin
+    Screen.Cursor := crHourGlass;
+    FORTALD := TFORTALD.Create(Self);
+    Screen.Cursor := crDefault;
+    FORTALD.domingo.Enabled := DBCheckBox8.Checked;
+    FORTALD.segunda.Enabled := DBCheckBox2.Checked;
+    FORTALD.terca.Enabled := DBCheckBox3.Checked;
+    FORTALD.quarta.Enabled := DBCheckBox4.Checked;
+    FORTALD.quinta.Enabled := DBCheckBox5.Checked;
+    FORTALD.sexta.Enabled := DBCheckBox6.Checked;
+    FORTALD.sabado.Enabled := DBCheckBox7.Checked;
+    FORTALD.ShowModal;
+
+    // recalcula o horário
+    if (not quPrincipal1.FieldByName('tal_horsabini1').IsNull) then
+      Hr5 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabini1').Value)
+    else
+      Hr5 := '';
+    if (not quPrincipal1.FieldByName('tal_horsabfim1').IsNull) then
+      Hr6 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabfim1').Value)
+    else
+      Hr6 := '';
+    if (not quPrincipal1.FieldByName('tal_horsabini2').IsNull) then
+      Hr7 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabini2').Value)
+    else
+      Hr7 := '';
+    if (not quPrincipal1.FieldByName('tal_horsabfim2').IsNull) then
+      Hr8 := FormatDateTime('hh:nn', quPrincipal1.FieldByName('tal_horsabfim2').Value)
+    else
+      Hr8 := '';
+    // chama rotina que faz o recálculo das horas
+    Digitou := True;
+    CalcHora();
+  end;
+
+  MudaAba := True;
+end;
+
+procedure TFORTAL.DBCheckBox2Click(Sender: TObject);
+begin
+  inherited;
+  if pgPrincipal.ActivePageIndex = 1 then
+  begin
+    Digitou := True;
+    CalcHora;
+  end;
+end;
+
+procedure TFORTAL.DBCheckBox7Click(Sender: TObject);
+begin
+  inherited;
+  if pgPrincipal.ActivePageIndex = 1 then
+    Digitou := True;
+end;
+
+procedure TFORTAL.CriaCampo(Tabela, campo, chave, condicao: string);
+begin
+  qrypesquisa.CLOSE;
+  qrypesquisa.SQL.clear;
+  qrypesquisa.sql.text := 'select * from ' + tabela + ' where ' + chave + ' = -1';
+  qrypesquisa.Open;
+  if qrypesquisa.FieldList.IndexOf(campo) < 0 then
+  begin
+    try
+      qrypesquisa.Close;
+      qrypesquisa.SQL.Clear;
+      qrypesquisa.SQL.Add('alter table ' + tabela + ' add  ' + campo + ' ' + condicao + ' ');
+      qrypesquisa.ExecSQL;
+    except
+      showmessage('Campo Já foi Criado');
+    end;
+  end;
+end;
+
+
+procedure TFORTAL.calchora();
+var
+  hor: array[1..20] of string;
+  hsemana, Acumula, h1, h2, h3, h4, h5, h6, h7, h8: TDateTime;
+  totDias: Integer;
+  tot1: Double;
+  DiaInicial, DiaFinal, horarios: string;
+  semana, contador: integer;
+  multiplicador: real;
+  dias: array[1..7] of string;
+  diassemana: integer;
+
+  function Vdia(dia: string): boolean;
+  begin
+
+    if ((quPrincipal1.FieldByName('tal_Hor' + dia + 'ini1').asstring <> '') and
+      (quPrincipal1.FieldByName('tal_Hor' + dia + 'fim1').asstring <> '')) or
+      ((quPrincipal1.FieldByName('tal_Hor' + dia + 'ini2').asstring <> '') and
+      (quPrincipal1.FieldByName('tal_Hor' + dia + 'fim2').asstring <> '')) then
+      result := true
+    else
+      result := false;
+  end;
+
+  function PrimeiroDia: string;
+  var
+    dia: string;
+  begin
+    if (DBCheckBox7.Checked) and (not VDia('Sab')) then
+      dia := 'sábado';
+    if (DBCheckBox6.Checked) and (not VDia('Sex')) then
+      Dia := 'sexta';
+    if (DBCheckBox5.Checked) and (not VDia('Qui')) then
+      Dia := 'quinta';
+    if (DBCheckBox4.Checked) and (not VDia('Qua')) then
+      Dia := 'quarta';
+    if (DBCheckBox3.Checked) and (not VDia('Ter')) then
+      Dia := 'terça';
+    if (DBCheckBox2.Checked) and (not VDia('Seg')) then
+      Dia := 'segunda';
+    result := dia;
+  end;
+
+  function UltimoDia: string;
+  var
+    dia: string;
+  begin
+
+    if (DBCheckBox3.Checked) and (not VDia('ter')) then
+      Dia := 'terça-feira';
+    if (DBCheckBox4.Checked) and (not VDia('qua')) then
+      Dia := 'quarta-feira';
+    if (DBCheckBox5.Checked) and (not VDia('qui')) then
+      Dia := 'quinta-feira';
+    if (DBCheckBox6.Checked) and (not VDia('Sex')) then
+      Dia := 'sexta-feira';
+    if (DBCheckBox7.Checked) and (not VDia('Sab')) then
+      dia := 'sábado';
+    if (DBCheckBox8.Checked) and (not VDia('Dom')) then
+      dia := 'domingo';
+    result := dia;
+  end;
+
+
+
+
+begin
+
+  dias[1] := 'um';
+  dias[2] := 'dois';
+  dias[3] := 'tres';
+  dias[4] := 'qatro';
+  dias[5] := 'cinco';
+  dias[6] := 'seis';
+  dias[7] := 'sete';
+  diassemana := 0;
+  dtc := '';
+  Horarios := '';
+  if (hr1 = '') and (hr2 = '') then Exit;
+  contador := 3;
+  multiplicador := 4;
+  semana := 0;
+  HSemana := 0;
+  try
+    // Verifica Dias da semana  e horarios diferenciados
+
+    if DBCheckBox2.Checked then
+      inc(semana);
+    if DBCheckBox3.Checked then
+      inc(semana);
+    if DBCheckBox4.Checked then
+      inc(semana);
+    if DBCheckBox5.Checked then
+      inc(semana);
+    if DBCheckBox6.Checked then
+      inc(semana);
+    if DBCheckBox7.Checked then
+      inc(semana);
+    if DBCheckBox8.Checked then
+      inc(semana);
+    diassemana := 0;
+    if DBCheckBox2.Checked then
+      inc(diassemana);
+    if DBCheckBox3.Checked then
+      inc(diassemana);
+    if DBCheckBox4.Checked then
+      inc(diassemana);
+    if DBCheckBox5.Checked then
+      inc(diassemana);
+    if DBCheckBox6.Checked then
+      inc(diassemana);
+    if DBCheckBox7.Checked then
+      inc(diassemana);
+    if DBCheckBox8.Checked then
+      inc(diassemana);
+
+
+
+    Acumula := 0;
+    //SEGUNDA
+    if DBCheckBox2.Checked then
+    begin
+      if vdia('Seg') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegfim1').Value)) * 24;
+        Horarios := Horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegfim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorSegini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSegfim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegfim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSegini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSegfim2').Value);
+        horarios := horarios + ' horas nas segundas-feiras ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    //TERCA
+    if DBCheckBox3.Checked then
+    begin
+      if vdia('Ter') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerfim1').Value)) * 24;
+        dec(semana);
+
+        Horarios := horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerfim1').Value);
+
+        if quPrincipal1.FieldByName('Tal_HorTerini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorTerfim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerfim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorTerini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorTerfim2').Value);
+        horarios := horarios + ' horas nas terças-feiras ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    //quarta
+    if DBCheckBox4.Checked then
+    begin
+      if vdia('Qua') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuaini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuafim1').Value)) * 24;
+        Horarios := Horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuaini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuafim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorQuaini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuaini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorQuafim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuafim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorQuaini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuaini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuafim2').Value);
+        horarios := horarios + ' horas nas quartas-feiras ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    // Quinta
+    if DBCheckBox5.Checked then
+    begin
+      if vdia('Qui') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuiini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuifim1').Value)) * 24;
+        Horarios := Horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuiini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuifim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorQuiini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuiini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorQuifim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuifim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorQuiini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuiini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorQuifim2').Value);
+        horarios := horarios + ' horas nas quintas-feiras ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    //Sexta
+    if DBCheckBox6.Checked then
+    begin
+      if vdia('Sex') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexfim1').Value)) * 24;
+        Horarios := Horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexfim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorSexini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSexfim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexfim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSexini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSexfim2').Value);
+        horarios := horarios + ' horas nas sextas-feiras ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+    //sabado
+
+    if DBCheckBox7.Checked then
+    begin
+      if vdia('Sab') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabfim1').Value)) * 24;
+        Horarios := Horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabfim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorSabini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSabfim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabfim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorSabini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorSabfim2').Value);
+        horarios := horarios + ' horas aos sábados ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    //domingo
+    if DBCheckBox8.Checked then
+    begin
+      if vdia('Dom') then
+      begin
+        h1 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomini1').Value)) * 24;
+        h2 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomfim1').Value)) * 24;
+        Horarios := horarios + ', das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomini1').Value) +
+          ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomfim1').Value);
+        dec(semana);
+
+        if quPrincipal1.FieldByName('Tal_HorDomini2').asstring <> '' then
+          h3 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomini2').Value)) * 24
+        else
+          h3 := 0;
+        if quPrincipal1.FieldByName('Tal_HorDomfim2').asstring <> '' then
+          h4 := strtoTime(FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomfim2').Value)) * 24
+        else
+          h4 := 0;
+        if quPrincipal1.FieldByName('Tal_HorDomini2').asstring <> '' then
+          horarios := horarios + ' e das ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomini2').Value) +
+            ' às ' + FormatDateTime('hh:nn', quPrincipal1.FieldByName('Tal_HorDomfim2').Value);
+        horarios := horarios + ' horas aos domingos ';
+
+      end
+      else
+      begin
+        h1 := strtoTime(hr1) * 24;
+        h2 := strtoTime(hr2) * 24;
+        if hr3 <> '' then
+          h3 := strtoTime(hr3) * 24
+        else
+          h3 := 0;
+        if hr4 <> '' then
+          h4 := strtoTime(hr4) * 24
+        else
+          h4 := 0;
+      end;
+      if h2 < h1 then
+        h2 := 24 + h2;
+      if h4 < h3 then
+        h4 := 24 + h4;
+      HSemana := Hsemana + ((h2 - h1) + (h4 - h3));
+      acumula := acumula + (((h2 - h1) + (h4 - h3)) * multiplicador);
+      if contador > 0 then
+        dec(contador);
+      if contador = 0 then multiplicador := 4;
+    end;
+
+    hor[1] := hr1[1];
+    hor[2] := hr1[2];
+    hor[3] := ':';
+    hor[4] := hr1[4];
+    hor[5] := hr1[5];
+    //
+    hor[6] := hr2[1];
+    hor[7] := hr2[2];
+    hor[8] := ':';
+    hor[9] := hr2[4];
+    hor[10] := hr2[5];
+    //
+    if hr3 <> '' then
+    begin
+      hor[11] := hr3[1];
+      hor[12] := hr3[2];
+      hor[13] := ':';
+      hor[14] := hr3[4];
+      hor[15] := hr3[5];
+    end;
+    //
+    if hr4 <> '' then
+    begin
+      hor[16] := hr4[1];
+      hor[17] := hr4[2];
+      hor[18] := ':';
+      hor[19] := hr4[4];
+      hor[20] := hr4[5];
+    end;
+    // dia inicial e final
+
+    diainicial := primeirodia();
+    diafinal := ultimodia();
+
+    periodo := Diainicial + ' a ' + Diafinal + ' ';
+    dtc := '';
+    if semana > 0 then
+    begin
+      dtc := 'das ' + hor[1] + hor[2] + hor[3] + hor[4] + hor[5] + ' às ' + hor[6] + hor[7] + hor[8] + hor[9] + hor[10];
+      if (hr3 <> '') or (hr4 <> '') then
+        dtc := dtc + ' e das ' + hor[11] + hor[12] + hor[13] + hor[14] + hor[15] + ' às ' + hor[16] + hor[17] + hor[18] + hor[19] + hor[20];
+    end;
+    if ckEscala.Checked then
+      dtc := 'durante ' + strzero(diassemana, 2) + ' (' + dias[diassemana] + ') dias da semana, conforme escala, ' + dtc;
+    dtc := dtc + ' horas' + horarios;
+
+    // horário de sábado
+    {if (hr5 <> '') or (hr6 <> '') then
+    begin
+      dtc := dtc + ' de ' + diaInicial + ' à ' + diaFinal + ', e das ' + hr5 + ' às ' + hr6;
+      if (hr7 <> '') or (hr8 <> '') then
+        dtc := dtc + ' e das ' + hr7 + ' às ' + hr8;
+      dtc := dtc + ' aos sábados';
+    end;}
+
+    tot1 := arredondar(acumula * 1.1, 2);
+
+    //((h2 - h1) + (h4 - h3)) * totDias + ((h6 - h5) + (h8 - h7)) * 4;
+    etotal := FloatToStr(tot1);
+    STotal := FloatToStr(arredondar(Hsemana, 2));
+    edsemana.Text := Stotal;
+    if quPrincipal1.active then
+    begin
+      if quPrincipal1.State = dsInsert then
+      begin
+        if Digitou then
+          quPrincipal1.FieldByName('tal_tothoras').Value := Tot1;
+        eTotal := quPrincipal1.FieldByName('tal_tothoras').Text;
+      end
+      else
+      begin
+        if Digitou then
+        begin
+          if not (quPrincipal1.State in [dsInsert, dsEdit]) then quPrincipal1.Edit;
+          quPrincipal1.FieldByName('tal_tothoras').Value := Tot1;
+        end;
+        eTotal := quPrincipal1.FieldByName('tal_tothoras').Text;
+      end;
+    end;
+
+    meEnt1.Text := hr1;
+    meSai1.Text := hr2;
+    meEnt2.Text := hr3;
+    meSai2.Text := hr4;
+    Digitou := False;
+  except
+  end;
+end;
+
+
+
+
+procedure TFORTAL.DBEdit14DblClick(Sender: TObject);
+begin
+  inherited;
+  if frmlibera.showmodal = mrok then
+    DBEdit14.readonly := false
+  else
+    showmessage('Você não tem Permissão para trocar este Status nessa tela!!');
+
+end;
+
+procedure TFORTAL.BitBtn1Click(Sender: TObject);
+begin
+  inherited;
+  if not (DmDta.qutcealteracao.State in [dsInsert, dsEdit]) then dmDta.qutceAlteracao.Edit;
+  DmDta.quTceAlteracaoTal_Auxtransp.AsString := '';
+  rdauxilio.ItemIndex := -1;
+  DmDta.quTceAlteracaoTal_Auxtransptexto.AsString := '';
+  DmDta.quTceAlteracaoTal_Auxtranspvalor.asstring := '';
+end;
+
+procedure TFORTAL.btNovoClick(Sender: TObject);
+begin
+  inherited;
+  DmDta.quTCEAlteracaotal_AuxTransp.Text := DmDta.BuscaCampo('Vaga', 'Vag_AuxTransp', 'Vag_cod', DmDta.quTCEVAg_Cod.asinteger);
+  DmDta.quTCEalteracaotal_AuxTranspValor.text := DmDta.BuscaCampo('Vaga', 'Vag_AuxTranspValor', 'Vag_cod', DmDta.quTCEVag_Cod.asinteger);
+  DmDta.quTCEAlteracaotal_AuxTransptexto.value := DmDta.BuscaCampo('Vaga', 'Vag_AuxTransptexto', 'Vag_cod', DmDta.quTCEVag_Cod.asinteger);
+end;
+
+procedure TFORTAL.rdauxilioChange(Sender: TObject);
+begin
+  inherited;
+  nb.ActivePage := 'Default';
+  dbedit13.Enabled := rdauxilio.ItemIndex = 1;
+  dbedit14.Enabled := rdauxilio.ItemIndex = 3;
+  case rdauxilio.ItemIndex of
+    1: nb.ActivePage := 'Valor';
+    3: nb.ActivePage := 'outro';
+  end;
+end;
+
+procedure TFORTAL.cbSuperExit(Sender: TObject);
+var
+  total: integer;
+begin
+  inherited;
+  if (quPrincipal1.State in [dsInsert, dsEdit]) then
+  begin
+    DmDta.quTceAlteracaoEmp_cod2.AsInteger := qrysupervisoremp_cod.AsInteger;
+    if (CodEstudante > 0) and
+      (DmDta.quTceAlteracaoFunc_cod.Asstring <> '') then
+    begin
+      with TQuery.Create(nil) do
+      begin
+        DatabaseName := DATABASE_NAME;
+        Sql.Clear;
+
+        Sql.add('select EmpFuncRest.*,Instituicao.inst_nome from EmpFuncRest,Instituicao where  Instituicao.Inst_cod = EmpFuncRest.inst_cod and  emp_cod=' + DmDta.quTceAlteracaoEmp_cod2.AsSTRING + ' and Func_cod = ' + DmDta.quTceAlteracaoFunc_cod.AsString + ' and  Instituicao.inst_cod=' + DmDta.BuscaCampo('Estudante', 'inst_cod', 'Est_cod', codEstudante));
+        Open;
+        if eof = false then
+        begin
+          showmessage('A Instituição de ensino do Estudante possui restrições quanto a este Supervisor!!');
+          DmDta.quTcealteracaoFunc_cod.AsString := '';
+          Close;
+          Free;
+          exit;
+        end;
+        Close;
+        Free;
+      end;
+    end;
+     ////
+   { if (DmDta.quTceAlteracaoFunc_cod.Asstring <> '') then
+    begin
+      with TQuery.Create(nil) do
+      begin
+        Total := 0;
+        DatabaseName := DATABASE_NAME;
+        Sql.Clear;
+        Sql.add(' select count(tce_cod) Estagiarios  ');
+        Sql.add(' from tce t    where ');
+        Sql.add(' t.tce_situacao <> ''7'' and ');
+        Sql.add(' t.Func_cod =' + DmDta.quTceAlteracaoFunc_cod.AsString + ' and ');
+        Sql.add(' t.emp_cod = ' + DmDta.quTceAlteracaoEmp_cod2.AsSTRING + '  and t.tce_cod not in (select tce_cod from tcealteracao )  ');
+        Open;
+        total := fieldbyname('Estagiarios').asinteger;
+        close;
+        Sql.Clear;
+        Sql.add(' select func_cod  from ');
+        Sql.add(' from tcealteracao  where  tceAlteracao.tce in (select tce from tce t where ');
+        Sql.add(' t.tce_situacao <> ''7'' and ');
+        Sql.add(' t.Func_cod =' + DmDta.quTcealteracaoFunc_cod.AsString + ' and ');
+        Sql.add(' t.emp_cod = ' + DmDta.quTceAlteracaoEmp_cod2.AsSTRING + '   )  order by tal_cod desc ');
+        Open;
+        if not eof then
+        begin
+          if fieldbyname('Func_cod').asstring = DmDta.quTcealteracaoFunc_cod.AsString then
+            inc(total)
+        end;
+
+        if total >= 10 then
+        begin
+          showmessage('Este Supervisor Possui 10 Estagiários Ativos!!');
+          if DmDta.quTcealteracao.State in [dsinsert] then
+            DmDta.quTcealteracaoFunc_cod.AsString := '';
+          Close;
+          Free;
+          exit;
+        end;
+        Close;
+        Free;
+      end;
+    end;}
+
+    if (DmDta.quTceAlteracaoFunc_cod.Asstring <> '') then
+    begin
+      with TQuery.Create(nil) do
+      begin
+        Total := 0;
+        DatabaseName := DATABASE_NAME;
+        Sql.Clear;
+        sql.Text := ' select TOP 1 (select count(T.tce_cod) TotalT  from  tce t ' +
+          ' where  T.FUNC_COD IS NOT NULL AND  T.FUNC_COD = :func ' +
+          '  AND  t.tce_situacao <> ''7'' and T.EMP_COD2=:empresa ' +
+          '  AND  t.tce_cod not in (select tce_cod from tcealteracao )) + ' +
+          ' (select count(X.tce_cod)  TotalN  from  tcealteracao x where ' +
+          ' x.tce_cod in (select tce_cod from tce t where  t.tce_situacao <> ''7'') ' +
+          ' AND X.FUNC_COD=:func AND X.EMP_COD2=:empresa AND X.func_cod IS NOT NULL  and ' +
+          '   X.tal_cod = (select top 1 tal_cod from tcealteracao where tce_cod = x.tce_cod order by tal_cod desc )) ' +
+          ' T2 FROM  TCE WHERE 1=1 ';
+
+        parambyname('empresa').AsInteger := DmDta.quTceAlteracaoEmp_cod2.AsInteger;
+        parambyname('func').AsInteger := DmDta.quTceAlteracaoFunc_cod.asinteger;
+        Open;
+        total := fieldbyname('t2').asinteger;
+
+        if total >= 10 then
+        begin
+          showmessage('Este Supervisor Possui 10 Estagiários Ativos!!');
+          if DmDta.quTceAlteracao.State in [dsinsert] then
+            DmDta.quTceALTERACAOFunc_cod.AsString := '';
+          Close;
+          Free;
+          exit;
+        end;
+        Close;
+        Free;
+      end;
+    end;
+    ////
+
+  end;
+end;
+
+procedure TFORTAL.SpeedButton7Click(Sender: TObject);
+begin
+  if DmDta.quTceAlteracao.State in [dsedit, dsinsert] = false then
+    if dmdta.quTceAlteracao.IsEmpty = false then
+      dmdta.quTce.Edit;
+
+
+  if (meEnt1.Text <> '  :  ') and (meSai1.Text <> '  :  ') then
+  begin
+    hr1 := ''; hr2 := ''; hr3 := ''; hr4 := '';
+    if meEnt1.Text <> '  :  ' then
+      hr1 := meEnt1.Text;
+    if meSai1.Text <> '  :  ' then
+      hr2 := meSai1.Text;
+    if meEnt2.Text <> '  :  ' then
+      hr3 := meEnt2.Text;
+    if meSai2.Text <> '  :  ' then
+      hr4 := meSai2.Text;
+    digitou := true;
+    CalcHora();
+  end;
+
+end;
+
+
+
+procedure TFORTAL.SpeedButton1Click(Sender: TObject);
+begin
+
+
+  MudaAba := False;
+  if (quPrincipal1.State in [dsInsert, dsEdit]) then
+  begin
+    if MSGSIMNAO('Deseja salvar o registro?') then
+    begin
+      try
+        btSalvar.Click;
+      except
+        btCancelar.Click; // Cancela Registro
+      end;
+    end
+    else
+      exit;
+  end;
+
+  if Salvou then
+  begin
+    Screen.Cursor := crHourGlass;
+    FORTALAT := TFORTALAT.Create(Self);
+    FORTALAT.SetaCodigo(dmdta.quTceTce_cod.AsInteger, DmDta.quTceAlteracaotal_cod.AsInteger);
+    Screen.Cursor := crDefault;
+    FORTALAT.ShowModal;
+  end;
+  MudaAba := True;
+
+end;
+
+procedure TFORTAL.SpeedButton10Click(Sender: TObject);
+begin
+  inherited;
+  Screen.Cursor := crHourGlass;
+  FORMTalObs := TFORMTalObs.Create(Self);
+  Screen.Cursor := crDefault;
+  FORMTalObs.ShowModal;
+end;
+
+procedure TFORTAL.DBEdit24DblClick(Sender: TObject);
+var
+  escola: integer;
+  NomeEscola: string;
+begin
+  inherited;
+  with TQuery.Create(nil) do
+  begin
+    DatabaseName := DATABASE_NAME;
+    close;
+    sql.clear;
+    sql.add('select e.*, c.inst_nome from Estudante E, Instituicao C where e.inst_cod = c.inst_cod and e.est_cod = ' + Dmdta.quTceEst_cod.Text);
+    open;
+    escola := FieldByName('inst_cod').Value;
+    nomeEscola := FieldByName('inst_nome').Value;
+    close;
+    free;
+  end;
+  Screen.Cursor := crHourGlass;
+  FORIFU := TFORIFU.Create(Self);
+  FORIFU.Inst := Escola;
+  FORIFU.InstNome := nomeEscola;
+  FORIFU.F2 := True;
+  Screen.Cursor := crDefault;
+  //forifu.CkOrientadores.Checked := true;
+  //forifu.cbfuncoesExit(nil);
+  FORIFU.ShowModal;
+  if FORIFU.F2Codigo <> '' then
+  begin
+    if DmDta.qutcealteracao.Active then
+    begin
+      if (DmDta.quTceAlteracao.State in [dsInsert, dsEdit]) then
+      begin
+        DmDta.quTcealteracao.FieldByName('tAL_orientador').Text := FORIFU.F2Codigo;
+        DmDta.quTceAlteracao.FieldByName('inst_cod').Text := inttostr(FORIFU.inst);
+      end;
+    end;
+    SelectNext(ActiveControl, True, true);
+  end;
+  FORIFU.Free;
+
+end;
+
+procedure TFORTAL.DBEdit24Exit(Sender: TObject);
+var
+  escola: integer;
+  NomeEscola: string;
+begin
+  inherited;
+  with TQuery.Create(nil) do
+  begin
+    DatabaseName := DATABASE_NAME;
+    close;
+    sql.clear;
+    sql.add('select e.*, c.inst_nome from Estudante E, Instituicao C where e.inst_cod = c.inst_cod and e.est_cod = ' + Dmdta.quTceEst_cod.Text);
+    open;
+    escola := FieldByName('inst_cod').Value;
+    nomeEscola := FieldByName('inst_nome').Value;
+    close;
+    free;
+  end;
+
+  if (DmDta.quTceAlteracao.State in [dsInsert, dsEdit]) then
+  begin
+    DmDta.quTceAlteracao.FieldByName('inst_cod').Text := inttostr(escola);
+  end;
+
+end;
+
+procedure TFORTAL.pgPrincipalChange(Sender: TObject);
+begin
+  inherited;
+  if pgprincipal.ActivePageIndex = 1 then
+    if quPrincipal1.IsEmpty = false then
+      quprincipal1.Edit;
+end;
+
+end.
+
+
+
+
+
+procedure TFORTAL.calchora();
+var
+  hor: array[1..20] of string;
+  h1, h2, h3, h4, h5, h6, h7, h8: TDateTime;
+  totDias: Integer;
+  tot1: Double;
+  DiaInicial, DiaFinal: string;
+
+begin
+
+  if (hr1 = '') and (hr2 = '') then Exit;
+
+  try
+    h1 := strtoTime(hr1) * 24;
+    h2 := strtoTime(hr2) * 24;
+
+    if hr3 <> '' then
+      h3 := strtoTime(hr3) * 24
+    else
+      h3 := 0;
+
+    if hr4 <> '' then
+      h4 := strtoTime(hr4) * 24
+    else
+      h4 := 0;
+
+    if hr5 <> '' then
+      h5 := strtoTime(hr5) * 24
+    else
+      h5 := 0;
+
+    if hr6 <> '' then
+      h6 := strtoTime(hr6) * 24
+    else
+      h6 := 0;
+
+    if hr7 <> '' then
+      h7 := strtoTime(hr7) * 24
+    else
+      h7 := 0;
+
+    if hr8 <> '' then
+      h8 := strtoTime(hr8) * 24
+    else
+      h8 := 0;
+
+    if h2 < h1 then
+      h2 := 24 + h2;
+    if h4 < h3 then
+      h4 := 24 + h4;
+    if h6 < h5 then
+      h6 := 24 + h6;
+    if h8 < h7 then
+      h8 := 24 + h8;
+
+    hor[1] := hr1[1];
+    hor[2] := hr1[2];
+    hor[3] := ':';
+    hor[4] := hr1[4];
+    hor[5] := hr1[5];
+    //
+    hor[6] := hr2[1];
+    hor[7] := hr2[2];
+    hor[8] := ':';
+    hor[9] := hr2[4];
+    hor[10] := hr2[5];
+    //
+    if hr3 <> '' then
+    begin
+      hor[11] := hr3[1];
+      hor[12] := hr3[2];
+      hor[13] := ':';
+      hor[14] := hr3[4];
+      hor[15] := hr3[5];
+    end;
+
+    //
+    if hr4 <> '' then
+    begin
+      hor[16] := hr4[1];
+      hor[17] := hr4[2];
+      hor[18] := ':';
+      hor[19] := hr4[4];
+      hor[20] := hr4[5];
+    end;
+    dias[1] := 'um';
+    dias[2] := 'dois';
+    dias[3] := 'tres';
+    dias[4] := 'qatro';
+    dias[5] := 'cinco';
+    dias[6] := 'seis';
+    dias[7] := 'sete';
+
+    if dmdta.qutcealteracaotal_domingo.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_segunda.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_terca.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_quarta.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_quinta.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_Sexta.AsString = '1' then
+      inc(diassemana);
+    if dmdta.qutcealteracaotal_Sabado.AsString = '1' then
+      inc(diassemana);
+
+
+    // Verifica os dias da semana
+    TotDias := 30; // valor inicial
+    TotDias := TotDias - 8; // desconta domingo e sábado
+    if not DBCheckBox2.Checked then
+      TotDias := TotDias - 4;
+    if not DBCheckBox3.Checked then
+      TotDias := TotDias - 4;
+    if not DBCheckBox4.Checked then
+      TotDias := TotDias - 4;
+    if not DBCheckBox5.Checked then
+      TotDias := TotDias - 4;
+    if not DBCheckBox6.Checked then
+      TotDias := TotDias - 4;
+
+    // dia inicial e final
+    if DBCheckBox2.Checked then
+    begin
+      DiaInicial := 'segunda';
+      if DBCheckbox6.Checked then
+        DiaFinal := 'sexta'
+      else if DBCheckbox5.Checked then
+        DiaFinal := 'quinta'
+      else if DBCheckbox4.Checked then
+        DiaFinal := 'quarta'
+      else if DBCheckbox6.Checked then
+        DiaFinal := 'terça'
+      else
+        DiaFinal := 'segunda'
+    end
+    else if DBCheckBox3.Checked then
+    begin
+      DiaInicial := 'terça';
+      if DBCheckbox6.Checked then
+        DiaFinal := 'sexta'
+      else if DBCheckbox5.Checked then
+        DiaFinal := 'quinta'
+      else if DBCheckbox4.Checked then
+        DiaFinal := 'quarta'
+      else
+        DiaFinal := 'terça';
+    end
+    else if DBCheckBox4.Checked then
+    begin
+      DiaInicial := 'quarta';
+      if DBCheckbox6.Checked then
+        DiaFinal := 'sexta'
+      else if DBCheckbox5.Checked then
+        DiaFinal := 'quinta'
+      else
+        DiaFinal := 'quarta';
+    end
+    else if DBCheckBox5.Checked then
+    begin
+      DiaInicial := 'quinta';
+      if DBCheckbox6.Checked then
+        DiaFinal := 'sexta'
+      else
+        DiaFinal := 'quinta';
+    end
+    else
+    begin
+      DiaInicial := 'sexta';
+      DiaFinal := 'sexta';
+    end;
+
+    dtc := hor[1] + hor[2] + hor[3] + hor[4] + hor[5] + ' às ' + hor[6] + hor[7] + hor[8] + hor[9] + hor[10];
+    if (hr3 <> '') or (hr4 <> '') then
+      dtc := dtc + ' e das ' + hor[11] + hor[12] + hor[13] + hor[14] + hor[15] + ' às ' + hor[16] + hor[17] + hor[18] + hor[19] + hor[20];
+    // horário de sábado
+    if (hr5 <> '') or (hr6 <> '') then
+    begin
+      dtc := dtc + ' de ' + diaInicial + ' à ' + diaFinal + ', e das ' + hr5 + ' às ' + hr6;
+      if (hr7 <> '') or (hr8 <> '') then
+        dtc := dtc + ' e das ' + hr7 + ' às ' + hr8;
+      dtc := dtc + ' aos sábados';
+    end;
+
+    tot1 := ((h2 - h1) + (h4 - h3)) * totDias + ((h6 - h5) + (h8 - h7)) * 4;
+    etotal := FloatToStr(tot1);
+
+    if quPrincipal1.State = dsInsert then
+    begin
+      if Digitou then
+        quPrincipal1.FieldByName('tal_tothoras').Value := Tot1;
+      eTotal := quPrincipal1.FieldByName('tal_tothoras').Text;
+    end
+    else
+    begin
+      if Digitou then
+      begin
+        if not (quPrincipal1.State in [dsInsert, dsEdit]) then quPrincipal1.Edit;
+        quPrincipal1.FieldByName('tal_tothoras').Value := Tot1;
+      end;
+      eTotal := quPrincipal1.FieldByName('tal_tothoras').Text;
+    end;
+
+    meEnt1.Text := hr1;
+    meSai1.Text := hr2;
+    meEnt2.Text := hr3;
+    meSai2.Text := hr4;
+    Digitou := False;
+  except
+  end;
+end;
+
+
+
+  //*************************************************************//
+  // TCE - modelo UTFPR                                          //
+  //*************************************************************//
+
+procedure ImprimeUTFPR;
+var ValorInt: Integer;
+  Valor, ValorCent: Double;
+  ValString: string;
+  DiasSemana: string;
+begin
+    // Verifica se não tem TA
+  with DmDta.quTceAditivo do
+  begin
+    Close;
+    ParamByName('tce_cod').AsInteger := DmDta.quTceTCE_COD.Value;
+    Open;
+
+    if IsEmpty then
+      DataFim := DmDta.quTce.FieldByName('tce_datafim').AsDateTime
+    else
+    begin
+      Last;
+      DataFim := FieldByName('tpr_datafim').AsDateTime;
+      Close;
+    end;
+  end;
+
+  dtCompleta;
+
+  ValString := FloatToStr(bolsa);
+  DiasSemana := '111110';
+
+  Valor := StrToFloat(ValString);
+  ValorInt := Trunc(Valor);
+  ValorCent := (Valor - ValorInt) * 100;
+
+  if valorInt > 0 then
+    exte := NumeroExtenso(ValorInt, 1);
+
+  if ValorCent > 0 then
+  begin
+    if FormatFloat('0', ValorCent) = FormatFloat('0', Trunc(ValorCent)) then
+    begin
+      if exte = '' then
+        exte := NumeroExtenso(Trunc(ValorCent), 2)
+      else
+        exte := exte + ' E ' + NumeroExtenso(Trunc(ValorCent), 2);
+    end
+    else
+    begin
+      if exte = '' then
+        exte := NumeroExtenso(Trunc(ValorCent) + 1, 2)
+      else
+        exte := exte + ' E ' + NumeroExtenso(Trunc(ValorCent) + 1, 2);
+    end;
+  end;
+
+  var1 := CreateOleObject('Word.basic');
+  var1.FileOpen(FORINI.Diretorio + 'tce_modelo2.doc');
+
+  Var1.CenterPara;
+  var1.Insert('ALTERAÇÃO DO TERMO DE COMPROMISSO DE ESTÁGIO');
+  var1.Insert(#13 + 'E ACORDO DE COOPERAÇÃO');
+  var1.Insert(#13 + #13);
+  Var1.JustifyPara;
+  var1.Insert('TCE Nº   ' + DmDta.quTceTCE_COD.Text);
+  var1.Insert(#13 + #13 + #13);
+  var1.Insert(' Ao(s) ' + datac + ', na cidade de Curitiba, Paraná, a INSTITUIÇÃO DE ');
+  var1.Insert('ENSINO, abaixo relacionada e a UNIDADE CONCEDENTE, abaixo relacionada, através de seus repre');
+  var1.Insert('sentantes celebram entre si o ACORDO DE COOPERAÇÃO que ');
+  Var1.Insert('vigorará no período entre ' + meTceVig.Text);
+  Var1.Insert(' e ' + FormatDateTime('dd/mm/yyyy', DataFim) + ', podendo ser prorrogado através de termo aditivo, bem como denunciado a ');
+  Var1.Insert('qualquer momento entre as partes, mediante comunicado por escrito e 30 (trinta) dias antecedentes, ');
+  Var1.Insert('independendo de qualquer notificação ou interpelação judicial. O presente ACORDO DE COOPERAÇÃO ');
+  var1.Insert('tem por objetivo formalizar  as condições básicas para a realização de Estágio do estudante da Instituição ');
+  var1.Insert('de Ensino junto à Unidade Concedente.');
+  var1.Insert(#13);
+  var1.Insert(#13 + 'INSTITUIÇÃO DE ENSINO');
+  var1.Insert(#13 + 'Razão Social: ' + nomeEsc);
+  var1.Insert(#13 + 'Endereço: ' + endesc);
+  var1.Insert(#13 + 'Bairro: ' + baiesc + '                Cidade: ' + CidadeEsc);
+  var1.Insert(#13 + 'CEP: ' + cepesc + '                Telefone: ' + telesc);
+  var1.Insert(#13 + 'CNPJ: ' + cnpjesc);
+  if CodEsc <> '331' then
+  begin
+    var1.Insert(#13 + 'Representada por: ' + respEsc);
+    var1.Insert(#13 + 'Cargo: ' + caresc);
+    if (CurCod = '14') or (CurCod = '15') then
+      Var1.Insert(#13 + 'Coordenador do Curso: Dr(a). ' + CoordEsc);
+  end
+  else
+  begin
+    var1.Insert(#13 + 'Representada por: ');
+    var1.Insert(#13 + 'Cargo: COORDENADOR(A) DE CURSO');
+  end;
+    // verifica o código da escola, se não é UEM
+  if CodEsc = '221' then
+    var1.Insert(#13 + 'Orientador: ' + OrientadorEst);
+
+  var1.Insert(#13 + #13);
+  var1.Insert('UNIDADE CONCEDENTE');
+  var1.Insert(#13 + 'Razão Social: ' + nomeemp);
+  var1.Insert(#13 + 'Endereço:' + endemp);
+  var1.Insert(#13 + 'Bairro: ' + baiemp + '                Cidade: ' + CidadeEmp);
+  var1.Insert(#13 + 'CEP: ' + cepemp + '                Telefone: ' + telemp);
+  var1.Insert(#13 + 'CNPJ: ' + cnpjemp);
+  var1.Insert(#13 + 'Representada por: ' + respemp);
+  var1.Insert(#13 + 'Cargo: ' + caremp);
+  if SuperEst <> '' then
+  begin
+    if (CurCod = '14') or (curcod = '15') then
+      var1.Insert(#13 + 'Supervisor de Estágio: Dr(a). ' + SuperEst)
+    else
+      var1.Insert(#13 + 'Supervisor de Estágio: ' + SuperEst);
+  end;
+  if FormSuperEst <> '' then
+    var1.Insert(#13 + 'Formação: ' + FormSuperEst);
+  if CRJ <> '' then
+    var1.Insert(#13 + 'Nº do C.R.J.: ' + CRJ);
+  if CREF <> '' then
+    var1.Insert(#13 + 'Nº do C.R.E.F.: ' + CREF);
+  if CPP <> '' then
+    var1.Insert(#13 + 'Nº do C.R.P.: ' + CPP);
+  if Conselho <> '' then
+    var1.Insert(#13 + 'Nº do Conselho: ' + Conselho);
+  if Coren <> '' then
+    var1.Insert(#13 + 'Nº do C.O.R.E.N.: ' + Coren);
+  if CRM <> '' then
+    var1.Insert(#13 + 'Nº do C.R.M.: ' + CRM);
+  if CRO <> '' then
+    var1.Insert(#13 + 'Nº do C.R.O.: ' + CRO);
+  if CodEsc = '221' then
+    var1.Insert(#13 + 'Supervisor: ' + SuperEmp);
+
+  var1.Insert(#13 + #13);
+  var1.Insert('A UNIDADE CONCEDENTE, juntamente com a INSTITUIÇÃO DE ENSINO, e o ESTUDANTE:');
+  var1.Insert(#13 + 'Estudante: ' + nomeest);
+  if CodEsc = '331' then
+    Var1.Insert(#13 + 'Número de Matrícula: ' + NumMatEsc + '            Data de Nascimento:' + Datana);
+  var1.Insert(#13 + 'Endereço: ' + endest);
+  var1.Insert(#13 + 'Bairro: ' + baiest + '                Cidade: ' + CidadeEst);
+  var1.Insert(#13 + 'CEP: ' + Copy(cepest, 1, 2) + '.' + Copy(cepest, 3, 3) + '-' + Copy(cepest, 6, 3) + '                Telefone: (' + Copy(telest, 1, 2) + ') ' + Copy(telest, 3, 4) + '-' + Copy(telest, 7, 4));
+  var1.Insert(#13 + 'RG: ' + rgest + '                     CPF: ' + CpfEst + '                     CTPS: ' + ctpest);
+  var1.Insert(#13 + 'Curso: ' + curest);
+  var1.Insert(#13 + 'Período/Ano: ' + peratu);
+
+  var1.Insert(#13 + #13);
+  var1.Insert('Celebram entre si, através do Agente de Integração CETEFE - CENTRO DE TREINAMENTO E FORMACÃO DO ESTUDANTE, CNPJ 02.217.643/0001-17, ');
+  Var1.Insert('o TERMO DE COMPROMISSO DE ESTÁGIO, de acordo com a Lei n° 6.494/77 complementada pela Lei nº 8.859/94, pela Lei 8.666/93 e pelo Decreto n° 87.497/82, ');
+  var1.Insert('complementado pelo Decreto nº 2.080/96, sob as seguintes condições:');
+  var1.Insert(#13 + #13);
+
+    //// começa aqui as cláusulas
+
+  var1.Insert('CLÁUSULA 1ª - Caberá ao CETEFE, como Agente de Integração: ');
+  var1.Insert(#13 + #13);
+  var1.Insert('I) Celebrar e manter Convênio de Cooperação com as Unidades Concedentes;' + #13);
+  var1.Insert('II) Cadastrar, convocar e selecionar os estudantes, encaminhando-os às Unidades Concedentes, de acordo com a necessidade da mesma;' + #13);
+  var1.Insert('III) Captar oportunidade de Estágio junto às Unidades Concedentes, compatibilizando as atividades de Estágio e o horário de estágio com o curso do Estagiário;' + #13);
+  var1.Insert('IV) Desenvolver atividades de treinamento dos estagiários, bem como oferecer cursos, palestras, seminários e outras atividades que venham a ');
+  var1.Insert('complementar o aprendizado e facilitar o desenvolvimento do Programa de Estágio;' + #13);
+  var1.Insert('V) Realizar interação entre as Unidades Concedentes e a Instituição de Ensino, visando à assinatura do instrumento jurídico previsto no Art. 5º do Decreto nº 87.497/82;' + #13);
+  var1.Insert('VI) Providenciar a assinatura do Termo de Compromisso de Estágio, entre a Unidade Concedente, o Estudante e a respectiva Instituição de Ensino, de acordo com ');
+  var1.Insert('o § 1º, do Art.6º do Decreto nº 87.497/82;' + #13);
+  var1.Insert('VII) Acompanhar o estudante em toda a duração do Programa de Estágio, através de relatórios e visitas regulares, tanto ao estudante como ao (s) supervisores ');
+  var1.Insert('(es) de estágio do mesmo;' + #13);
+  var1.Insert('VIII) Providenciar toda a documentação necessária para a efetivação do estágio;' + #13);
+  var1.Insert('IX) Providenciar a contratação de Seguros Contra Acidentes Pessoais em favor dos Estagiários, assumindo os custos correspondentes.' + #13 + #13 + #13);
+
+  var1.Insert('CLÁUSULA 2ª - Caberá à UTFPR - UNIVERSIDADE TECNOLOGICA FEDERAL DO PARANA - CAMPUS CURITIBA, como Instituição de Ensino:' + #13 + #13);
+  Var1.Insert('I) Comunicar ao CETEFE, sempre que necessário, desistências, trancamento de matricula, conclusão de curso, bem como outras informações úteis ao ');
+  Var1.Insert('processo de manutenção do Programa de Estágio.' + #13);
+  Var1.Insert('II) Comunicar ao CETEFE detalhes sobre o desempenho do estudante sempre que se fizer necessário;' + #13);
+  Var1.Insert('III) Informar ao CETEFE a relação de todos os cursos que mantém, bem como as condições mínimas exigidas para realização de estágio em cada curso;' + #13);
+  Var1.Insert('IV) Assinar o Termo de compromisso de Estágio, que se for necessário para celebração  do estágio entre o estudante e a Unidade Concedente.' + #13 + #13 + #13);
+
+  var1.Insert('CLÁUSULA 3ª - Caberá à Unidade Concedente (Empresa):' + #13 + #13);
+  Var1.Insert('I) Informar ao CETEFE as vagas disponíveis, identificando a área em que existem vagas, bem como das condições de realização de estágio;' + #13);
+  Var1.Insert('II) Manter centralizadas as informações sobre o estágio, indicando o responsável para tratar das questões relativas ao Programa de Estágio;' + #13);
+  Var1.Insert('III) Comunicar ao CETEFE os nomes dos estudantes que irão realizar estágio;' + #13);
+  Var1.Insert('IV) Comunicar ao CETEFE detalhes sobre o desempenho do estagiário sempre que se fizer necessário;' + #13);
+  Var1.Insert('V) Celebrar com a Instituição de Ensino, o Estudante e o Agente de Integração o Termo de Compromisso de Estágio, de acordo com o § 1º, do Art. 6º, ');
+  Var1.Insert('do Decreto nº 87.497/82;' + #13);
+  Var1.Insert('VI) Informar ao CETEFE a Interrupção, conclusão ou eventuais modificações do estágio, bem como outras informações de interesse ao desenvolvimento do Programa de Estágio;' + #13);
+  Var1.Insert('VII) Fixar a jornada de atividade do estágio compatibilizando o horário escolar do estudante com o horário de trabalho da Unidade Concedente;' + #13);
+  Var1.Insert('VIII) Efetuar o pagamento da bolsa-auxílio, quando houver, em plena conformidade com o disposto neste instrumento emitindo e enviando cópia do recibo ao CETEFE; ou' + #13);
+  Var1.Insert('VIII) Repassar ao CETEFE a valor correspondente à bolsa-auxílio, quando houver, ficando este responsável pelo repasse ao estagiário.' + #13);
+  Var1.Insert('IX) Compete exclusivamente às Unidades Concedentes disponibilizar, mensalmente, a quantia acordada neste instrumento ao estagiário seja qual for a modalidade ');
+  Var1.Insert('de pagamento, isentando o CETEFE e a Instituição de Ensino ora mencionada de quaisquer responsabilidades sobre o pagamento do estagiário, ficando, ');
+  Var1.Insert('aquele responsável tão somente pelo repasse quando estipulado contratualmente.' + #13 + #13 + #13);
+
+  Var1.Insert('CLÁUSULA 4ª - O Termo de compromisso de Estágio não caracteriza a vinculação empregatícia entre o estudante e a Unidade Concedente. ');
+  Var1.Insert('O presente Termo visa assegurar a complementação de aprendizagem através de treinamento prático, integração social e desenvolvimento pessoal do Estagiário.' + #13 + #13);
+
+  Var1.Insert('CLÁUSULA 5ª - Este Termo de Compromisso de Estágio terá vigência de ' + meTceVig.Text + ' até ' + FormatDateTime('dd/mm/yyyy', DataFim));
+  Var1.Insert(', podendo ser rescindido a qualquer momento por qualquer uma das partes ou podendo ser prorrogado através de Termo Aditivo.' + #13 + #13);
+
+  Var1.Insert('CLÁUSULA 6ª - As atividades de estágio se farão das ' + dtc + ',  per');
+  var1.Insert('fazendo ' + etotal + ' horas mensais. A jornada deverá ser compatível com o horário escolar ');
+  var1.Insert('do Estudante, sendo que durante as férias ou recessos escolares, outra jornada ');
+  var1.Insert('de atividades poderá ser estabelecida entre as partes. A jornada de atividade em estágio deverá compatibilizar-se com o ');
+  Var1.Insert('horário escolar do estagiário e com o horário da Unidade Concedente. ');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 7ª - As atividades desenvolvidas deverão ser compatíveis com o Contexto Básico da ');
+  var1.Insert('Profissão do curso do estudante.');
+  var1.Insert(#13 + #13);
+  var1.Insert('§ Único - As atividades poderão ser ampliadas, reduzidas, alteradas, substituídas de acordo ');
+  var1.Insert('com a necessidade, sendo as atividades inicialmente desenvolvidas pelo estudante:');
+  var1.Insert(#13 + #13 + #13 + #13);
+  var1.Insert('1. ' + at[1]);
+  var1.Insert(#13 + '2. ' + at[2]);
+  var1.Insert(#13 + '3. ' + at[3]);
+  var1.Insert(#13 + '4. ' + at[4]);
+  var1.Insert(#13 + '5. ' + at[5]);
+  var1.Insert(#13 + #13 + #13);
+
+  if Bolsa > 0 then
+  begin
+    var1.Insert('CLÁUSULA 8ª - A Unidade Concedente remunerará em R$ ' + FormatFloat('0.00', bolsa) + ' (' + exte + ' / ');
+    var1.Insert(tipoBolsa + '), o Estudante, a título de bolsa-auxílio, quantia esta que será ');
+    var1.Insert('paga a partir do mês subseqüente ao vencimento, mediante a apresentação de ');
+    var1.Insert('comprovante. O valor estabelecido poderá variar segundo a sua freqüência mensal ');
+    var1.Insert('grau de escolaridade, atividades desempenhadas, entendimento entre as partes ou ');
+    var1.Insert('outro motivo qualquer.');
+  end
+  else
+  begin
+    var1.Insert('CLÁUSULA 8ª - A Unidade Concedente remunerará em R$ ________ (SEM REMUNERAÇÃO) ');
+    var1.Insert('o Estudante, a título de bolsa-auxílio, quantia  esta que será ');
+    var1.Insert('paga a partir do mês subseqüente ao vencimento, mediante a apresentação de ');
+    var1.Insert('comprovante. O valor estabelecido poderá variar segundo a sua freqüência mensal ');
+    var1.Insert('grau de escolaridade, atividades desempenhadas, entendimento entre as partes ou ');
+    var1.Insert('outro motivo qualquer.');
+  end;
+  var1.Insert(#13 + #13);
+  var1.Insert('§ 1° - A obrigação de pagamento da bolsa-auxílio é de responsabilidade única e exclusiva da UNIDADE ');
+  var1.Insert('CONCEDENTE e deverá ser efetuado através de depósito mensal do valor integral na conta corrente ');
+  var1.Insert('fornecida pelo CETEFE, com o que se considerará cumprida essa obrigação por parte da UNIDADE ');
+  var1.Insert('CONCEDENTE. Efetivado o pagamento caberá ao CETEFE repassar o valor da bolsa-auxílio.');
+  var1.Insert(#13 + #13);
+  var1.Insert('§ 2° - Caso a UNIDADE CONCEDENTE opte pelo pagamento da bolsa-auxílio diretamente aos estagiários, ficará ');
+  var1.Insert('a mesma obrigada a informar tal procedimento ao CETEFE, remetendo-lhe cópias dos respectivos recibos, bem como ');
+  var1.Insert('efetuar o pagamento do valor referente ao custo administrativo do Programa de Estágio estipulado, através de boleto bancário a ser emitido pelo CETEFE.');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 9ª - O estagiário deverá cumprir o Programa de Estágio, bem como cumprir as normas ');
+  var1.Insert('internas da Unidade Concedente.');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 10ª - Sempre que necessário, o estagiário deverá  fornecer informações para o acompa');
+  var1.Insert('nhamento e supervisão do Programa de Estágio, dentro do prazo estipulado.');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 11ª - Na eventual conclusão, abandono ou trancamento do curso, bem como no não cum');
+  var1.Insert('primento das normas estabelecidas neste Termo de Compromisso de Estágio, haverá ');
+  var1.Insert('a interrupção automática do referido Termo.');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 12ª - Fica o CETEFE como centralizador do processo de estágio entre a  Unidade Conce');
+  var1.Insert('dente, Instituição de Ensino e o Estudante. Quaisquer alterações que se façam ');
+  var1.Insert('necessárias neste Termo de Compromisso de Estágio, o CETEFE deverá ser comunicado.');
+  var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 13ª - Na vigência do presente Termo, o estagiário estará incluído na cobertura do Se');
+  var1.Insert('guro Contra Acidentes Pessoais proporcionado através da apólice nº 00000009 da Companhia Seguradora UNIBANCO AIG SEGUROS S/A.');
+  var1.Insert(', sob a responsabilidade do CETEFE. ');
+
+  Var1.Insert(#13 + #13);
+  var1.Insert('CLÁUSULA 14ª - A UTFPR - UNIVERSIDADE TECNOLOGICA FEDERAL DO PARANÁ dará publicidade a este Termo, em consonância com preceitos legais vigentes.' + #13 + #13);
+  var1.Insert('CLÁUSULA 15ª - Fica eleito o Foro da Justiça Federal, Seção Judiciária de Curitiba para dirimir quaisquer dúvidas ou questões jurídicas ');
+  var1.Insert('que se originarem na execução deste Termo.' + #13 + #13);
+  Var1.Insert('CLÁUSULA 16ª - Este Termo pode ser rescindido unilateralmente pela UTFPR - UNIVERSIDADE TECNOLOGICA FEDERAL DO PARANÁ, em razão do interesse público, ficando o ');
+  var1.Insert('estagiário impossibilitado de desenvolver suas atividades nesta empresa. ' + #13 + #13);
+
+  var1.Insert(#13 + #13 + #13);
+  var1.Insert('E, por assim estarem de acordo, assinam este instrumento em 4 (quatro) vias de igual teor:');
+  var1.Insert(#13 + #13 + #13 + #13);
+  var1.Insert('                                                ________________________________________            ________________________________________');
+  var1.Insert(#13 + '                                                     Representante da INSTITUIÇÃO DE ENSINO                                Representante do CETEFE');
+  var1.Insert(#13 + #13 + #13 + #13);
+  var1.Insert('                                                _________________________________________           ________________________________________ ');
+  var1.Insert(#13 + '                                                     Representante da UNIDADE CONCEDENTE                                              Estudante');
+
+  var1.Insert(#13 + #13 + #13);
+  var1.Insert('                                             Testemunhas: ' + #13 + #13 + #13 + #13);
+  var1.Insert('                                              _________________________________________	________________________________________' + #13);
+  Var1.Insert('                                              Nome:	                                              		Nome:' + #13);
+  Var1.Insert('                                              RG:			                 			RG:' + #13);
+  Var1.Insert('                                              CPF:	                                              			CPF:' + #13 + #13 + #13);
+
+  var1.Insert('   TCE: ' + DmDta.quTceTCE_COD.Text + '  -  Estudante:  ' + DmDta.quTceEST_COD.Text + ' ' + nomeEst + '  -  ' + cidadeEst + '/' + estadoEst);
+
+  var1.appshow;
+  Screen.Cursor := crDefault;
+end;
+

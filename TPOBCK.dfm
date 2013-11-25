@@ -1,0 +1,167 @@
+object FORBCK: TFORBCK
+  Left = 241
+  Top = 314
+  Width = 475
+  Height = 244
+  Caption = 'Backup de Arquivos'
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = True
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 191
+    Width = 467
+    Height = 19
+    Panels = <>
+    SimplePanel = False
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 467
+    Height = 191
+    Align = alClient
+    TabOrder = 1
+    object Bevel1: TBevel
+      Left = 9
+      Top = 9
+      Width = 447
+      Height = 137
+    end
+    object btSalvar: TSpeedButton
+      Left = 214
+      Top = 154
+      Width = 81
+      Height = 25
+      Hint = 'Backup de Arquivos - Tecla F5'
+      Caption = 'Backup'
+      Flat = True
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000130B0000130B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333330B7FFF
+        FFB0333333777F3333773333330B7FFFFFB0333333777F3333773333330B7FFF
+        FFB0333333777F3333773333330B7FFFFFB03FFFFF777FFFFF77000000000077
+        007077777777777777770FFFFFFFF00077B07F33333337FFFF770FFFFFFFF000
+        7BB07F3FF3FFF77FF7770F00F000F00090077F77377737777F770FFFFFFFF039
+        99337F3FFFF3F7F777FF0F0000F0F09999937F7777373777777F0FFFFFFFF999
+        99997F3FF3FFF77777770F00F000003999337F773777773777F30FFFF0FF0339
+        99337F3FF7F3733777F30F08F0F0337999337F7737F73F7777330FFFF0039999
+        93337FFFF7737777733300000033333333337777773333333333}
+      OnClick = btSalvarClick
+    end
+    object btFechar: TSpeedButton
+      Tag = 7
+      Left = 376
+      Top = 154
+      Width = 81
+      Height = 25
+      Hint = 'Fechar  -  F4'
+      Caption = 'Fechar'
+      Flat = True
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00330000000000
+        03333377777777777F333301111111110333337F333333337F33330111111111
+        0333337F333333337F333301111111110333337F333333337F33330111111111
+        0333337F333333337F333301111111110333337F333333337F33330111111111
+        0333337F3333333F7F333301111111B10333337F333333737F33330111111111
+        0333337F333333337F333301111111110333337F33FFFFF37F3333011EEEEE11
+        0333337F377777F37F3333011EEEEE110333337F37FFF7F37F3333011EEEEE11
+        0333337F377777337F333301111111110333337F333333337F33330111111111
+        0333337FFFFFFFFF7F3333000000000003333377777777777333}
+      NumGlyphs = 2
+      OnClick = btFecharClick
+    end
+    object btRestaurar: TSpeedButton
+      Tag = 7
+      Left = 295
+      Top = 154
+      Width = 81
+      Height = 25
+      Hint = 'Restaurar Backup - Tecla F6'
+      Caption = 'Restaurar'
+      Flat = True
+      Glyph.Data = {
+        76010000424D7601000000000000760000002800000020000000100000000100
+        04000000000000010000120B0000120B00001000000000000000000000000000
+        800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003FF0000000F0
+        000033F77777773777773FFF0CCC0FF09990333F73F37337F33733FFF0C0FFF0
+        99903333F7373337F337333FFF0FFFF0999033333F73FFF7FFF73333FFF000F0
+        0000333333F77737777733333F07B70FFFFF3333337F337F33333333330BBB0F
+        FFFF3333337F337F333333333307B70FFFFF33333373FF733F333333333000FF
+        0FFF3333333777337FF3333333333FF000FF33FFFFF3333777FF300000333300
+        000F377777F33377777F30EEE0333000000037F337F33777777730EEE0333330
+        00FF37F337F3333777F330EEE033333000FF37FFF7F3333777F3300000333330
+        00FF3777773333F77733333333333000033F3333333337777333}
+      NumGlyphs = 2
+      OnClick = btRestaurarClick
+    end
+    object Label1: TLabel
+      Left = 29
+      Top = 27
+      Width = 93
+      Height = 13
+      Caption = 'Base de Dados em:'
+    end
+    object lblDirBase: TLabel
+      Left = 127
+      Top = 27
+      Width = 58
+      Height = 13
+      Caption = 'lblDirBase'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object FileListBox1: TFileListBox
+      Left = 29
+      Top = 42
+      Width = 404
+      Height = 83
+      ItemHeight = 13
+      TabOrder = 0
+    end
+  end
+  object SaveDialog1: TSaveDialog
+    DefaultExt = 'A:\'
+    Filter = 'Arquivos Zip|*.zip'
+    Left = 64
+    Top = 160
+  end
+  object ZipMaster1: TZipMaster
+    Verbose = False
+    Trace = False
+    AddCompLevel = 9
+    AddOptions = [AddDiskSpan]
+    ExtrOptions = [ExtrOverWrite]
+    Unattended = False
+    SFXOverWriteMode = OvrConfirm
+    SFXCaption = 'Self Extracting Archive'
+    KeepFreeOnDisk1 = 0
+    Left = 22
+    Top = 161
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 112
+    Top = 160
+  end
+end

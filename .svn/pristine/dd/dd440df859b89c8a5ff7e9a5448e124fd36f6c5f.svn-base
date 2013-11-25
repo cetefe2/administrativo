@@ -1,0 +1,193 @@
+unit TPOERR;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, DB, DBTables, StdCtrls, cxStyles, cxCustomData,
+  cxGraphics, cxFilter, cxData, cxDataStorage, cxEdit, cxDBData, Buttons,
+  cxGridLevel, cxClasses, cxControls, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid, TPODTA,
+  Provider, DBClient, cxCheckBox, Placemnt;
+
+type
+  TFORERR = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    edtData: TEdit;
+    cxGrid1DBTableView1: TcxGridDBTableView;
+    cxGrid1Level1: TcxGridLevel;
+    cxGrid1: TcxGrid;
+    Panel2: TPanel;
+    SpeedButton1: TSpeedButton;
+    cxGrid1DBTableView1Tipo: TcxGridDBColumn;
+    cxGrid1DBTableView1est_nome: TcxGridDBColumn;
+    cxGrid1DBTableView1DescSituacaoAtual: TcxGridDBColumn;
+    cxGrid1DBTableView1DescSituacaoDestino: TcxGridDBColumn;
+    cxGrid1DBTableView1tce_datares: TcxGridDBColumn;
+    cxGrid1DBTableView1tce_cod: TcxGridDBColumn;
+    cxGrid1DBTableView1emp_nome: TcxGridDBColumn;
+    btnMarcar: TSpeedButton;
+    btnDesmarcar: TSpeedButton;
+    btnAplicarCorrecao: TSpeedButton;
+    cxStyleRepository1: TcxStyleRepository;
+    cxStyle1: TcxStyle;
+    cdsDados: TClientDataSet;
+    dsDados: TDataSource;
+    pDados: TDataSetProvider;
+    cdsDadosTipo: TStringField;
+    cdsDadosest_nome: TStringField;
+    cdsDadosDescSituacaoAtual: TStringField;
+    cdsDadosDescSituacaoDestino: TStringField;
+    cdsDadosSituacaoAtual: TStringField;
+    cdsDadosSituacaoDestino: TIntegerField;
+    cdsDadostce_datares: TDateTimeField;
+    cdsDadostce_cod: TIntegerField;
+    cdsDadosemp_nome: TStringField;
+    cdsDadosMarcado: TStringField;
+    cxGrid1DBTableView1Marcado: TcxGridDBColumn;
+    FormStorage1: TFormStorage;
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnAplicarCorrecaoClick(Sender: TObject);
+    procedure btnMarcarClick(Sender: TObject);
+    procedure btnDesmarcarClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+  private
+    procedure AbrirTabelas;
+    procedure Marcar(bMarcar: boolean);
+
+  public
+    { Public declarations }
+  end;
+
+var
+  FORERR: TFORERR;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFORERR.AbrirTabelas;
+begin
+  Screen.Cursor := crHourGlass;
+  cdsDados.Close;
+  cdsDados.Open;
+
+  dmDta.quDataAtual.Close;
+  dmDta.quDataAtual.Open;
+
+  edtData.Text := FormatDateTime('dd/mm/yyyy', dmDta.quDataAtualDATA_ATUAL.asDateTime);
+
+  cxGrid1DBTableView1.ViewData.Expand(true);
+  
+  Screen.Cursor := crDefault;
+end;
+
+procedure TFORERR.FormShow(Sender: TObject);
+begin
+  AbrirTabelas;
+end;
+
+procedure TFORERR.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+  FORERR := nil;
+end;
+
+procedure TFORERR.Marcar(bMarcar: boolean);
+var
+  bookm: TBookmark;
+begin
+  if cdsDados.IsEmpty then
+    exit;
+
+  bookm := cdsDados.GetBookmark;
+  cdsDados.DisableControls;
+  btnAplicarCorrecao.Enabled := false;
+  Screen.Cursor := crHourGlass;
+  try
+    cdsDados.First;
+    while not cdsDados.eof do
+    begin
+      if bMarcar <> (cdsDadosMarcado.asString = 'S') then
+      begin
+        cdsDados.Edit;
+        if bMarcar then
+           cdsDadosMarcado.asString := 'S'
+        else
+           cdsDadosMarcado.asString := 'N';
+        cdsDados.Post;
+      end;
+      cdsDados.Next;
+    end;
+
+  finally
+    cdsDados.GotoBookmark(bookm);
+    cdsDados.FreeBookmark(bookm);
+    cdsDados.EnableControls;
+    btnAplicarCorrecao.Enabled := true;
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TFORERR.btnAplicarCorrecaoClick(Sender: TObject);
+begin
+  if not cdsDados.Locate('MARCADO', 'S', []) then
+  begin
+    MessageBox(Handle, 'Nenhum TCE foi selecionado para esta operação!', 'Aviso', MB_OK or MB_ICONWARNING);
+    exit;
+  end;
+
+  //
+  cdsDados.DisableControls;
+  btnAplicarCorrecao.Enabled := false;
+  Screen.Cursor := crHourGlass;
+  try
+    cdsDados.First;
+    while not cdsDados.eof do
+    begin
+      if cdsDadosMarcado.asString = 'S' then
+      begin
+        dmDTA.quCorrigeSituacaoTCE.ParamByName('P_TCE_COD').asInteger     := cdsDadostce_cod.asInteger;
+        dmDTA.quCorrigeSituacaoTCE.ParamByName('P_TCE_SITUACAO').asString := cdsDadosSituacaoDestino.asString;
+        dmDTA.quCorrigeSituacaoTCE.ExecSQL;
+      end;
+
+      cdsDados.Next;
+    end;
+
+    cdsDados.First;
+  finally
+    cdsDados.EnableControls;
+    btnAplicarCorrecao.Enabled := true;
+    Screen.Cursor := crDefault;
+  end;
+
+
+  //
+
+  AbrirTabelas;
+
+  MessageBox(Handle, 'Correções realizadas com sucesso!', 'Aviso', MB_OK or MB_ICONINFORMATION);
+
+  if cdsDados.IsEmpty then
+     close;
+end;
+
+procedure TFORERR.btnMarcarClick(Sender: TObject);
+begin
+  Marcar(true);
+end;
+
+procedure TFORERR.btnDesmarcarClick(Sender: TObject);
+begin
+  Marcar(false);
+end;
+
+procedure TFORERR.SpeedButton1Click(Sender: TObject);
+begin
+  Close;
+end;
+
+end.
